@@ -110,11 +110,9 @@
             //     .then(response => response.json())
             //     .then(data => console.log(data));
             
-            // Clear all inputs
             inputs.forEach(input => input.value = '');
             inputs[0].focus();
             
-            // Restart timer
             clearInterval(timerInterval);
             timeLeft = 60;
             startTimer();
