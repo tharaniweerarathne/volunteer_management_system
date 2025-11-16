@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Events</title>
+    <link rel="stylesheet" href="../assets/css/join_event_main.css">
+    <link rel="icon" type="image/png" href="../assets/images/title.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" rel="stylesheet">
+ <style>
+
+ </style>
+</head>
+<body>
+    <section id ="home" class="hero-section">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="about.html">
+                    <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" style="background: rgba(255,255,255,0.3);">
+                    <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html#home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html#about">About</a>
+                        </li>
+                       <li class="nav-item">
+                            <a class="nav-link" href="index.html#events">Events</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html#leadership_board">Top Volunteers</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html#past_events">Past Events</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html#contact">Contact Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-button">Sign Up</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+        <!-- hero section -->
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Be Part of Our Latest Events</h1>
+                <p>Find an event that inspires you to make a change.</p>
+            </div>
+        </div>
+    </section>
+
+
+<!-- <section class="events">
+     <a href="about.html" class="back-button" onclick="history.back(); return false;">
+            <i class="ri-arrow-left-line"></i>
+            Back
+        </a>
+</section>
+
+--> 
+
+
+<section class="joinEventsSection animate-on-scroll">
+    <div class="container">
+        <h1 class="joinEventsTitle">Be Part of Our Latest Events</h1>
+        <p class="joinEventsSubtitle">Find an event that inspires you to make a change.</p>
+
+        <div class="joinEventsSearchContainer">
+            <input type="text" class="joinEventsSearchInput" placeholder="Search ...">
+            <button class="joinEventsSearchBtn">
+                <i class="ri-search-line"></i>
+            </button>
+        </div>
+
+        <div class="row g-3">
+            <!-- Card 1 -->
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="joinEventsCard">
+                    <div class="joinEventsCardImage">
+                        <img src="../assets/images/help.png" alt="Mission" class="img-fluid">
+                        <div class="joinEventsDateBadge">
+                            <span class="joinEventsDateDay">20</span>
+                            <span class="joinEventsDateMonth">Feb</span>
+                        </div>
+                    </div>
+                    <div class="joinEventsCardBody">
+                        <h3 class="joinEventsCardTitle">Beach Cleanup</h3>
+                        <p class="joinEventsCardText">Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum</p>
+                        <div class="joinEventsCardDetails">
+                            <div class="joinEventsCardDetail">
+                                <i class="ri-calendar-line"></i>
+                                <span>20/11/2025</span>
+                            </div>
+                            <div class="joinEventsCardDetail">
+                                <i class="ri-time-line"></i>
+                                <span>12:00 pm to 2:00 pm</span>
+                            </div>
+                            <div class="joinEventsCardDetail">
+                                <i class="ri-map-pin-line"></i>
+                                <a href="#" class="joinEventsLocationLink">Browns Beach - Negombo</a>
+                            </div>
+                        </div>
+                        <button class="joinEventsJoinBtn">Join Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="joinEventsCard">
+                    <div class="joinEventsCardImage">
+                        <img src="../assets/images/about.png" alt="Mission" class="img-fluid">
+                        <div class="joinEventsDateBadge">
+                            <span class="joinEventsDateDay">25</span>
+                            <span class="joinEventsDateMonth">Feb</span>
+                        </div>
+                    </div>
+                    <div class="joinEventsCardBody">
+                        <h3 class="joinEventsCardTitle">Community Garden</h3>
+                        <p class="joinEventsCardText">Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum</p>
+                        <div class="joinEventsCardDetails">
+                            <div class="joinEventsCardDetail">
+                                <i class="ri-calendar-line"></i>
+                                <span>25/11/2025</span>
+                            </div>
+                            <div class="joinEventsCardDetail">
+                                <i class="ri-time-line"></i>
+                                <span>09:00 am to 12:00 pm</span>
+                            </div>
+                            <div class="joinEventsCardDetail">
+                                <i class="ri-map-pin-line"></i>
+                                <a href="#" class="joinEventsLocationLink">Central Park - Negombo</a>
+                            </div>
+                        </div>
+                        <button class="joinEventsJoinBtn">Join Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="joinEventsCard">
+                    <div class="joinEventsCardImage">
+                        <img src="../assets/images/help.png" alt="Mission" class="img-fluid">
+                        <div class="joinEventsDateBadge">
+                            <span class="joinEventsDateDay">30</span>
+                            <span class="joinEventsDateMonth">Feb</span>
+                        </div>
+                    </div>
+                    <div class="joinEventsCardBody">
+                        <h3 class="joinEventsCardTitle">Tree Planting</h3>
+                        <p class="joinEventsCardText">Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum</p>
+                        <div class="joinEventsCardDetails">
+                            <div class="joinEventsCardDetail">
+                                <i class="ri-calendar-line"></i>
+                                <span>30/11/2025</span>
+                            </div>
+                            <div class="joinEventsCardDetail">
+                                <i class="ri-time-line"></i>
+                                <span>10:00 am to 2:00 pm</span>
+                            </div>
+                            <div class="joinEventsCardDetail">
+                                <i class="ri-map-pin-line"></i>
+                                <a href="#" class="joinEventsLocationLink">Forest Reserve - Negombo</a>
+                            </div>
+                        </div>
+                        <button class="joinEventsJoinBtn">Join Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 - This will start a new row automatically -->
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="joinEventsCard">
+                    <div class="joinEventsCardImage">
+                        <img src="../assets/images/help.png" alt="Mission" class="img-fluid">
+                        <div class="joinEventsDateBadge">
+                            <span class="joinEventsDateDay">05</span>
+                            <span class="joinEventsDateMonth">Mar</span>
+                        </div>
+                    </div>
+                    <div class="joinEventsCardBody">
+                        <h3 class="joinEventsCardTitle">Food Drive</h3>
+                        <p class="joinEventsCardText">Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum</p>
+                        <div class="joinEventsCardDetails">
+                            <div class="joinEventsCardDetail">
+                                <i class="ri-calendar-line"></i>
+                                <span>05/12/2025</span>
+                            </div>
+                            <div class="joinEventsCardDetail">
+                                <i class="ri-time-line"></i>
+                                <span>08:00 am to 1:00 pm</span>
+                            </div>
+                            <div class="joinEventsCardDetail">
+                                <i class="ri-map-pin-line"></i>
+                                <a href="#" class="joinEventsLocationLink">Community Center - Negombo</a>
+                            </div>
+                        </div>
+                        <button class="joinEventsJoinBtn">Join Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add more cards as needed - they will automatically wrap to new rows -->
+            
+        </div>
+      
+    </div>
+</section>
+
+
+
+ <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="footer-logo">
+                        <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
+                    </div>
+                    <p class="footer-description">
+                        Empowering communities through seamless volunteer coordination. We connect people, 
+                        manage events, and inspire positive change with smart, efficient solutions.
+                    <div class="social-links mt-4">
+                        <a href="#"><i class="ri-facebook-fill"></i></a>
+                        <a href="#"><i class="ri-instagram-line"></i></a>
+                        <a href="#"><i class="ri-linkedin-fill"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="footer-title">Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="index.html#home"><i class="ri-arrow-right-s-line"></i> Home</a></li>
+                        <li><a href="index.html#about"><i class="ri-arrow-right-s-line"></i> About Us</a></li>
+                        <li><a href="index.html#events"><i class="ri-arrow-right-s-line"></i> Events</a></li>
+                        <li><a href="index.html#leadership_board"><i class="ri-arrow-right-s-line"></i> Top Volunteers</a></li>
+                        <li><a href="index.html#past_events"><i class="ri-arrow-right-s-line"></i> Past Events</a></li>
+                        <li><a href="index.html#contact"><i class="ri-arrow-right-s-line"></i> Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="footer-title">Contact Us</h5>
+                    <ul class="footer-links">
+                        <li>
+                            <i class="ri-map-pin-line"></i> 
+                            Liyanagemulla Road<br>
+                            <span style="padding-left: 24px">Seeduwa, Sri Lanka</span>
+                        </li>
+                        <li><i class="ri-phone-line"></i>077 235 3565</li>
+                        <li><i class="ri-mail-line"></i> info@contact.com</li>
+                        <li><i class="ri-time-line"></i> Mon - Sun: 9:00 - 17:00</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="mb-0">&copy; 2025 Unity Volunteers Trust. All rights reserved. <i class="ri-heart-fill" style="color: #ff6b6b;"></i></p>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-to-top">
+         <i class="ri-arrow-up-s-line"></i>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+    // scroll animation observer
+    const observerOptions = {
+        threshold: 0.2,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const aboutSections = document.querySelectorAll('.animate-on-scroll');
+        aboutSections.forEach(section => {
+            observer.observe(section);
+        });
+    });
+
+
+
+    //scroll to top
+    document.addEventListener('DOMContentLoaded', () => {
+    const scrollToTopBtn = document.querySelector('.scroll-to-top');
+    
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+            scrollToTopBtn.classList.add('show');
+        } else {
+            scrollToTopBtn.classList.remove('show');
+        }
+    });
+    
+    scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                window.scrollTo({ top: targetElement.offsetTop - 80, behavior: 'smooth' });
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>
