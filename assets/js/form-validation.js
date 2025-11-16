@@ -135,9 +135,9 @@ const btn = document.getElementById('signInBtn');
 const leftSection = document.getElementById('leftSection');
 
 btn.addEventListener('click', function(e) {
-    e.preventDefault();  // Stop immediate redirect
-    leftSection.classList.add('slide-out-left'); // Animate out
+    e.preventDefault(); 
+    leftSection.classList.add('slide-out-left'); 
     setTimeout(() => {
-        window.location.href = 'sign_in.html'; // Redirect after animation
-    }, 500); // Match animation duration
+        window.location.href = 'sign_in.html'; 
+    }, 500); 
 });

@@ -1,0 +1,305 @@
+:root {
+    --primary-color: #ff6200;
+    --primary-color-dark: #994524;
+    --dark-color: #111317;
+    --dark-light: #1f2125;
+    --text-light: #d1d5db;
+    --background-color: #e7e7e7;
+    --white: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    min-height: 100vh;
+}
+
+.container-fluid {
+    padding: 0;
+}
+
+.row {
+    margin: 0;
+    min-height: 100vh;
+}
+
+.left-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-dark) 100%);
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.left-section::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    top: -100px;
+    left: -100px;
+}
+
+.left-section::after {
+    content: '';
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    bottom: -150px;
+    right: -150px;
+}
+
+.left-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.left-content h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.left-content p {
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+}
+
+.sign-in-btn {
+    background-color: transparent;
+    color: var(--white);
+    border: 3px solid var(--white);
+    padding: 0.8rem 3rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sign-in-btn:hover {
+    background-color: var(--white);
+    color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.right-section {
+    background-color: var(--white);
+    padding: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 550px;
+}
+
+.form-container h2 {
+    color: var(--dark-color);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.form-subtitle {
+    color: #6b7280;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+}
+
+.form-label {
+    color: var(--dark-color);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.required {
+    color: var(--primary-color);
+}
+
+.form-control, .form-select {
+    border: 2px solid #e5e7eb;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background-color: #f9fafb;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(255, 98, 0, 0.15);
+    background-color: var(--white);
+}
+
+.input-group {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    z-index: 10;
+}
+
+.form-control.with-icon {
+    padding-left: 2.8rem;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #9ca3af;
+    z-index: 10;
+    transition: color 0.3s ease;
+}
+
+.password-toggle:hover {
+    color: var(--primary-color);
+}
+
+.skills-section {
+    background-color: #f9fafb;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 2px solid #e5e7eb;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.skill-checkbox {
+    display: flex;
+    align-items: center;
+}
+
+.skill-checkbox input[type="checkbox"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-right: 0.6rem;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+}
+
+.skill-checkbox label {
+    cursor: pointer;
+    margin-bottom: 0;
+    color: var(--dark-color);
+    font-size: 0.9rem;
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-dark) 100%);
+    color: var(--white);
+    border: none;
+    padding: 1rem;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 1.5rem;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 98, 0, 0.3);
+}
+
+.invalid-feedback {
+    color: #e88992 !important;
+    font-size: 0.875rem;
+    margin-top: 5px;
+}
+
+.email-hints {
+    font-size: 0.85rem;
+    margin-top: 8px;
+    min-height: 20px;
+}
+
+.email-hint {
+    display: inline-block;
+    padding: 4px 10px;
+    margin: 3px 3px 3px 0;
+    background-color: var(--dark-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 6px;
+    color: var(--primary-color);
+    transition: all 0.2s ease;
+    font-size: 0.8rem;
+}
+
+.email-hints {
+    font-size: 0.85rem;
+    margin-top: 8px;
+    min-height: 20px;
+}
+
+.email-hint {
+    display: inline-block;
+    padding: 4px 10px;
+    margin: 3px 3px 3px 0;
+    background-color: var(--dark-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 6px;
+    color: var(--primary-color);
+    transition: all 0.2s ease;
+    font-size: 0.8rem;
+}
+
+    @media (max-width: 991px) {
+        .left-section {
+            min-height: 40vh;
+        }
+
+        .left-content h1 {
+            font-size: 2.5rem;
+        }
+
+        .right-section {
+            padding: 2rem 1.5rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .skills-grid {
+            grid-template-columns: 1fr;
+        }
+    }
