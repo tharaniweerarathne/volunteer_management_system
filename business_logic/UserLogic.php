@@ -19,7 +19,7 @@ class UserLogic {
         if (password_verify($password, $user['password'])) {
             return ["success" => true, "user" => $user];
         } else {
-            return ["success" => false, "message" => "Incorrect password"];
+            return ["success" => false, "message" => "Incorrect password. Please check your credentials and try again later."];
         }
     }
 }

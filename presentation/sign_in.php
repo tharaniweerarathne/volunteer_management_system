@@ -35,7 +35,7 @@ unset($_SESSION['old_email'], $_SESSION['old_password'], $_SESSION['login_error'
                             </label>
                             <div class="input-group">
                                 <i class="ri-mail-line input-icon"></i>
-                                <input type="email" id="email" name="email" class="form-control with-icon" placeholder="Enter your email" required>
+                                <input type="email" id="email" name="email" class="form-control with-icon" placeholder="Enter your email" required value="<?php echo htmlspecialchars($emailValue); ?>">
                             </div>
                             <div class="email-hints" id="emailHints"></div>
                             </div>
@@ -52,18 +52,10 @@ unset($_SESSION['old_email'], $_SESSION['old_password'], $_SESSION['login_error'
                             </div>
                         </div>
 
-                        <!-- Show login error -->
+<!-- login error message -->
 <?php if($loginError): ?>
     <div style="
-        color: #721c24; 
-        background-color: #f8d7da; 
-        border: 1px solid #f5c6cb; 
-        padding: 10px 15px; 
-        border-radius: 5px; 
-        margin: 10px 0;
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-    ">
+        color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px 15px; border-radius: 5px; margin: 10px 0;font-family: Arial, sans-serif;font-size: 14px;">
         <?php echo $loginError; ?>
     </div>
 <?php endif; ?>
