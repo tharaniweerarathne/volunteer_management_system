@@ -1,3 +1,12 @@
+<?php
+session_start();
+$emailValue = $_SESSION['old_email'] ?? '';
+$passwordValue = $_SESSION['old_password'] ?? '';
+$loginError = $_SESSION['login_error'] ?? '';
+
+unset($_SESSION['old_email'], $_SESSION['old_password'], $_SESSION['login_error']);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +27,7 @@
                     <h2>Sign In</h2>
                     <p class="form-subtitle">Welcome back! Please sign in to access your volunteer account and continue making a difference in the community.</p>
 
-                    <form id="volunteerForm">
+                     <form id="volunteerForm" method="POST" action="login_process.php">
                         
                         <div class="mb-3">
                             <label class="form-label">
@@ -26,7 +35,7 @@
                             </label>
                             <div class="input-group">
                                 <i class="ri-mail-line input-icon"></i>
-                                <input type="email" id="email" class="form-control with-icon" placeholder="Enter your email" required>
+                                <input type="email" id="email" name="email" class="form-control with-icon" placeholder="Enter your email" required>
                             </div>
                             <div class="email-hints" id="emailHints"></div>
                             </div>
@@ -38,10 +47,27 @@
                             </label>
                             <div class="input-group">
                                 <i class="ri-lock-line input-icon"></i>
-                                <input type="password" class="form-control with-icon" id="passwordInput" placeholder="Enter Your Password" required>
+                                <input type="password" name="password" class="form-control with-icon" id="passwordInput" placeholder="Enter Your Password" required>
                                 <i class="ri-eye-line password-toggle" id="togglePassword"></i>
                             </div>
                         </div>
+
+                        <!-- Show login error -->
+<?php if($loginError): ?>
+    <div style="
+        color: #721c24; 
+        background-color: #f8d7da; 
+        border: 1px solid #f5c6cb; 
+        padding: 10px 15px; 
+        border-radius: 5px; 
+        margin: 10px 0;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+    ">
+        <?php echo $loginError; ?>
+    </div>
+<?php endif; ?>
+
 
                         <div class="forgot-password">
                             <a href="#">Forgot Password?</a>

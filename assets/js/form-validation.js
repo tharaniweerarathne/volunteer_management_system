@@ -9,17 +9,6 @@
             this.classList.toggle('ri-eye-off-line');
         });
 
-        document.getElementById('volunteerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const skills = [];
-            document.querySelectorAll('input[name="skills"]:checked').forEach(checkbox => {
-                skills.push(checkbox.value);
-            });
-
-            alert('Registration successful! Selected skills: ' + (skills.length > 0 ? skills.join(', ') : 'None'));
-        });
-
         
 
         // email validations
@@ -130,14 +119,3 @@ passwordInput.addEventListener('input', function() {
     });
 });
 
-
-const btn = document.getElementById('signInBtn');
-const leftSection = document.getElementById('leftSection');
-
-btn.addEventListener('click', function(e) {
-    e.preventDefault(); 
-    leftSection.classList.add('slide-out-left'); 
-    setTimeout(() => {
-        window.location.href = 'sign_in.html'; 
-    }, 500); 
-});
