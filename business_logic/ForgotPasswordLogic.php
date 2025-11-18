@@ -14,14 +14,14 @@ class ForgotPasswordLogic {
         $this->forgotPasswordData = new ForgotPasswordData($conn);
     }
     
-    // Generate 6-digit OTP
+    // generating 6-digit OTP
     private function generateOTP() {
         return sprintf("%06d", mt_rand(0, 999999));
     }
     
-    // Send OTP via email
+    // sending OTP via email
     public function sendPasswordResetOTP($email) {
-        // Check if email exists
+        // check if email exists
         $user = $this->forgotPasswordData->getUserByEmail($email);
         
         if (!$user) {
@@ -30,7 +30,7 @@ class ForgotPasswordLogic {
         
         $otp = $this->generateOTP();
         
-        // Store OTP in session
+        
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -38,24 +38,24 @@ class ForgotPasswordLogic {
         $_SESSION['forgot_otp_time'] = time();
         $_SESSION['forgot_email'] = $email;
         
-        // Send email using PHPMailer
+        
         $mail = new PHPMailer(true);
         
         try {
-            // Server settings
+            
             $mail->isSMTP();
-            $mail->Host       = 'smtp.gmail.com'; // Change to your SMTP host
+            $mail->Host       = 'smtp.gmail.com'; 
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'infocontact256@gmail.com'; // Change to your email
-            $mail->Password   = 'ffvr keeu ztxj bwpa'; // Change to your app password
+            $mail->Username   = 'infocontact256@gmail.com'; 
+            $mail->Password   = 'ffvr keeu ztxj bwpa'; 
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port       = 587;
             
-            // Recipients
+            
             $mail->setFrom('your-email@gmail.com', 'Volunteer Platform');
             $mail->addAddress($email, $user['name']);
             
-            // Content
+            
             $mail->isHTML(true);
             $mail->Subject = 'Password Reset OTP';
             $mail->Body    = "
@@ -78,7 +78,7 @@ class ForgotPasswordLogic {
         }
     }
     
-    // Verify OTP
+    // verify OTP
     public function verifyPasswordResetOTP($enteredOTP) {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -88,7 +88,7 @@ class ForgotPasswordLogic {
             return ["success" => false, "message" => "OTP session expired. Please request a new OTP."];
         }
         
-        // Check if OTP is expired (10 minutes)
+        
         if (time() - $_SESSION['forgot_otp_time'] > 600) {
             return ["success" => false, "message" => "OTP has expired. Please request a new one."];
         }
@@ -100,7 +100,7 @@ class ForgotPasswordLogic {
         }
     }
     
-    // Reset password
+    // reset password
     public function resetPassword($newPassword) {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -112,14 +112,14 @@ class ForgotPasswordLogic {
         
         $email = $_SESSION['forgot_email'];
         
-        // Hash the new password
+        
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
         
-        // Update password in database
+        // update password in database
         $result = $this->forgotPasswordData->updatePassword($email, $hashedPassword);
         
         if ($result) {
-            // Clear session data
+            
             unset($_SESSION['forgot_otp']);
             unset($_SESSION['forgot_otp_time']);
             unset($_SESSION['forgot_email']);

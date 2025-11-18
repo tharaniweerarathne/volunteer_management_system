@@ -6,7 +6,7 @@ class ForgotPasswordData {
         $this->conn = $conn;
     }
     
-    // Check if email exists
+    // checking if email exists
     public function getUserByEmail($email) {
         $stmt = $this->conn->prepare("SELECT userId, name, email FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
@@ -15,7 +15,7 @@ class ForgotPasswordData {
         return $result->fetch_assoc();
     }
     
-    // Update user password
+    // updating user password
     public function updatePassword($email, $hashedPassword) {
         $stmt = $this->conn->prepare("UPDATE users SET password = ? WHERE email = ?");
         $stmt->bind_param("ss", $hashedPassword, $email);

@@ -14,21 +14,21 @@ class RegistrationLogic {
         $this->registrationData = new RegistrationData($conn);
     }
     
-    // ADD THIS NEW METHOD
+    
     public function checkEmailExists($email) {
         return $this->registrationData->emailExists($email);
     }
     
-    // Generate 6-digit OTP
+    // generating 6-digit OTP
     private function generateOTP() {
         return sprintf("%06d", mt_rand(0, 999999));
     }
     
-    // Send OTP via email
+    // sending OTP via email
     public function sendOTP($email, $name) {
         $otp = $this->generateOTP();
         
-        // Store OTP in session
+        
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -36,24 +36,24 @@ class RegistrationLogic {
         $_SESSION['otp_time'] = time();
         $_SESSION['otp_email'] = $email;
         
-        // Send email using PHPMailer
+        
         $mail = new PHPMailer(true);
         
         try {
-            // Server settings
+            
             $mail->isSMTP();
-            $mail->Host       = 'smtp.gmail.com'; // Change to your SMTP host
+            $mail->Host       = 'smtp.gmail.com'; 
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'infocontact256@gmail.com'; // Change to your email
-            $mail->Password   = 'ffvr keeu ztxj bwpa'; // Change to your app password
+            $mail->Username   = 'infocontact256@gmail.com'; 
+            $mail->Password   = 'ffvr keeu ztxj bwpa'; 
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port       = 587;
             
-            // Recipients
+            
             $mail->setFrom('your-email@gmail.com', 'Volunteer Platform');
             $mail->addAddress($email, $name);
             
-            // Content
+            
             $mail->isHTML(true);
             $mail->Subject = 'Your OTP Verification Code';
             $mail->Body    = "
@@ -76,7 +76,7 @@ class RegistrationLogic {
         }
     }
     
-    // Verify OTP
+    // verify OTP
     public function verifyOTP($enteredOTP) {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -86,7 +86,7 @@ class RegistrationLogic {
             return ["success" => false, "message" => "OTP session expired"];
         }
         
-        // Check if OTP is expired (10 minutes)
+        
         if (time() - $_SESSION['otp_time'] > 600) {
             return ["success" => false, "message" => "OTP has expired. Please request a new one."];
         }
@@ -98,24 +98,24 @@ class RegistrationLogic {
         }
     }
     
-    // Register user
+    // user registration
     public function registerUser($name, $email, $password, $telephoneNo, $location, $gender, $skills = []) {
-        // Double-check if email already exists (safety measure)
+        
         if ($this->registrationData->emailExists($email)) {
             return ["success" => false, "message" => "This email is already registered. Please use a different email or sign in."];
         }
         
-        // Hash password
+        
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         
-        // Create user
+        // user creation
         $userId = $this->registrationData->createUser($name, $email, $hashedPassword, $telephoneNo, $location, $gender);
         
         if (!$userId) {
             return ["success" => false, "message" => "Registration failed. Please try again."];
         }
         
-        // Add skills if provided
+        // adding skills 
         if (!empty($skills)) {
             $skillIds = $this->registrationData->getSkillIdsByNames($skills);
             if (!empty($skillIds)) {

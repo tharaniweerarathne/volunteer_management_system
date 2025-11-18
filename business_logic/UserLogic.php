@@ -8,7 +8,7 @@ class UserLogic {
         $this->userData = new UserData($conn);
     }
 
-    // Login function
+    // login function
     public function login($email, $password) {
         $user = $this->userData->getUserByEmail($email);
 

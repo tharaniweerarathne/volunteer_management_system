@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-// Determine which step to show
+
 $step = $_GET['step'] ?? 'email';
 
-// Validate step transitions
+
 if ($step === 'otp' && !isset($_SESSION['forgot_email'])) {
     header('Location: forgot_password.php?step=email');
     exit;
@@ -27,7 +27,7 @@ if ($step === 'reset' && !isset($_SESSION['otp_verified'])) {
 </head>
 <body>
     <div class="forgot-container">
-        <!-- Step 1: Email Input -->
+        <!-- email input -->
         <div id="emailStep" style="display: <?php echo $step === 'email' ? 'block' : 'none'; ?>;">
             <div class="forgot-header">
                 <a href="sign_in.php" class="back-link">
@@ -52,7 +52,7 @@ if ($step === 'reset' && !isset($_SESSION['otp_verified'])) {
             </form>
         </div>
 
-        <!-- Step 2: OTP Verification -->
+        <!-- OTP verification -->
         <div id="otpStep" style="display: <?php echo $step === 'otp' ? 'block' : 'none'; ?>;">
             <div class="forgot-header">
                 <a href="forgot_password.php?step=email" class="back-link">
@@ -83,7 +83,7 @@ if ($step === 'reset' && !isset($_SESSION['otp_verified'])) {
             </div>
         </div>
 
-        <!-- Step 3: Reset Password -->
+        <!-- reset password -->
         <div id="resetStep" style="display: <?php echo $step === 'reset' ? 'block' : 'none'; ?>;">
             <div class="forgot-header">
                 <h2>Reset Password</h2>
@@ -127,7 +127,7 @@ if ($step === 'reset' && !isset($_SESSION['otp_verified'])) {
     </div>
 
     <script>
-        // ==================== STEP 1: EMAIL SUBMISSION ====================
+        // email submission
         document.getElementById('emailForm')?.addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = document.getElementById('email').value.trim();
@@ -169,11 +169,11 @@ if ($step === 'reset' && !isset($_SESSION['otp_verified'])) {
             }
         });
 
-        // ==================== STEP 2: OTP VERIFICATION ====================
+        // OTP verfication
         const otpInputs = document.querySelectorAll('.otp-input');
         
         if (otpInputs.length > 0) {
-            // Auto-focus and navigation
+            
             otpInputs.forEach((input, index) => {
                 input.addEventListener('input', (e) => {
                     if (e.target.value.length === 1 && index < otpInputs.length - 1) {
@@ -191,7 +191,7 @@ if ($step === 'reset' && !isset($_SESSION['otp_verified'])) {
                 });
             });
 
-            // Paste functionality
+            // paste functionality
             otpInputs[0].addEventListener('paste', (e) => {
                 e.preventDefault();
                 const pastedData = e.clipboardData.getData('text').slice(0, 6);
@@ -203,7 +203,7 @@ if ($step === 'reset' && !isset($_SESSION['otp_verified'])) {
                 if (pastedData.length === 6) otpInputs[5].focus();
             });
 
-            // OTP Form submission
+            // OTP form submission
             document.getElementById('otpForm')?.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
@@ -248,7 +248,7 @@ if ($step === 'reset' && !isset($_SESSION['otp_verified'])) {
                 }
             });
 
-            // Resend OTP
+            // resend OTP
             let timerInterval;
             let timeLeft = 60;
 
@@ -308,11 +308,11 @@ if ($step === 'reset' && !isset($_SESSION['otp_verified'])) {
             });
         }
 
-        // ==================== STEP 3: RESET PASSWORD ====================
+        // reset password
         const passwordInput = document.getElementById('password');
         const confirmPasswordInput = document.getElementById('confirmPassword');
 
-        // Password visibility toggle
+        // password visibility toggle
         document.getElementById('togglePassword')?.addEventListener('click', function() {
             const type = passwordInput.type === 'password' ? 'text' : 'password';
             passwordInput.type = type;
@@ -327,7 +327,7 @@ if ($step === 'reset' && !isset($_SESSION['otp_verified'])) {
             this.classList.toggle('ri-eye-off-line');
         });
 
-        // Password validation
+        // password validation
         passwordInput?.addEventListener('input', function() {
             const password = this.value;
             
@@ -336,14 +336,14 @@ if ($step === 'reset' && !isset($_SESSION['otp_verified'])) {
             document.getElementById('special')?.classList.toggle('valid', /[!@#$%^&*(),.?":{}|<>]/.test(password));
         });
 
-        // Reset form submission
+        // reset form submission
         document.getElementById('resetForm')?.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const password = passwordInput.value;
             const confirmPassword = confirmPasswordInput.value;
             
-            // Validate password
+            // validate password
             if (password.length < 5) {
                 showMessage('resetError', 'Password must be at least 5 characters long');
                 return;
@@ -394,7 +394,7 @@ if ($step === 'reset' && !isset($_SESSION['otp_verified'])) {
             }
         });
 
-        // Helper function to show messages
+      
         function showMessage(elementId, message) {
             const element = document.getElementById(elementId);
             if (element) {

@@ -6,7 +6,7 @@ class RegistrationData {
         $this->conn = $conn;
     }
     
-    // Check if email already exists
+    // checking if email already exists
     public function emailExists($email) {
         $stmt = $this->conn->prepare("SELECT userId FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
@@ -15,9 +15,9 @@ class RegistrationData {
         return $result->num_rows > 0;
     }
     
-    // Insert new user
+    // insertion of new user
     public function createUser($name, $email, $hashedPassword, $telephoneNo, $location, $gender) {
-        $role = 'Volunteer'; // Always set role as Volunteer
+        $role = 'Volunteer'; 
         $stmt = $this->conn->prepare("INSERT INTO users (name, email, password, telephoneNo, location, gender, role) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("sssssss", $name, $email, $hashedPassword, $telephoneNo, $location, $gender, $role);
         
@@ -27,7 +27,7 @@ class RegistrationData {
         return false;
     }
     
-    // Get skill IDs by skill names
+    
     public function getSkillIdsByNames($skillNames) {
         if (empty($skillNames)) {
             return [];
@@ -48,7 +48,7 @@ class RegistrationData {
         return $skillIds;
     }
     
-    // Insert volunteer skills
+    // insertion of volunteer skills
     public function addVolunteerSkills($userId, $skillIds) {
         if (empty($skillIds)) {
             return true;

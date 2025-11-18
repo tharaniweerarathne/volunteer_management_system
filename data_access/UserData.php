@@ -6,13 +6,13 @@ class UserData {
         $this->conn = $conn;
     }
 
-    // Fetch user by email
+    
     public function getUserByEmail($email) {
         $stmt = $this->conn->prepare("SELECT * FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
-        return $result->fetch_assoc(); // returns associative array like ['email'=>'...', 'password'=>'hashed_value', ...]
+        return $result->fetch_assoc(); 
     }
 }
 ?>
