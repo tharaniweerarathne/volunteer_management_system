@@ -29,7 +29,7 @@ switch ($action) {
             exit;
         }
         
-        // Clear any existing forgot password session
+        
         unset($_SESSION['otp_verified']);
         
         $result = $forgotPasswordLogic->sendPasswordResetOTP($email);
@@ -72,7 +72,7 @@ switch ($action) {
             exit;
         }
         
-        // Validate password strength
+        // validating password 
         if (strlen($password) < 5) {
             echo json_encode(["success" => false, "message" => "Password must be at least 5 characters long"]);
             exit;

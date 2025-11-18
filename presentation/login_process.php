@@ -8,7 +8,7 @@ if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
 
-// Store email only
+
 $_SESSION['old_email'] = $email;
 
 $userLogic = new UserLogic($conn);

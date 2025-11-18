@@ -16,28 +16,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $location = trim($input['location'] ?? '');
     $skills = $input['skills'] ?? [];
     
-    // Validate input
+    // validation of input
     if (empty($name) || empty($email) || empty($password) || empty($phone) || empty($gender) || empty($location)) {
         echo json_encode(["success" => false, "message" => "All required fields must be filled"]);
         exit;
     }
     
-    // Validate email format
+    // Validation of email format
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo json_encode(["success" => false, "message" => "Invalid email format"]);
         exit;
     }
     
-    // CHECK IF EMAIL ALREADY EXISTS BEFORE SENDING OTP
+    // checking email
     $registrationLogic = new RegistrationLogic($conn);
     
-    // Add this check
+    
     if ($registrationLogic->checkEmailExists($email)) {
         echo json_encode(["success" => false, "message" => "This email is already registered. Please use a different email or sign in."]);
         exit;
     }
     
-    // Store registration data in session temporarily
+    
     $_SESSION['temp_registration'] = [
         'name' => $name,
         'email' => $email,
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'skills' => $skills
     ];
     
-    // Send OTP
+    // send OTP
     $result = $registrationLogic->sendOTP($email, $name);
     
     echo json_encode($result);

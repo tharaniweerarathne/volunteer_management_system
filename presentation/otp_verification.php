@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Check if user has registration data
+
 if (!isset($_SESSION['temp_registration'])) {
     header('Location: sign_up.php');
     exit;
@@ -52,7 +52,7 @@ if (!isset($_SESSION['temp_registration'])) {
         const errorMessage = document.getElementById('errorMessage');
         const successMessage = document.getElementById('successMessage');
         
-        // Auto-focus and navigation
+        
         inputs.forEach((input, index) => {
             input.addEventListener('input', (e) => {
                 if (e.target.value.length === 1 && index < inputs.length - 1) {
@@ -70,7 +70,7 @@ if (!isset($_SESSION['temp_registration'])) {
             });
         });
 
-        // Paste functionality
+        // paste functionality
         inputs[0].addEventListener('paste', (e) => {
             e.preventDefault();
             const pastedData = e.clipboardData.getData('text').slice(0, 6);
@@ -86,7 +86,7 @@ if (!isset($_SESSION['temp_registration'])) {
             }
         });
 
-        // Form submission
+        // form submission
         document.getElementById('otpForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -124,7 +124,7 @@ if (!isset($_SESSION['temp_registration'])) {
             }
         });
 
-        // Resend OTP functionality
+        // resend OTP functionality
         let timerInterval;
         let timeLeft = 60;
 

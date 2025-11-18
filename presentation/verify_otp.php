@@ -18,13 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $verifyResult = $registrationLogic->verifyOTP($enteredOTP);
     
     if ($verifyResult['success']) {
-        // OTP is correct, now complete registration
+        
         if (isset($_SESSION['temp_registration'])) {
             $data = $_SESSION['temp_registration'];
             
-            // CHECK AGAIN BEFORE FINAL REGISTRATION (in case someone registered between OTP send and verify)
+            
             if ($registrationLogic->checkEmailExists($data['email'])) {
-                // Clear session data
+                
                 unset($_SESSION['temp_registration']);
                 unset($_SESSION['otp']);
                 unset($_SESSION['otp_time']);
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
             
             if ($registerResult['success']) {
-                // Clear temporary data
+                
                 unset($_SESSION['temp_registration']);
                 unset($_SESSION['otp']);
                 unset($_SESSION['otp_time']);
