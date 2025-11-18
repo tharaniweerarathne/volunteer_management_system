@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Registration</title>
+    <link rel="icon" type="image/png" href="../assets/images/title.png">
+    <link rel="stylesheet" href="../assets/css/signup.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- left section -->
+            <div class="col-lg-5 left-section">
+                <div class="left-content">
+                    <h1>Start volunteering today.</h1>
+                    <p>Already have an account?</p>
+                    <button class="sign-in-btn" onclick="window.location.href='sign_in.php'">Sign In</button>
+                </div>
+            </div>
+
+            <!-- right section -->
+            <div class="col-lg-7 right-section">
+                <div class="form-container">
+                    <h2>Sign Up</h2>
+                    <p class="form-subtitle">Create your volunteer Register to start joining events and contributing to the community. Please fill in your details below:</p>
+
+                    <form id="volunteerForm">
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <span class="required">*</span> Full Name
+                            </label>
+                            <div class="input-group">
+                                <i class="ri-user-line input-icon"></i>
+                                <input type="text" name="name" class="form-control with-icon" placeholder="Enter your name" required>
+                               
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                               <span class="required">*</span> Email Address
+                            </label>
+                            <div class="input-group">
+                                <i class="ri-mail-line input-icon"></i>
+                                <input type="email" name="email" id="email" class="form-control with-icon" placeholder="Enter your email" required>
+                            </div>
+                            <div class="email-hints" id="emailHints"></div>
+                            </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <span class="required">*</span> Password
+                            </label>
+                            <div class="input-group">
+                                <i class="ri-lock-line input-icon"></i>
+                                <input type="password" name="password" class="form-control with-icon" id="passwordInput" placeholder="Password" required>
+                                <i class="ri-eye-line password-toggle" id="togglePassword"></i>
+                            </div>
+                            <div class="email-hints" id="passwordHints"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <span class="required">*</span> Telephone Number
+                            </label>
+                            <div class="input-group">
+                                <i class="ri-phone-line input-icon"></i>
+                                <input type="tel" name="phone" id="phone" class="form-control with-icon" placeholder="Enter your Contact number" required>
+                            </div>
+                            <div class="email-hints" id="mobileHints"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <span class="required">*</span> Gender
+                            </label>
+                            <select name="gender" class="form-select" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                                <option value="prefer-not">Prefer not to say</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                               <span class="required">*</span> Location
+                            </label>
+                            <div class="input-group">
+                                <i class="ri-map-pin-line input-icon"></i>
+                                <input type="text" name="location" id="location" class="form-control with-icon" placeholder="Enter your Location" required>
+                            </div>
+                        </div>
+ 
+
+                        <div class="mb-3">
+                            <label class="form-label">Skills (Optional)</label>
+                            <div class="skills-section">
+                                <p style="margin-bottom: 0.5rem; color: #6b7280; font-size: 0.9rem;">
+                                    Add any skills you have, such as teaching, event organizing, first aid, photography, etc.
+                                </p>
+                                <div class="skills-grid">
+                                    <div class="skill-checkbox">
+                                        <input type="checkbox" id="teaching" name="skills[]" value="teaching">
+                                        <label for="teaching">Teaching</label>
+                                    </div>
+                                    <div class="skill-checkbox">
+                                        <input type="checkbox" id="event-organizing" name="skills[]" value="event-organizing">
+                                        <label for="event-organizing">Event Organizing</label>
+                                    </div>
+                                    <div class="skill-checkbox">
+                                        <input type="checkbox" id="first-aid" name="skills[]" value="first-aid">
+                                        <label for="first-aid">First Aid</label>
+                                    </div>
+                                    <div class="skill-checkbox">
+                                        <input type="checkbox" id="photography" name="skills[]" value="photography">
+                                        <label for="photography">Photography</label>
+                                    </div>
+                                    <div class="skill-checkbox">
+                                        <input type="checkbox" id="cooking" name="skills[]" value="cooking">
+                                        <label for="cooking">Cooking</label>
+                                    </div>
+                                    <div class="skill-checkbox">
+                                        <input type="checkbox" id="environment" name="skills[]" value="fundraising">
+                                        <label for="fundraising">Environmental Work</label>
+                                    </div>
+                                    <div class="skill-checkbox">
+                                        <input type="checkbox" id="social-media" name="skills[]" value="social-media">
+                                        <label for="social-media">Social Media</label>
+                                    </div>
+                                    <div class="skill-checkbox">
+                                        <input type="checkbox" id="graphic-design" name="skills[]" value="graphic-design">
+                                        <label for="graphic-design">Graphic Design</label>
+                                    </div>
+                                    <div class="skill-checkbox">
+                                        <input type="checkbox" id="elderly-care" name="skills[]" value="writing">
+                                        <label for="writing">Elderly care</label>
+                                    </div>
+                                    <div class="skill-checkbox">
+                                        <input type="checkbox" id="translation" name="skills[]" value="translation">
+                                        <label for="translation">Translation</label>
+                                    </div>
+                                    <div class="skill-checkbox">
+                                        <input type="checkbox" id="it-support" name="skills[]" value="it-support">
+                                        <label for="it-support">IT and technical support</label>
+                                    </div>
+                                    <div class="skill-checkbox">
+                                        <input type="checkbox" id="public-speaking" name="skills[]" value="mentoring">
+                                        <label for="mentoring">Public speaking or presenting</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/form-validation.js"></script>
+    <script>
+document.getElementById('volunteerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const formData = new FormData(this);
+    
+    // Get selected skills
+    const skills = [];
+    document.querySelectorAll('input[name="skills[]"]:checked').forEach(checkbox => {
+        skills.push(checkbox.value);
+    });
+    
+    // Prepare data object
+    const data = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        password: formData.get('password'),
+        phone: formData.get('phone'),
+        gender: formData.get('gender'),
+        location: formData.get('location'),
+        skills: skills
+    };
+    
+    // Validate required fields
+    if (!data.name || !data.email || !data.password || !data.phone || !data.gender || !data.location) {
+        alert('Please fill in all required fields');
+        return;
+    }
+    
+    // Show loading state
+    const submitBtn = this.querySelector('.submit-btn');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Processing...';
+    submitBtn.disabled = true;
+    
+    try {
+        const response = await fetch('process_registration.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Redirect to OTP verification page
+            window.location.href = 'otp_verification.php';
+        } else {
+            alert(result.message || 'Registration failed. Please try again.');
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }
+});
+</script>
+</body>
+</html>

@@ -62,7 +62,7 @@ unset($_SESSION['old_email'], $_SESSION['old_password'], $_SESSION['login_error'
 
 
                         <div class="forgot-password">
-                            <a href="#">Forgot Password?</a>
+                            <a href="forgot_password.php">Forgot Password?</a>
                         </div>
 
                         
@@ -76,7 +76,7 @@ unset($_SESSION['old_email'], $_SESSION['old_password'], $_SESSION['login_error'
                 <div class="right-content">
                     <h1>Welcome Back!</h1>
                     <p>Don't have an account?</p>
-                    <button class="sign-up-btn" onclick="window.location.href='sign_up.html'">Sign Up</button>
+                    <button class="sign-up-btn" onclick="window.location.href='sign_up.php'">Sign Up</button>
                 </div>
             </div>
         </div>

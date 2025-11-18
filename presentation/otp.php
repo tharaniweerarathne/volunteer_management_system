@@ -1,0 +1,133 @@
+<?php
+session_start();
+
+// Check if user has registration data
+if (!isset($_SESSION['temp_registration'])) {
+    header('Location: sign_up.php');
+    exit;
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <link rel="icon" type="image/png" href="../assets/images/title.png">
+    <link rel="stylesheet" href="../assets/css/otp_verification.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+    <div class="otp-container">
+        <div class="otp-header">
+            <h2>OTP Verification</h2>
+            <p>Enter the 6-digit code sent to your phone</p>
+        </div>
+
+        <form id="otpForm" action="verify_otp.php" method="POST">
+            <div class="otp-inputs">
+                <input type="number" class="otp-input" name="otp1" maxlength="1" pattern="\d" required>
+                <input type="number" class="otp-input" name="otp2" maxlength="1" pattern="\d" required>
+                <input type="number" class="otp-input" name="otp3" maxlength="1" pattern="\d" required>
+                <input type="number" class="otp-input" name="otp4" maxlength="1" pattern="\d" required>
+                <input type="number" class="otp-input" name="otp5" maxlength="1" pattern="\d" required>
+                <input type="number" class="otp-input" name="otp6" maxlength="1" pattern="\d" required>
+            </div>
+
+            <button type="submit" class="verify-btn">Verify OTP</button>
+        </form>
+
+        <div class="resend-container">
+            <a href="#" class="resend-link" id="resendLink">Resend OTP</a>
+            <div class="timer" id="timer"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+       
+        const inputs = document.querySelectorAll('.otp-input');
+        
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+
+            
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length > 1) {
+                    e.target.value = e.target.value.slice(0, 1);
+                }
+            });
+        });
+
+        // paste functionality
+        inputs[0].addEventListener('paste', (e) => {
+            e.preventDefault();
+            const pastedData = e.clipboardData.getData('text').slice(0, 6);
+            
+            pastedData.split('').forEach((char, index) => {
+                if (inputs[index] && /^\d$/.test(char)) {
+                    inputs[index].value = char;
+                }
+            });
+        });
+
+        // resend OTP timer
+        let timerInterval;
+        let timeLeft = 60;
+
+        function startTimer() {
+            const resendLink = document.getElementById('resendLink');
+            const timerDisplay = document.getElementById('timer');
+            
+            resendLink.style.pointerEvents = 'none';
+            resendLink.style.opacity = '0.5';
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = `Resend OTP in ${timeLeft}s`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    resendLink.style.pointerEvents = 'auto';
+                    resendLink.style.opacity = '1';
+                    timerDisplay.textContent = '';
+                    timeLeft = 60;
+                }
+            }, 1000);
+        }
+
+        startTimer();
+
+        // Resend OTP click handler
+        document.getElementById('resendLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Here you can add AJAX call to your PHP file for resending OTP
+            // Example:
+            // fetch('resend_otp.php', { method: 'POST' })
+            //     .then(response => response.json())
+            //     .then(data => console.log(data));
+            
+            inputs.forEach(input => input.value = '');
+            inputs[0].focus();
+            
+            clearInterval(timerInterval);
+            timeLeft = 60;
+            startTimer();
+            
+            alert('OTP has been resent!');
+        });
+    </script>
+</body>
+</html>

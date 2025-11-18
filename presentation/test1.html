@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
+    <link rel="icon" type="image/png" href="../assets/images/title.png">
+    <link rel="stylesheet" href="../assets/css/forgot_password.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" rel="stylesheet">
+</head>
+<body>
+    <div class="forgot-container">
+        <!-- Step 1: Email Input -->
+        <div id="emailStep" >
+            <div class="forgot-header">
+                <a href="sign_in.php" class="back-link">
+                    <i class="ri-arrow-left-line"></i> Back to Sign In
+                </a>
+                <h2>Forgot Password?</h2>
+                <p>Enter your email address and we'll send you an OTP to reset your password.</p>
+            </div>
+
+            <div id="emailError" class="message error"></div>
+            <div id="emailSuccess" class="message success"></div>
+
+            <form id="emailForm">
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="ri-mail-line input-icon"></i>
+                        <input type="email" id="email" class="form-input" placeholder="Enter your registered email" required>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn">Send OTP</button>
+            </form>
+        </div>
+
+        <!-- Step 2: OTP Verification -->
+        <div id="otpStep">
+            <div class="forgot-header">
+                <a href="forgot_password.php?step=email" class="back-link">
+                    <i class="ri-arrow-left-line"></i> Back
+                </a>
+                <h2>Verify OTP</h2>
+                <p>Enter the 6-digit code sent to<br><strong id="displayEmail"><?php echo htmlspecialchars($_SESSION['forgot_email'] ?? ''); ?></strong></p>
+            </div>
+
+            <div id="otpError" class="message error"></div>
+            <div id="otpSuccess" class="message success"></div>
+
+            <form id="otpForm">
+                <div class="otp-inputs">
+                    <input type="number" class="otp-input" maxlength="1" pattern="\d" required>
+                    <input type="number" class="otp-input" maxlength="1" pattern="\d" required>
+                    <input type="number" class="otp-input" maxlength="1" pattern="\d" required>
+                    <input type="number" class="otp-input" maxlength="1" pattern="\d" required>
+                    <input type="number" class="otp-input" maxlength="1" pattern="\d" required>
+                    <input type="number" class="otp-input" maxlength="1" pattern="\d" required>
+                </div>
+                <button type="submit" class="submit-btn">Verify OTP</button>
+            </form>
+
+            <div class="resend-container">
+                <a href="#" class="resend-link" id="resendLink">Resend OTP</a>
+                <div class="timer" id="timer"></div>
+            </div>
+        </div>
+
+        <!-- Step 3: Reset Password -->
+        <div id="resetStep">
+            <div class="forgot-header">
+                <h2>Reset Password</h2>
+                <p>Enter your new password below</p>
+            </div>
+
+            <div id="resetError" class="message error"></div>
+            <div id="resetSuccess" class="message success"></div>
+
+            <form id="resetForm">
+                <div class="form-group">
+                    <label class="form-label">New Password</label>
+                    <div class="input-wrapper">
+                        <i class="ri-lock-line input-icon"></i>
+                        <input type="password" id="password" class="form-input" placeholder="Enter new password" required>
+                        <i class="ri-eye-line password-toggle" id="togglePassword"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <i class="ri-lock-line input-icon"></i>
+                        <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm new password" required>
+                        <i class="ri-eye-line password-toggle" id="toggleConfirmPassword"></i>
+                    </div>
+                </div>
+
+                <div class="password-requirements">
+                    <p>Password must contain:</p>
+                    <ul>
+                        <li id="length">At least 5 characters</li>
+                        <li id="number">At least one number</li>
+                        <li id="special">At least one special character</li>
+                    </ul>
+                </div>
+
+                <button type="submit" class="submit-btn">Reset Password</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
