@@ -125,5 +125,67 @@ class RegistrationLogic {
         
         return ["success" => true, "message" => "Registration successful!", "userId" => $userId];
     }
+
+
+       // ==================== COORDINATOR LOGIC ====================
+    
+    // Register coordinator (no skills, no OTP)
+    public function registerCoordinator($name, $email, $password, $telephoneNo, $location, $gender) {
+        if ($this->registrationData->emailExists($email)) {
+            return ["success" => false, "message" => "This email is already registered."];
+        }
+        
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $userId = $this->registrationData->createCoordinator($name, $email, $hashedPassword, $telephoneNo, $location, $gender);
+        
+        if (!$userId) {
+            return ["success" => false, "message" => "Failed to add coordinator."];
+        }
+        
+        return ["success" => true, "message" => "Coordinator added successfully!", "userId" => $userId];
+    }
+    
+    // Get all coordinators
+    public function getAllCoordinators() {
+        return $this->registrationData->getAllCoordinators();
+    }
+    
+    // Get coordinator by ID
+    public function getCoordinatorById($userId) {
+        $coordinator = $this->registrationData->getCoordinatorById($userId);
+        if (!$coordinator) {
+            return ["success" => false, "message" => "Coordinator not found"];
+        }
+        return ["success" => true, "data" => $coordinator];
+    }
+    
+    // Update coordinator
+    public function updateCoordinator($userId, $name, $email, $telephoneNo, $location, $gender, $newPassword = null) {
+        // Check if email exists for another user
+        if ($this->registrationData->emailExistsForOtherUser($email, $userId)) {
+            return ["success" => false, "message" => "This email is already used by another user."];
+        }
+        
+        // Update basic info
+        if (!$this->registrationData->updateCoordinator($userId, $name, $email, $telephoneNo, $location, $gender)) {
+            return ["success" => false, "message" => "Failed to update coordinator."];
+        }
+        
+        // Update password if provided
+        if (!empty($newPassword)) {
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+            $this->registrationData->updateCoordinatorPassword($userId, $hashedPassword);
+        }
+        
+        return ["success" => true, "message" => "Coordinator updated successfully!"];
+    }
+    
+    // Delete coordinator
+    public function deleteCoordinator($userId) {
+        if (!$this->registrationData->deleteCoordinator($userId)) {
+            return ["success" => false, "message" => "Failed to delete coordinator."];
+        }
+        return ["success" => true, "message" => "Coordinator deleted successfully!"];
+    }
 }
 ?>
