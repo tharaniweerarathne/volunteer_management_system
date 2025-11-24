@@ -168,6 +168,24 @@ $coordinators = $logic->getAllCoordinators();
     margin-right: 4px;
     font-size: 16px;
 }
+
+.email-hints {
+    font-size: 0.85rem;
+    margin-top: 8px;
+    min-height: 20px;
+}
+
+.email-hint {
+    display: inline-block;
+    padding: 4px 10px;
+    margin: 3px 3px 3px 0;
+    background:  #000000ff;
+    border: 1px solid  #ff6200;
+    border-radius: 6px;
+    color:  #ff6200;
+    transition: all 0.2s ease;
+    font-size: 0.8rem;
+}
     </style>
 </head>
 <body>
@@ -311,8 +329,9 @@ $coordinators = $logic->getAllCoordinators();
                             </label>
                             <div class="input-group">
                                 <i class="ri-mail-line input-icon"></i>
-                                <input type="email" name="email" class="form-control with-icon" placeholder="Enter coordinator's email" required>
+                                <input type="email" name="email" id="email" class="form-control with-icon" placeholder="Enter coordinator's email" required>
                             </div>
+                            <div class="email-hints" id="emailHints"></div>
                         </div>
                     </div>
                     <div class="row">
@@ -325,6 +344,7 @@ $coordinators = $logic->getAllCoordinators();
                                 <input type="password" name="password" class="form-control with-icon" placeholder="Enter the password" id="addPassword" required>
                                 <i class="ri-eye-line password-toggle" onclick="togglePassword('addPassword')"></i>
                             </div>
+                            <div class="email-hints" id="passwordHints"></div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">
@@ -332,8 +352,9 @@ $coordinators = $logic->getAllCoordinators();
                             </label>
                             <div class="input-group">
                                 <i class="ri-phone-line input-icon"></i>
-                                <input type="tel" name="phone" class="form-control with-icon" placeholder="Enter telephone number" required>
+                                <input type="tel" name="phone" id="phone" class="form-control with-icon" placeholder="Enter telephone number" required>
                             </div>
+                             <div class="email-hints" id="mobileHints"></div>
                         </div>
                     </div>
                     <div class="row">
@@ -519,6 +540,10 @@ $coordinators = $logic->getAllCoordinators();
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/dashboards.js"></script>
+    <script src="../assets/js/form_validation1.js"></script>
+    
+
     <script>
         function togglePassword(inputId) {
             const input = document.getElementById(inputId);
