@@ -1,5 +1,14 @@
 <?php
 session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['name'])) {
+    echo "Not logged in!";
+    exit();
+}
+
+$name = $_SESSION['name'];
+
 require_once __DIR__ . "/../data_access/db.php";
 require_once __DIR__ . "/../business_logic/RegistrationLogic.php";
 
@@ -55,14 +64,12 @@ $coordinators = $logic->getAllCoordinators();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coordinator Management</title>
+    <link rel="stylesheet" href="../assets/css/v1.css">
+    <link rel="icon" type="image/png" href="../assets/images/title.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+
         .container {
             max-width: 1200px;
         }
@@ -73,18 +80,18 @@ $coordinators = $logic->getAllCoordinators();
             margin-bottom: 30px;
         }
         .card-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff6200 0%, #994524 100%);
             color: white;
             border-radius: 15px 15px 0 0 !important;
             padding: 20px;
         }
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff6200 0%, #994524 100%);
             border: none;
         }
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 15px rgba(179, 82, 27, 0.4);
         }
         .table-container {
             overflow-x: auto;
@@ -118,9 +125,156 @@ $coordinators = $logic->getAllCoordinators();
             color: #6c757d;
             z-index: 10;
         }
+
+.coordinator-edit-btn {
+    background-color: #15760aff;      /* your theme primary color */
+    border: none;
+    padding: 6px 14px;
+    font-size: 14px;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.coordinator-edit-btn:hover {
+    background-color: #35a45eff;      /* darker primary */
+    transform: scale(1.05);
+}
+
+.coordinator-edit-btn i {
+    margin-right: 4px;
+    font-size: 16px;
+}
+
+
+.coordinator-delete-btn {
+    background-color: #b31318ff;      /* your theme primary color */
+    border: none;
+    padding: 6px 14px;
+    font-size: 14px;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.coordinator-delete-btn:hover {
+    background-color: #b94b50ff;      /* darker primary */
+    transform: scale(1.05);
+}
+
+.coordinator-delete-btn i {
+    margin-right: 4px;
+    font-size: 16px;
+}
     </style>
 </head>
 <body>
+
+    <!-- sidebar navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
+        </div>
+        <div class="nav-items">
+            <div class="nav-item">
+                <a href="#" class="active">
+                    <i class="ri-dashboard-line"></i>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#">
+                    <i class="ri-calendar-check-line"></i>
+                    <span>My Events</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#">
+                    <i class="ri-add-circle-line"></i>
+                    <span>Join Events</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#">
+                    <i class="ri-calendar-line"></i>
+                    <span>Calendar</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#">
+                    <i class="ri-medal-line"></i>
+                    <span>Certificates</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#">
+                    <i class="ri-trophy-line"></i>
+                    <span>Leaderboard</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#">
+                    <i class="ri-message-3-line"></i>
+                    <span>Messages</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#">
+                    <i class="ri-feedback-line"></i>
+                    <span>Feedback</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="logout.php">
+                    <i class="ri-logout-box-line me-2"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- main content -->
+    <div class="main-content" id="mainContent">
+        <!-- top header -->
+        <header class="top-header">
+            <div class="welcome-text">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="ri-menu-line"></i>
+                </button>
+                Welcome Coordinator, <?php echo $name; ?>
+            </div>
+            <div class="header-actions">
+                
+
+                <div class="dropdown">
+                    <button class="btn p-0 dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="ri-notification-3-line"></i><span class="notification-badge">3</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="ri-edit-line me-2"></i>Edit Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="ri-logout-box-line me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+
+
+
+
+                <div class="dropdown">
+                    <button class="btn p-0 dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="ri-user-3-fill header-icon"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="ri-edit-line me-2"></i>Edit Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="logout.php"><i class="ri-logout-box-line me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
     <div class="container">
         <h1 class="text-white text-center mb-4">
             <i class="ri-user-settings-line"></i> Coordinator Management
@@ -148,7 +302,7 @@ $coordinators = $logic->getAllCoordinators();
                             </label>
                             <div class="input-group">
                                 <i class="ri-user-line input-icon"></i>
-                                <input type="text" name="name" class="form-control with-icon" required>
+                                <input type="text" name="name" class="form-control with-icon" placeholder="Enter coordinator's name" required>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -157,7 +311,7 @@ $coordinators = $logic->getAllCoordinators();
                             </label>
                             <div class="input-group">
                                 <i class="ri-mail-line input-icon"></i>
-                                <input type="email" name="email" class="form-control with-icon" required>
+                                <input type="email" name="email" class="form-control with-icon" placeholder="Enter coordinator's email" required>
                             </div>
                         </div>
                     </div>
@@ -168,7 +322,7 @@ $coordinators = $logic->getAllCoordinators();
                             </label>
                             <div class="input-group">
                                 <i class="ri-lock-line input-icon"></i>
-                                <input type="password" name="password" class="form-control with-icon" id="addPassword" required>
+                                <input type="password" name="password" class="form-control with-icon" placeholder="Enter the password" id="addPassword" required>
                                 <i class="ri-eye-line password-toggle" onclick="togglePassword('addPassword')"></i>
                             </div>
                         </div>
@@ -178,7 +332,7 @@ $coordinators = $logic->getAllCoordinators();
                             </label>
                             <div class="input-group">
                                 <i class="ri-phone-line input-icon"></i>
-                                <input type="tel" name="phone" class="form-control with-icon" required>
+                                <input type="tel" name="phone" class="form-control with-icon" placeholder="Enter telephone number" required>
                             </div>
                         </div>
                     </div>
@@ -189,7 +343,7 @@ $coordinators = $logic->getAllCoordinators();
                             </label>
                             <div class="input-group">
                                 <i class="ri-map-pin-line input-icon"></i>
-                                <input type="text" name="location" class="form-control with-icon" required>
+                                <input type="text" name="location" class="form-control with-icon" placeholder="Enter the location" required>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -260,10 +414,10 @@ $coordinators = $logic->getAllCoordinators();
                                         <td><?= htmlspecialchars($coord['location']) ?></td>
                                         <td><?= htmlspecialchars($coord['gender']) ?></td>
                                         <td class="action-buttons">
-                                            <button class="btn btn-sm btn-warning" onclick="editCoordinator(<?= htmlspecialchars(json_encode($coord)) ?>)">
+                                            <button class="btn btn-sm btn-warning coordinator-edit-btn" onclick="editCoordinator(<?= htmlspecialchars(json_encode($coord)) ?>)">
                                                 <i class="ri-edit-line"></i> Edit
                                             </button>
-                                            <button class="btn btn-sm btn-danger" onclick="deleteCoordinator(<?= $coord['userId'] ?>, '<?= htmlspecialchars($coord['name']) ?>')">
+                                            <button class="btn btn-sm btn-danger coordinator-delete-btn" onclick="deleteCoordinator(<?= $coord['userId'] ?>, '<?= htmlspecialchars($coord['name']) ?>')">
                                                 <i class="ri-delete-bin-line"></i> Delete
                                             </button>
                                         </td>
@@ -281,7 +435,7 @@ $coordinators = $logic->getAllCoordinators();
     <div class="modal fade" id="editModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <div class="modal-header" style="background: linear-gradient(135deg, #ff6200 0%, #994524 100%); color: white;">
                     <h5 class="modal-title"><i class="ri-edit-line"></i> Edit Coordinator</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
@@ -358,6 +512,11 @@ $coordinators = $logic->getAllCoordinators();
         <input type="hidden" name="action" value="delete">
         <input type="hidden" name="userId" id="deleteUserId">
     </form>
+
+
+        <!--here content-->
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
