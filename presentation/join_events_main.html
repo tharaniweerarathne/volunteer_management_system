@@ -74,6 +74,26 @@
             </button>
         </div>
 
+
+    <div class="filter_details">
+    <div class="search-row">
+        <input type="date" id="date" name="date" placeholder="Date">
+        <select id="category" name="category">
+            <option value="">Category</option>
+            <!-- PHP categories here -->
+        </select>
+        <select id="skill" name="skill">
+            <option value="">Skill Level</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+        </select>
+        <input type="text" id="location" name="location" placeholder="Location">
+        <button class="search-btn" onclick="searchEvents()">Search</button>
+    </div>
+</div>
+
+
         <div class="row g-3">
             <!-- Card 1 -->
             <div class="col-lg-4 col-md-6 col-sm-12">
@@ -86,6 +106,12 @@
                         </div>
                     </div>
                     <div class="joinEventsCardBody">
+                        <!--this needed to be changed-->
+                            <div class="joinEventsCardMeta">
+                               <span class="joinEventsCategory">Environment</span>
+                               <span class="joinEventsSkill">Beginner</span>
+                            </div>
+
                         <h3 class="joinEventsCardTitle">Beach Cleanup</h3>
                         <p class="joinEventsCardText">Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum</p>
                         <div class="joinEventsCardDetails">
@@ -118,6 +144,10 @@
                         </div>
                     </div>
                     <div class="joinEventsCardBody">
+                            <div class="joinEventsCardMeta">
+                               <span class="joinEventsCategory">Environment</span>
+                               <span class="joinEventsSkill">Beginner</span>
+                            </div>
                         <h3 class="joinEventsCardTitle">Community Garden</h3>
                         <p class="joinEventsCardText">Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum</p>
                         <div class="joinEventsCardDetails">
@@ -150,6 +180,10 @@
                         </div>
                     </div>
                     <div class="joinEventsCardBody">
+                            <div class="joinEventsCardMeta">
+                               <span class="joinEventsCategory">Environment</span>
+                               <span class="joinEventsSkill">Beginner</span>
+                            </div>
                         <h3 class="joinEventsCardTitle">Tree Planting</h3>
                         <p class="joinEventsCardText">Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum</p>
                         <div class="joinEventsCardDetails">
@@ -182,6 +216,10 @@
                         </div>
                     </div>
                     <div class="joinEventsCardBody">
+                            <div class="joinEventsCardMeta">
+                               <span class="joinEventsCategory">Environment</span>
+                               <span class="joinEventsSkill">Beginner</span>
+                            </div>
                         <h3 class="joinEventsCardTitle">Food Drive</h3>
                         <p class="joinEventsCardText">Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum</p>
                         <div class="joinEventsCardDetails">
@@ -250,7 +288,7 @@
                             <span style="padding-left: 24px">Seeduwa, Sri Lanka</span>
                         </li>
                         <li><i class="ri-phone-line"></i>077 235 3565</li>
-                        <li><i class="ri-mail-line"></i> info@contact.com</li>
+                        <li><i class="ri-mail-line"></i> infocontact256@gmail.com</li>
                         <li><i class="ri-time-line"></i> Mon - Sun: 9:00 - 17:00</li>
                     </ul>
                 </div>
