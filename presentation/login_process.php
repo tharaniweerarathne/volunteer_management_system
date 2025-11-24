@@ -20,11 +20,11 @@ if ($result['success']) {
     $_SESSION['role'] = $result['user']['role'];
 
     if ($result['user']['role'] === 'Admin') {
-        header("Location: ../presentation/admin_dashboard.html");
+        header("Location: ../presentation/admin_dashboard.php");
     } elseif ($result['user']['role'] === 'Coordinator') {
-        header("Location: ../presentation/coordinator_dashboard.html");
+        header("Location: ../presentation/coordinator_dashboard.php");
     } else {
-        header("Location: ../presentation/volunteer_dashboard.html");
+        header("Location: ../presentation/volunteer_dashboard.php");
     }
     exit;
 } else {
