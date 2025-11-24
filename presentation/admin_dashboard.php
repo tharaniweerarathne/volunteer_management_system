@@ -36,8 +36,8 @@ $name = $_SESSION['name'];
             </div>
             <div class="nav-item">
                 <a href="coordinator_management.php">
-                    <i class="ri-calendar-check-line"></i>
-                    <span>Insert Coordinators</span>
+                    <i class="ri-user-settings-line"></i>
+                    <span>Coordinator Management</span>
                 </a>
             </div>
             <div class="nav-item">
