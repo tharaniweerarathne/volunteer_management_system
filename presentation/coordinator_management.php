@@ -64,213 +64,10 @@ $coordinators = $logic->getAllCoordinators();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coordinator Management</title>
-    <link rel="stylesheet" href="../assets/css/v2.css">
+    <link rel="stylesheet" href="../assets/css/a2.css">
     <link rel="icon" type="image/png" href="../assets/images/title.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <style>
-.container1 {
-  max-width: 1200px;
-  margin: 20px auto 0;
-  min-height: 100vh;
-  padding: 20px;
-}
-
-.card {
-  border: none;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.95);
-}
-
-.card-header {
-  background: linear-gradient(135deg, #ff6200 0%, #994524 100%);
-  color: white;
-  border-radius: 16px 16px 0 0;
-  padding: 24px;
-  font-weight: 600;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #ff6200 0%, #994524 100%);
-  border: none;
-  border-radius: 12px;
-  padding: 12px 24px;
-  font-weight: 500;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 25px rgba(179, 82, 27, 0.3);
-}
-
-.table-container {
-  overflow-x: auto;
-  border-radius: 0 0 16px 16px;
-}
-
-.action-buttons {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.required {
-  color: #ef4444;
-}
-
-.input-group {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.input-icon {
-  position: absolute;
-  left: 16px;
-  color: #6b7280;
-  z-index: 10;
-}
-
-.form-control.with-icon {
-  padding-left: 48px;
-  border-radius: 12px;
-  border: 2px solid #e5e7eb;
-  transition: all 0.3s ease;
-}
-
-.form-control.with-icon:focus {
-  border-color: #ff6200;
-  box-shadow: 0 0 0 3px rgba(255, 98, 0, 0.1);
-}
-
-.password-toggle {
-  position: absolute;
-  right: 16px;
-  cursor: pointer;
-  color: #6b7280;
-  z-index: 10;
-  transition: color 0.2s ease;
-}
-
-.password-toggle:hover {
-  color: #374151;
-}
-
-.coordinator-edit-btn {
-  background: #15803d;
-  border: none;
-  padding: 8px 16px;
-  font-size: 14px;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.coordinator-edit-btn:hover {
-  background: #16a34a;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(21, 128, 61, 0.3);
-}
-
-.coordinator-delete-btn {
-  background: #dc2626;
-  border: none;
-  padding: 8px 16px;
-  font-size: 14px;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.coordinator-delete-btn:hover {
-  background: #ef4444;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
-}
-
-.email-hints {
-  font-size: 0.85rem;
-  margin-top: 8px;
-  min-height: 20px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.email-hint {
-  padding: 6px 12px;
-  background: #000;
-  border: 1.5px solid #ff6200;
-  border-radius: 8px;
-  color: #ff6200;
-  transition: all 0.3s ease;
-  font-size: 0.8rem;
-  font-weight: 500;
-}
-
-.email-hint:hover {
-  background: #ff6200;
-  color: white;
-  transform: translateY(-1px);
-}
-
-/*scrollbar*/
-html {
-  scrollbar-width: thin;
-  scrollbar-color: #cf7035 #000000;
-}
-
-.page-title {
-    text-align: center;
-    margin-bottom: 3rem;
-    font-size: 2.8rem;
-    font-weight: 600;
-    color: #ffffff;
-    background: linear-gradient(135deg, #ff6200 0%, #994524 100%);
-    padding: 1.5rem 3rem;
-    border-radius: 20px;
-    box-shadow: 
-        0 10px 30px rgba(0,0,0,0.3),
-        inset 0 1px 0 rgba(255,255,255,0.1);
-    position: relative;
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.1);
-}
-
-.page-title::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-    transition: left 0.5s;
-}
-
-.page-title:hover::before {
-    left: 100%;
-}
-
-.page-title i {
-    font-size: 2.5rem;
-    margin-right: 1rem;
-    color: #ffffffff;
-}
- 
-   </style>
 </head>
 <body>
 
@@ -378,7 +175,7 @@ html {
         </header>
 
     <div class="container1">
-        <h1 class="text-white text-center page-title mb-4">
+        <h1 class="text-left page-title mb-4">
             <i class="ri-user-settings-line"></i> Coordinator Management
         </h1>
 
@@ -389,7 +186,7 @@ html {
             </div>
         <?php endif; ?>
 
-        <!-- Add Coordinator Form -->
+        <!-- add coordinator Form -->
         <div class="card">
             <div class="card-header">
                 <h4 class="mb-0"><i class="ri-user-add-line"></i> Add New Coordinator</h4>
