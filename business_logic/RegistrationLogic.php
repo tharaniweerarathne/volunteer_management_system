@@ -127,9 +127,9 @@ class RegistrationLogic {
     }
 
 
-       // ==================== COORDINATOR LOGIC ====================
+       // ==================== coordinator registration logic ====================
     
-    // Register coordinator (no skills, no OTP)
+    // register coordinator 
     public function registerCoordinator($name, $email, $password, $telephoneNo, $location, $gender) {
         if ($this->registrationData->emailExists($email)) {
             return ["success" => false, "message" => "This email is already registered."];
@@ -145,12 +145,12 @@ class RegistrationLogic {
         return ["success" => true, "message" => "Coordinator added successfully!", "userId" => $userId];
     }
     
-    // Get all coordinators
+    // getting all coordinators
     public function getAllCoordinators() {
         return $this->registrationData->getAllCoordinators();
     }
     
-    // Get coordinator by ID
+    
     public function getCoordinatorById($userId) {
         $coordinator = $this->registrationData->getCoordinatorById($userId);
         if (!$coordinator) {
@@ -159,19 +159,19 @@ class RegistrationLogic {
         return ["success" => true, "data" => $coordinator];
     }
     
-    // Update coordinator
+    // update coordinator
     public function updateCoordinator($userId, $name, $email, $telephoneNo, $location, $gender, $newPassword = null) {
-        // Check if email exists for another user
+        // check if email exists for another user
         if ($this->registrationData->emailExistsForOtherUser($email, $userId)) {
             return ["success" => false, "message" => "This email is already used by another user."];
         }
         
-        // Update basic info
+        // update basic info
         if (!$this->registrationData->updateCoordinator($userId, $name, $email, $telephoneNo, $location, $gender)) {
             return ["success" => false, "message" => "Failed to update coordinator."];
         }
         
-        // Update password if provided
+        // update password if provided
         if (!empty($newPassword)) {
             $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
             $this->registrationData->updateCoordinatorPassword($userId, $hashedPassword);
@@ -180,7 +180,7 @@ class RegistrationLogic {
         return ["success" => true, "message" => "Coordinator updated successfully!"];
     }
     
-    // Delete coordinator
+    // delete coordinator
     public function deleteCoordinator($userId) {
         if (!$this->registrationData->deleteCoordinator($userId)) {
             return ["success" => false, "message" => "Failed to delete coordinator."];

@@ -66,9 +66,9 @@ class RegistrationData {
     }
 
 
-       // ==================== COORDINATOR METHODS ====================
+       // ==================== coordinators methods ====================
     
-    // Create coordinator (no skills)
+    // create coordinator 
     public function createCoordinator($name, $email, $hashedPassword, $telephoneNo, $location, $gender) {
         $role = 'Coordinator'; 
         $stmt = $this->conn->prepare("INSERT INTO users (name, email, password, telephoneNo, location, gender, role) VALUES (?, ?, ?, ?, ?, ?, ?)");
@@ -80,7 +80,7 @@ class RegistrationData {
         return false;
     }
     
-    // Get all coordinators
+    // get all coordinators
     public function getAllCoordinators() {
         $stmt = $this->conn->prepare("SELECT userId, name, email, telephoneNo, location, gender FROM users WHERE role = 'Coordinator' ORDER BY name ASC");
         $stmt->execute();
@@ -88,7 +88,7 @@ class RegistrationData {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
     
-    // Get coordinator by ID
+    
     public function getCoordinatorById($userId) {
         $stmt = $this->conn->prepare("SELECT userId, name, email, telephoneNo, location, gender FROM users WHERE userId = ? AND role = 'Coordinator'");
         $stmt->bind_param("i", $userId);
@@ -97,28 +97,28 @@ class RegistrationData {
         return $result->fetch_assoc();
     }
     
-    // Update coordinator
+    // update coordinator
     public function updateCoordinator($userId, $name, $email, $telephoneNo, $location, $gender) {
         $stmt = $this->conn->prepare("UPDATE users SET name = ?, email = ?, telephoneNo = ?, location = ?, gender = ? WHERE userId = ? AND role = 'Coordinator'");
         $stmt->bind_param("sssssi", $name, $email, $telephoneNo, $location, $gender, $userId);
         return $stmt->execute();
     }
     
-    // Update coordinator password
+    // update coordinator password
     public function updateCoordinatorPassword($userId, $hashedPassword) {
         $stmt = $this->conn->prepare("UPDATE users SET password = ? WHERE userId = ? AND role = 'Coordinator'");
         $stmt->bind_param("si", $hashedPassword, $userId);
         return $stmt->execute();
     }
     
-    // Delete coordinator
+    // delete coordinator
     public function deleteCoordinator($userId) {
         $stmt = $this->conn->prepare("DELETE FROM users WHERE userId = ? AND role = 'Coordinator'");
         $stmt->bind_param("i", $userId);
         return $stmt->execute();
     }
     
-    // Check if email exists for another user (for update validation)
+    // check if email exists for another user (for update validation)
     public function emailExistsForOtherUser($email, $userId) {
         $stmt = $this->conn->prepare("SELECT userId FROM users WHERE email = ? AND userId != ?");
         $stmt->bind_param("si", $email, $userId);
