@@ -201,7 +201,7 @@ $coordinators = $logic->getAllCoordinators();
                             </label>
                             <div class="input-group">
                                 <i class="ri-user-line input-icon"></i>
-                                <input type="text" name="name" class="form-control with-icon" placeholder="Enter coordinator's name" required>
+                                <input type="text" name="name" class="form-control with-icon" placeholder="Enter the coordinator's name" required>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -210,7 +210,7 @@ $coordinators = $logic->getAllCoordinators();
                             </label>
                             <div class="input-group">
                                 <i class="ri-mail-line input-icon"></i>
-                                <input type="email" name="email" id="email" class="form-control with-icon" placeholder="Enter coordinator's email" required>
+                                <input type="email" name="email" id="email" class="form-control with-icon" placeholder="Enter the coordinator's email" required>
                             </div>
                             <div class="email-hints" id="emailHints"></div>
                         </div>
@@ -233,7 +233,7 @@ $coordinators = $logic->getAllCoordinators();
                             </label>
                             <div class="input-group">
                                 <i class="ri-phone-line input-icon"></i>
-                                <input type="tel" name="phone" id="phone" class="form-control with-icon" placeholder="Enter telephone number" required>
+                                <input type="tel" name="phone" id="phone" class="form-control with-icon" placeholder="Enter the telephone number" required>
                             </div>
                              <div class="email-hints" id="mobileHints"></div>
                         </div>
