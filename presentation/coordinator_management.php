@@ -186,7 +186,7 @@ $coordinators = $logic->getAllCoordinators();
             </div>
         <?php endif; ?>
 
-        <!-- add coordinator Form -->
+        <!-- add coordinator form -->
         <div class="card">
             <div class="card-header">
                 <h4 class="mb-0"><i class="ri-user-add-line"></i> Add New Coordinator</h4>
@@ -268,13 +268,13 @@ $coordinators = $logic->getAllCoordinators();
             </div>
         </div>
 
-        <!-- Coordinators List -->
+        <!-- coordinators list -->
         <div class="card">
             <div class="card-header">
                 <h4 class="mb-0"><i class="ri-team-line"></i> All Coordinators</h4>
             </div>
             <div class="card-body">
-                <!-- Search Bar -->
+                
                 <div class="mb-4">
                     <div class="input-group">
                         <i class="ri-search-line input-icon"></i>
@@ -333,7 +333,7 @@ $coordinators = $logic->getAllCoordinators();
         </div>
     </div>
 
-    <!-- Edit Modal -->
+    <!-- edit modal -->
     <div class="modal fade" id="editModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -409,14 +409,12 @@ $coordinators = $logic->getAllCoordinators();
         </div>
     </div>
 
-    <!-- Delete Form (hidden) -->
+    <!-- delete form -->
     <form method="POST" id="deleteForm" style="display: none;">
         <input type="hidden" name="action" value="delete">
         <input type="hidden" name="userId" id="deleteUserId">
     </form>
 
-
-        <!--here content-->
     </div>
 
 
@@ -460,7 +458,7 @@ $coordinators = $logic->getAllCoordinators();
             }
         }
 
-        // Search functionality
+        // search functionality
         function searchCoordinators() {
             const searchInput = document.getElementById('searchInput').value.toLowerCase().trim();
             const rows = document.querySelectorAll('.coordinator-row');
@@ -478,7 +476,7 @@ $coordinators = $logic->getAllCoordinators();
                 }
             });
 
-            // Update search results message
+            // updating search results message
             const searchResults = document.getElementById('searchResults');
             if (searchInput === '') {
                 searchResults.textContent = '';
@@ -486,7 +484,7 @@ $coordinators = $logic->getAllCoordinators();
                 searchResults.textContent = `Found ${visibleCount} coordinator(s) matching "${searchInput}"`;
             }
 
-            // Show/hide "no results" message
+            // show/hide "no results" message
             updateNoResultsMessage(visibleCount);
         }
 
@@ -499,12 +497,12 @@ $coordinators = $logic->getAllCoordinators();
             const tbody = document.getElementById('coordinatorTableBody');
             let noResultsRow = tbody.querySelector('.no-results-search');
             
-            // Remove existing "no results" message if it exists
+            // remove existing "no results" message if it exists
             if (noResultsRow) {
                 noResultsRow.remove();
             }
 
-            // Add "no results" message if no rows are visible
+            // adding "no results" message if no rows are visible
             if (visibleCount === 0 && tbody.querySelectorAll('.coordinator-row').length > 0) {
                 const row = document.createElement('tr');
                 row.className = 'no-results-search';
@@ -513,7 +511,7 @@ $coordinators = $logic->getAllCoordinators();
             }
         }
 
-        // Auto-hide alerts after 5 seconds
+        // auto-hide alerts after 5 seconds
         setTimeout(() => {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(alert => {
