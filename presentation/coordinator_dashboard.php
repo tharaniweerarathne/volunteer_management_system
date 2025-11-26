@@ -42,9 +42,9 @@ $name = $_SESSION['name'];
                 </a>
             </div>
             <div class="nav-item">
-                <a href="#">
+                <a href="volunteer_management.php">
                     <i class="ri-add-circle-line"></i>
-                    <span>Join Events</span>
+                    <span>Volunteers</span>
                 </a>
             </div>
             <div class="nav-item">

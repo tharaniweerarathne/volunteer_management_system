@@ -1,13 +1,11 @@
 <?php
 session_start();
-require_once "../business_logic/UserLogic.php";
 
-$conn = new mysqli("localhost", "root", "", "volunteer_management");
-if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
+require_once "../data_access/db.php";
+require_once "../business_logic/UserLogic.php";
 
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
-
 
 $_SESSION['old_email'] = $email;
 
@@ -19,12 +17,16 @@ if ($result['success']) {
     $_SESSION['name'] = $result['user']['name'];
     $_SESSION['role'] = $result['user']['role'];
 
-    if ($result['user']['role'] === 'Admin') {
-        header("Location: ../presentation/admin_dashboard.php");
-    } elseif ($result['user']['role'] === 'Coordinator') {
-        header("Location: ../presentation/coordinator_dashboard.php");
-    } else {
-        header("Location: ../presentation/volunteer_dashboard.php");
+    // redirect based on role
+    switch ($result['user']['role']) {
+        case 'Admin':
+            header("Location: ../presentation/admin_dashboard.php");
+            break;
+        case 'Coordinator':
+            header("Location: ../presentation/coordinator_dashboard.php");
+            break;
+        default:
+            header("Location: ../presentation/volunteer_dashboard.php");
     }
     exit;
 } else {
@@ -32,5 +34,4 @@ if ($result['success']) {
     header("Location: sign_in.php");
     exit;
 }
-
 ?>

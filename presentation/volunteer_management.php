@@ -8,6 +8,7 @@ if (!isset($_SESSION['name'])) {
 }
 
 $name = $_SESSION['name'];
+$role = $_SESSION['role'] ?? '';
 
 require_once __DIR__ . "/../data_access/db.php";
 require_once __DIR__ . "/../business_logic/RegistrationLogic.php";
@@ -76,33 +77,32 @@ $volunteers = $logic->getAllVolunteers();
 <body>
 
     <!-- sidebar navigation -->
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-logo">
-            <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
+    </div>
+    <div class="nav-items">
+        <div class="nav-item">
+            <a href="#" class="active">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
         </div>
-        <div class="nav-items">
-            <div class="nav-item">
-                <a href="admin_dashboard.php">
-                    <i class="ri-dashboard-line"></i>
-                    <span>Dashboard</span>
-                </a>
-            </div>
+
+        <?php if ($role === 'Admin'): ?>
             <div class="nav-item">
                 <a href="coordinator_management.php">
                     <i class="ri-user-settings-line"></i>
                     <span>Coordinator Management</span>
                 </a>
             </div>
+        <?php endif; ?>
+
+        <?php if ($role === 'Admin' || $role === 'Coordinator'): ?>
             <div class="nav-item">
-                <a href="volunteer_management.php" class="active">
-                    <i class="ri-team-line"></i>
-                    <span>Volunteers</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#">
+                <a href="volunteer_management.php">
                     <i class="ri-add-circle-line"></i>
-                    <span>Join Events</span>
+                    <span>Volunteers</span>
                 </a>
             </div>
             <div class="nav-item">
@@ -111,49 +111,51 @@ $volunteers = $logic->getAllVolunteers();
                     <span>Calendar</span>
                 </a>
             </div>
-            <div class="nav-item">
-                <a href="#">
-                    <i class="ri-medal-line"></i>
-                    <span>Certificates</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#">
-                    <i class="ri-trophy-line"></i>
-                    <span>Leaderboard</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#">
-                    <i class="ri-message-3-line"></i>
-                    <span>Messages</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#">
-                    <i class="ri-feedback-line"></i>
-                    <span>Feedback</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="logout.php">
-                    <i class="ri-logout-box-line me-2"></i>
-                    <span>Logout</span>
-                </a>
-            </div>
+        <?php endif; ?>
+
+        <div class="nav-item">
+            <a href="#">
+                <i class="ri-medal-line"></i>
+                <span>Certificates</span>
+            </a>
         </div>
-    </nav>
+        <div class="nav-item">
+            <a href="#">
+                <i class="ri-trophy-line"></i>
+                <span>Leaderboard</span>
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="#">
+                <i class="ri-message-3-line"></i>
+                <span>Messages</span>
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="#">
+                <i class="ri-feedback-line"></i>
+                <span>Feedback</span>
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="logout.php">
+                <i class="ri-logout-box-line me-2"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+</nav>
 
     <!-- main content -->
     <div class="main-content" id="mainContent">
         <!-- top header -->
         <header class="top-header">
-            <div class="welcome-text">
-                <button class="menu-toggle" id="menuToggle">
-                    <i class="ri-menu-line"></i>
-                </button>
-                Welcome Admin, <?php echo $name; ?>
-            </div>
+<div class="welcome-text">
+    <button class="menu-toggle" id="menuToggle">
+        <i class="ri-menu-line"></i>
+    </button>
+    Welcome <?php echo htmlspecialchars($role); ?>, <?php echo htmlspecialchars($name); ?>
+</div>
             <div class="header-actions">
                 <div class="dropdown">
                     <button class="btn p-0 dropdown-toggle" type="button" data-bs-toggle="dropdown">

@@ -8,6 +8,7 @@ if (!isset($_SESSION['name'])) {
 }
 
 $name = $_SESSION['name'];
+$role = $_SESSION['role'] ?? '';
 
 require_once __DIR__ . "/../data_access/db.php";
 require_once __DIR__ . "/../business_logic/RegistrationLogic.php";
@@ -142,7 +143,7 @@ $coordinators = $logic->getAllCoordinators();
                 <button class="menu-toggle" id="menuToggle">
                     <i class="ri-menu-line"></i>
                 </button>
-                Welcome Coordinator, <?php echo $name; ?>
+                Welcome <?php echo htmlspecialchars($role); ?>, <?php echo htmlspecialchars($name); ?>
             </div>
             <div class="header-actions">
                 

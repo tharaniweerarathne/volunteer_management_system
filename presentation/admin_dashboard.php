@@ -93,7 +93,7 @@ $name = $_SESSION['name'];
                 <button class="menu-toggle" id="menuToggle">
                     <i class="ri-menu-line"></i>
                 </button>
-                Welcome, <?php echo $name; ?>
+                Welcome Admin, <?php echo $name; ?>
             </div>
             <div class="header-actions">
                 
