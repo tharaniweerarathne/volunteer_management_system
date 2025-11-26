@@ -126,5 +126,92 @@ class RegistrationData {
         $result = $stmt->get_result();
         return $result->num_rows > 0;
     }
+
+
+      // ==================== volunteers methods ====================
+    
+    // get all volunteers with their skills
+    public function getAllVolunteers() {
+        $query = "SELECT u.userId, u.name, u.email, u.telephoneNo, u.location, u.gender,
+                  GROUP_CONCAT(s.skillName SEPARATOR ',') as skills
+                  FROM users u
+                  LEFT JOIN volunteer_skills vs ON u.userId = vs.userId
+                  LEFT JOIN skills s ON vs.skillId = s.skillId
+                  WHERE u.role = 'Volunteer'
+                  GROUP BY u.userId
+                  ORDER BY u.userId DESC";
+        
+        $result = $this->conn->query($query);
+        $volunteers = [];
+        
+        while ($row = $result->fetch_assoc()) {
+            $row['skills'] = $row['skills'] ? explode(',', $row['skills']) : [];
+            $volunteers[] = $row;
+        }
+        
+        return $volunteers;
+    }
+    
+    // get volunteer by ID with skills
+    public function getVolunteerById($userId) {
+        $stmt = $this->conn->prepare("SELECT userId, name, email, telephoneNo, location, gender FROM users WHERE userId = ? AND role = 'Volunteer'");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $volunteer = $result->fetch_assoc();
+        
+        if ($volunteer) {
+            // Get skills
+            $skillStmt = $this->conn->prepare("SELECT s.skillName FROM volunteer_skills vs 
+                                              JOIN skills s ON vs.skillId = s.skillId 
+                                              WHERE vs.userId = ?");
+            $skillStmt->bind_param("i", $userId);
+            $skillStmt->execute();
+            $skillResult = $skillStmt->get_result();
+            
+            $skills = [];
+            while ($skillRow = $skillResult->fetch_assoc()) {
+                $skills[] = $skillRow['skillName'];
+            }
+            $volunteer['skills'] = $skills;
+        }
+        
+        return $volunteer;
+    }
+    
+    // update volunteer
+    public function updateVolunteer($userId, $name, $email, $telephoneNo, $location, $gender) {
+        $stmt = $this->conn->prepare("UPDATE users SET name = ?, email = ?, telephoneNo = ?, location = ?, gender = ? WHERE userId = ? AND role = 'Volunteer'");
+        $stmt->bind_param("sssssi", $name, $email, $telephoneNo, $location, $gender, $userId);
+        return $stmt->execute();
+    }
+    
+    // update volunteer password
+    public function updateVolunteerPassword($userId, $hashedPassword) {
+        $stmt = $this->conn->prepare("UPDATE users SET password = ? WHERE userId = ? AND role = 'Volunteer'");
+        $stmt->bind_param("si", $hashedPassword, $userId);
+        return $stmt->execute();
+    }
+    
+    // delete volunteer skills
+    public function deleteVolunteerSkills($userId) {
+        $stmt = $this->conn->prepare("DELETE FROM volunteer_skills WHERE userId = ?");
+        $stmt->bind_param("i", $userId);
+        return $stmt->execute();
+    }
+    
+    // delete volunteer
+public function deleteVolunteer($userId) {
+    // First delete from volunteer_skills manually
+    $stmt1 = $this->conn->prepare("DELETE FROM volunteer_skills WHERE userId = ?");
+    $stmt1->bind_param("i", $userId);
+    $stmt1->execute();
+
+    // Now delete from users table
+    $stmt2 = $this->conn->prepare("DELETE FROM users WHERE userId = ?");
+    $stmt2->bind_param("i", $userId);
+
+    return $stmt2->execute();
+}
 }
 ?>

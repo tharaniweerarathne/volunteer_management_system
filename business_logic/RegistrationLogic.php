@@ -187,5 +187,65 @@ class RegistrationLogic {
         }
         return ["success" => true, "message" => "Coordinator deleted successfully!"];
     }
+
+
+        // ==================== volunteer management logic ====================
+    
+    // get all volunteers with skills
+    public function getAllVolunteers() {
+        return $this->registrationData->getAllVolunteers();
+    }
+    
+    // get volunteer by ID
+    public function getVolunteerById($userId) {
+        $volunteer = $this->registrationData->getVolunteerById($userId);
+        if (!$volunteer) {
+            return ["success" => false, "message" => "Volunteer not found"];
+        }
+        return ["success" => true, "data" => $volunteer];
+    }
+    
+    // update volunteer
+    public function updateVolunteer($userId, $name, $email, $telephoneNo, $location, $gender, $newPassword = null, $skills = []) {
+        // check if email exists for another user
+        if ($this->registrationData->emailExistsForOtherUser($email, $userId)) {
+            return ["success" => false, "message" => "This email is already used by another user."];
+        }
+        
+        // update basic info
+        if (!$this->registrationData->updateVolunteer($userId, $name, $email, $telephoneNo, $location, $gender)) {
+            return ["success" => false, "message" => "Failed to update volunteer."];
+        }
+        
+        // update password if provided
+        if (!empty($newPassword)) {
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+            $this->registrationData->updateVolunteerPassword($userId, $hashedPassword);
+        }
+        
+        // update skills
+        // First delete existing skills
+        $this->registrationData->deleteVolunteerSkills($userId);
+        
+        // Then add new skills
+        if (!empty($skills)) {
+            $skillIds = $this->registrationData->getSkillIdsByNames($skills);
+            if (!empty($skillIds)) {
+                $this->registrationData->addVolunteerSkills($userId, $skillIds);
+            }
+        }
+        
+        return ["success" => true, "message" => "Volunteer updated successfully!"];
+    }
+    
+    // delete volunteer
+   public function deleteVolunteer($userId) {
+    if (!$this->registrationData->deleteVolunteer($userId)) {
+        return ["success" => false, "message" => "Failed to delete volunteer."];
+    }
+
+    return ["success" => true, "message" => "Volunteer and related skills deleted successfully!"];
+}
+
 }
 ?>
