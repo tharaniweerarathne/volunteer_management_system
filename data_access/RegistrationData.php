@@ -202,12 +202,12 @@ class RegistrationData {
     
     // delete volunteer
 public function deleteVolunteer($userId) {
-    // First delete from volunteer_skills manually
+    // delete from volunteer_skills 
     $stmt1 = $this->conn->prepare("DELETE FROM volunteer_skills WHERE userId = ?");
     $stmt1->bind_param("i", $userId);
     $stmt1->execute();
 
-    // Now delete from users table
+    // delete from users table
     $stmt2 = $this->conn->prepare("DELETE FROM users WHERE userId = ?");
     $stmt2->bind_param("i", $userId);
 

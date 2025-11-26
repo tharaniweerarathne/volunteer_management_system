@@ -224,10 +224,10 @@ class RegistrationLogic {
         }
         
         // update skills
-        // First delete existing skills
+        
         $this->registrationData->deleteVolunteerSkills($userId);
         
-        // Then add new skills
+        
         if (!empty($skills)) {
             $skillIds = $this->registrationData->getSkillIdsByNames($skills);
             if (!empty($skillIds)) {

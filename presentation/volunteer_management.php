@@ -474,7 +474,7 @@ $volunteers = $logic->getAllVolunteers();
                             </div>
                         </div>
                         
-                        <!-- Edit Skills Section -->
+                        <!-- edit skills section -->
                         <div class="mb-3">
                             <label class="form-label">Skills (Optional)</label>
                             <div class="skills-section">
