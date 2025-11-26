@@ -52,7 +52,7 @@ class ForgotPasswordLogic {
             $mail->Port       = 587;
             
             
-            $mail->setFrom('your-email@gmail.com', 'Volunteer Platform');
+            $mail->setFrom('your-email@gmail.com', 'Unity Volunteers Trust');
             $mail->addAddress($email, $user['name']);
             
             

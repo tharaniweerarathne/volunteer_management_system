@@ -50,7 +50,7 @@ class RegistrationLogic {
             $mail->Port       = 587;
             
             
-            $mail->setFrom('your-email@gmail.com', 'Volunteer Platform');
+            $mail->setFrom('your-email@gmail.com', 'Unity Volunteers Trust');
             $mail->addAddress($email, $name);
             
             
@@ -60,7 +60,7 @@ class RegistrationLogic {
                 <html>
                 <body style='font-family: Arial, sans-serif;'>
                     <h2>Hello $name,</h2>
-                    <p>Thank you for registering with our Volunteer Platform!</p>
+                    <p>Thank you for registering with our Unity Volunteers Trust Platform!</p>
                     <p>Your OTP verification code is:</p>
                     <h1 style='color: #4F46E5; letter-spacing: 5px;'>$otp</h1>
                     <p>This code will expire in 10 minutes.</p>
