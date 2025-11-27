@@ -30,7 +30,7 @@ $pendingCount = $contactLogic->getPendingCount();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Message (sent) </title>
-    <link rel="stylesheet" href="../assets/css/a5.css">
+    <link rel="stylesheet" href="../assets/css/a6.css">
     <link rel="icon" type="image/png" href="../assets/images/title.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
@@ -168,9 +168,9 @@ $pendingCount = $contactLogic->getPendingCount();
 
 
           <!-- Content Area -->
-        <div class="container">
-            <h2 class="page-title">
-                <i class="fas fa-envelope"></i>
+    <div class="container1">
+        <h1 class="text-left page-title mb-4">
+                <i class="ri-send-plane-line"></i>
                 Contact Messages
             </h2>
 
