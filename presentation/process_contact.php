@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $_SESSION['contact_result'] = $result;
-    header('Location: ../index.php#contact');
+    header("Location:index.php#contact");
     exit();
 }
 ?>
