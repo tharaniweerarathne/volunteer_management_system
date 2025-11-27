@@ -82,14 +82,15 @@ $volunteers = $logic->getAllVolunteers();
         <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
     </div>
     <div class="nav-items">
-        <div class="nav-item">
-            <a href="#" class="active">
+
+        <?php if ($role === 'Admin'): ?>
+            <div class="nav-item">
+            <a href="admin_dashboard.php">
                 <i class="ri-dashboard-line"></i>
                 <span>Dashboard</span>
             </a>
-        </div>
+            </div> 
 
-        <?php if ($role === 'Admin'): ?>
             <div class="nav-item">
                 <a href="coordinator_management.php">
                     <i class="ri-user-settings-line"></i>
@@ -98,9 +99,18 @@ $volunteers = $logic->getAllVolunteers();
             </div>
         <?php endif; ?>
 
+        <?php if ($role === 'Coordinator'): ?>
+            <div class="nav-item">
+            <a href="coordinator_dashboard.php">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
+            </div> 
+        <?php endif; ?>
+
         <?php if ($role === 'Admin' || $role === 'Coordinator'): ?>
             <div class="nav-item">
-                <a href="volunteer_management.php">
+                <a href="volunteer_management.php" class="active">
                     <i class="ri-add-circle-line"></i>
                     <span>Volunteers</span>
                 </a>
@@ -114,11 +124,18 @@ $volunteers = $logic->getAllVolunteers();
         <?php endif; ?>
 
         <div class="nav-item">
-            <a href="#">
-                <i class="ri-medal-line"></i>
-                <span>Certificates</span>
+            <a href="view_messages.php"> 
+                <i class="ri-medal-line" ></i>
+                <span>Message</span>
             </a>
         </div>
+
+        <div class="nav-item">
+                <a href="volunteer_management.php">
+                    <i class="ri-add-circle-line"></i>
+                    <span>Volunteers</span>
+                </a>
+            </div>
         <div class="nav-item">
             <a href="#">
                 <i class="ri-trophy-line"></i>
@@ -579,10 +596,10 @@ $volunteers = $logic->getAllVolunteers();
             document.getElementById('editGender').value = vol.gender;
             document.getElementById('editPassword').value = '';
             
-            // Uncheck all skills first
+            // uncheck all skills first
             document.querySelectorAll('#editModal input[type="checkbox"]').forEach(cb => cb.checked = false);
             
-            // Check skills that volunteer has
+            // check skills that volunteer has
             if (vol.skills && vol.skills.length > 0) {
                 vol.skills.forEach(skill => {
                     const checkbox = document.querySelector(`#editModal input[value="${skill}"]`);

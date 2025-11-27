@@ -7,6 +7,7 @@ if (!isset($_SESSION['name'])) {
 }
 
 $name = $_SESSION['name'];
+$role = $_SESSION['role'] ?? '';
 ?>
 
 <!DOCTYPE html>
@@ -24,23 +25,38 @@ $name = $_SESSION['name'];
 </head>
 <body>
     <!-- sidebar navigation -->
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-logo">
-            <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
-        </div>
-        <div class="nav-items">
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
+    </div>
+    <div class="nav-items">
+
+        <?php if ($role === 'Admin'): ?>
             <div class="nav-item">
-                <a href="#" class="active">
-                    <i class="ri-dashboard-line"></i>
-                    <span>Dashboard</span>
+            <a href="admin_dashboard.php" class="active">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
+            </div> 
+
+            <div class="nav-item">
+                <a href="coordinator_management.php">
+                    <i class="ri-user-settings-line"></i>
+                    <span>Coordinator Management</span>
                 </a>
             </div>
+        <?php endif; ?>
+
+        <?php if ($role === 'Coordinator'): ?>
             <div class="nav-item">
-                <a href="#">
-                    <i class="ri-calendar-check-line"></i>
-                    <span>My Events</span>
-                </a>
-            </div>
+            <a href="coordinator_dashboard.php" class="active">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
+            </div> 
+        <?php endif; ?>
+
+        <?php if ($role === 'Admin' || $role === 'Coordinator'): ?>
             <div class="nav-item">
                 <a href="volunteer_management.php">
                     <i class="ri-add-circle-line"></i>
@@ -53,38 +69,40 @@ $name = $_SESSION['name'];
                     <span>Calendar</span>
                 </a>
             </div>
-            <div class="nav-item">
-                <a href="#">
-                    <i class="ri-medal-line"></i>
-                    <span>Certificates</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#">
-                    <i class="ri-trophy-line"></i>
-                    <span>Leaderboard</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#">
-                    <i class="ri-message-3-line"></i>
-                    <span>Messages</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#">
-                    <i class="ri-feedback-line"></i>
-                    <span>Feedback</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="logout.php">
-                    <i class="ri-logout-box-line me-2"></i>
-                    <span>Logout</span>
-                </a>
-            </div>
+        <?php endif; ?>
+
+        <div class="nav-item">
+            <a href="view_messages.php" > 
+                <i class="ri-medal-line"></i>
+                <span>Message</span>
+            </a>
         </div>
-    </nav>
+        <div class="nav-item">
+            <a href="#">
+                <i class="ri-trophy-line"></i>
+                <span>Leaderboard</span>
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="#">
+                <i class="ri-message-3-line"></i>
+                <span>Messages</span>
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="#">
+                <i class="ri-feedback-line"></i>
+                <span>Feedback</span>
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="logout.php">
+                <i class="ri-logout-box-line me-2"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+</nav>
 
     <!-- main content -->
     <div class="main-content" id="mainContent">

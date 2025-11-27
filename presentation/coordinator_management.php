@@ -65,7 +65,7 @@ $coordinators = $logic->getAllCoordinators();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coordinator Management</title>
-    <link rel="stylesheet" href="../assets/css/a3.css">
+    <link rel="stylesheet" href="../assets/css/a4.css">
     <link rel="icon" type="image/png" href="../assets/images/title.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
@@ -73,27 +73,42 @@ $coordinators = $logic->getAllCoordinators();
 <body>
 
     <!-- sidebar navigation -->
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-logo">
-            <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
-        </div>
-        <div class="nav-items">
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
+    </div>
+    <div class="nav-items">
+
+        <?php if ($role === 'Admin'): ?>
             <div class="nav-item">
-                <a href="admin_dashboard.php">
-                    <i class="ri-dashboard-line"></i>
-                    <span>Dashboard</span>
-                </a>
-            </div>
+            <a href="admin_dashboard.php">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
+            </div> 
+
             <div class="nav-item">
                 <a href="coordinator_management.php" class="active">
                     <i class="ri-user-settings-line"></i>
                     <span>Coordinator Management</span>
                 </a>
             </div>
+        <?php endif; ?>
+
+        <?php if ($role === 'Coordinator'): ?>
             <div class="nav-item">
-                <a href="#">
+            <a href="coordinator_dashboard.php">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
+            </div> 
+        <?php endif; ?>
+
+        <?php if ($role === 'Admin' || $role === 'Coordinator'): ?>
+            <div class="nav-item">
+                <a href="volunteer_management.php">
                     <i class="ri-add-circle-line"></i>
-                    <span>Join Events</span>
+                    <span>Volunteers</span>
                 </a>
             </div>
             <div class="nav-item">
@@ -102,38 +117,47 @@ $coordinators = $logic->getAllCoordinators();
                     <span>Calendar</span>
                 </a>
             </div>
-            <div class="nav-item">
-                <a href="#">
-                    <i class="ri-medal-line"></i>
-                    <span>Certificates</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#">
-                    <i class="ri-trophy-line"></i>
-                    <span>Leaderboard</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#">
-                    <i class="ri-message-3-line"></i>
-                    <span>Messages</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#">
-                    <i class="ri-feedback-line"></i>
-                    <span>Feedback</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="logout.php">
-                    <i class="ri-logout-box-line me-2"></i>
-                    <span>Logout</span>
-                </a>
-            </div>
+        <?php endif; ?>
+
+        <div class="nav-item">
+            <a href="view_messages.php"> 
+                <i class="ri-medal-line" ></i>
+                <span>Message</span>
+            </a>
         </div>
-    </nav>
+
+        <div class="nav-item">
+                <a href="volunteer_management.php">
+                    <i class="ri-add-circle-line"></i>
+                    <span>Volunteers</span>
+                </a>
+            </div>
+        <div class="nav-item">
+            <a href="#">
+                <i class="ri-trophy-line"></i>
+                <span>Leaderboard</span>
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="#">
+                <i class="ri-message-3-line"></i>
+                <span>Messages</span>
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="#">
+                <i class="ri-feedback-line"></i>
+                <span>Feedback</span>
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="logout.php">
+                <i class="ri-logout-box-line me-2"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+</nav>
 
     <!-- main content -->
     <div class="main-content" id="mainContent">

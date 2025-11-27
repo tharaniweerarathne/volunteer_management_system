@@ -1783,6 +1783,45 @@ textarea.form-control {
     animation: spin 0.6s linear infinite;
 }
 
+.alert {
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+}
+
+.alert-success {
+    background-color: #d1fae5;
+    border: 1px solid #10b981;
+    color: #065f46;
+}
+
+.alert-danger {
+    background-color: #fee2e2;
+    border: 1px solid #ef4444;
+    color: #991b1b;
+}
+
+.alert i {
+    font-size: 1.2rem;
+}
+
+.btn-close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.5;
+    margin-left: auto;
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
     @keyframes spin {
         to { transform: rotate(360deg); }
     }

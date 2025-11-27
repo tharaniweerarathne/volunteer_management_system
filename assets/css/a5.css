@@ -488,3 +488,44 @@ html {
 }
 
 
+/*message section*/
+        .message-card {
+            border-left: 4px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        .message-card.pending {
+            border-left-color: #ff6200 !important; 
+            background-color: #fff7ed !important;
+        }
+        .message-card.replied {
+            border-left-color: #16a34a;
+        }
+        .message-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .status-pending {
+            background-color: #ff6200;
+            color: white;
+        }
+        .status-replied {
+            background-color: #16a34a;
+            color: white;
+        }
+        .reply-section {
+            background-color: #f0fdf4;
+            border-left: 3px solid #16a34a;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
+        }
+        .modal-header {
+            background: linear-gradient(135deg, #ff6200 0%, #994524 100%);
+            color: white;
+        }
