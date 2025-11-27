@@ -65,10 +65,11 @@ $coordinators = $logic->getAllCoordinators();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coordinator Management</title>
-    <link rel="stylesheet" href="../assets/css/a4.css">
+    <link rel="stylesheet" href="../assets/css/a6.css">
     <link rel="icon" type="image/png" href="../assets/images/title.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
 </head>
 <body>
 
@@ -292,6 +293,24 @@ $coordinators = $logic->getAllCoordinators();
                 </form>
             </div>
         </div>
+
+
+        <!--csv file generating-->
+        <div class="csv-generating">
+    <div class="section-title"><i class="ri-file-chart-line"></i> Export Data to CSV</div>
+    <div class="button-group">
+
+        <a href="export_csv.php?type=coordinators" class="csv-button btn-coordinators" onclick="showCsvLoading(this)">
+            <i class="ri-download-cloud-line"></i>
+            Coordinators
+        </a>
+
+        <a href="export_csv.php?type=all_users" class="csv-button btn-all-users" onclick="showCsvLoading(this)">
+            <i class="ri-download-cloud-line"></i>
+            All Users
+        </a>
+    </div>
+</div>
 
         <!-- coordinators list -->
         <div class="card">
@@ -543,6 +562,15 @@ $coordinators = $logic->getAllCoordinators();
                 bootstrap.Alert.getOrCreateInstance(alert).close();
             });
         }, 5000);
+
+
+
+         function showCsvLoading(button) {
+        button.classList.add('loading');
+        setTimeout(() => {
+            button.classList.remove('loading');
+        }, 2000);
+    }
     </script>
 </body>
 </html>

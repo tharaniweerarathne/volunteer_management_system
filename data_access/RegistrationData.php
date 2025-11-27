@@ -213,5 +213,65 @@ public function deleteVolunteer($userId) {
 
     return $stmt2->execute();
 }
+
+
+// ==================== CSV Export Methods ====================
+
+// Get all volunteers for CSV export (without password)
+public function getAllVolunteersForExport() {
+    $query = "SELECT u.userId, u.name, u.email, u.telephoneNo, u.location, u.gender,
+              GROUP_CONCAT(s.skillName SEPARATOR ', ') as skills
+              FROM users u
+              LEFT JOIN volunteer_skills vs ON u.userId = vs.userId
+              LEFT JOIN skills s ON vs.skillId = s.skillId
+              WHERE u.role = 'Volunteer'
+              GROUP BY u.userId
+              ORDER BY u.userId DESC";
+    
+    $result = $this->conn->query($query);
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
+
+// Get all coordinators for CSV export (without password)
+public function getAllCoordinatorsForExport() {
+    $stmt = $this->conn->prepare("SELECT userId, name, email, telephoneNo, location, gender 
+                                   FROM users 
+                                   WHERE role = 'Coordinator' 
+                                   ORDER BY name ASC");
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
+
+// Get all users for CSV export (without password)
+public function getAllUsersForExport() {
+    $query = "SELECT u.userId, u.name, u.email, u.telephoneNo, u.location, u.gender, u.role,
+              GROUP_CONCAT(s.skillName SEPARATOR ', ') as skills
+              FROM users u
+              LEFT JOIN volunteer_skills vs ON u.userId = vs.userId
+              LEFT JOIN skills s ON vs.skillId = s.skillId
+              GROUP BY u.userId
+              ORDER BY u.role, u.name ASC";
+    
+    $result = $this->conn->query($query);
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
+
+// Get all events for CSV export (add this when you have events table)
+public function getAllEventsForExport() {
+    // Adjust this query based on your events table structure
+    $query = "SELECT eventId, eventName, description, location, startDate, endDate, status
+              FROM events 
+              ORDER BY startDate DESC";
+    
+    $result = $this->conn->query($query);
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
+
+// Generic method for custom queries
+public function getDataForExport($query) {
+    $result = $this->conn->query($query);
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
 }
 ?>

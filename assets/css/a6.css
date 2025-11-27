@@ -542,7 +542,7 @@ html {
         color: #555;
         margin: 25px 0 15px 0;
         padding-left: 10px;
-        border-left: 4px solid #667eea;
+        border-left: 4px solid #ff6200;
     }
 
     .csv-generating .button-group {
@@ -595,15 +595,15 @@ html {
     }
 
     .csv-generating .btn-volunteers {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #195305 0%, #318919 100%);
     }
 
     .csv-generating .btn-coordinators {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        background: linear-gradient(135deg, #0b3160 0%, #49779c 100%);
     }
 
     .csv-generating .btn-all-users {
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        background: linear-gradient(135deg, #8b0909 0%, #9c4954 100%);
     }
 
     .csv-generating .csv-button i {
