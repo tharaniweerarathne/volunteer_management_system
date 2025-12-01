@@ -136,7 +136,7 @@ $role = $_SESSION['role'] ?? '';
                         <i class="ri-user-3-fill header-icon"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#"><i class="ri-edit-line me-2"></i>Edit Profile</a></li>
+                        <li><a class="dropdown-item" href="edit_profile_coordinator.php"><i class="ri-edit-line me-2"></i>Edit Profile</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="logout.php"><i class="ri-logout-box-line me-2"></i>Logout</a></li>
                     </ul>

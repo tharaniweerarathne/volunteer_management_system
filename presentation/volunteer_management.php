@@ -190,10 +190,23 @@ $volunteers = $logic->getAllVolunteers();
                         <i class="ri-user-3-fill header-icon"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#"><i class="ri-edit-line me-2"></i>Edit Profile</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="logout.php"><i class="ri-logout-box-line me-2"></i>Logout</a></li>
-                    </ul>
+    <li>
+        <a class="dropdown-item" href="<?php 
+            if ($_SESSION['role'] === 'Admin') {
+                echo 'edit_profile_admin.php';
+            } elseif ($_SESSION['role'] === 'Coordinator') {
+                echo 'edit_profile_coordinator.php';
+            } else {
+                echo '#';
+            }
+        ?>">
+            <i class="ri-edit-line me-2"></i>Edit Profile
+        </a>
+    </li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="logout.php"><i class="ri-logout-box-line me-2"></i>Logout</a></li>
+</ul>
+
                 </div>
             </div>
         </header>
