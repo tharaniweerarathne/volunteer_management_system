@@ -3,13 +3,13 @@ session_start();
 require_once __DIR__ . '/../data_access/db.php';
 require_once __DIR__ . '/../business_logic/ContactMessageLogic.php';
 
-// Check if user is logged in and is admin or coordinator
+// checking if user is logged in and is admin or coordinator
 if (!isset($_SESSION['userId']) || !in_array($_SESSION['role'], ['Admin', 'Coordinator'])) {
     header('Location: login.php');
     exit();
 }
 
-// Check if user's name is set in session
+
 if (!isset($_SESSION['name'])) {
     echo "Not logged in!";
     exit();
@@ -167,7 +167,7 @@ $pendingCount = $contactLogic->getPendingCount();
         </header>
 
 
-          <!-- Content Area -->
+          <!-- content area -->
     <div class="container1">
         <h1 class="text-left page-title mb-4">
                 <i class="ri-send-plane-line"></i>
@@ -182,7 +182,7 @@ $pendingCount = $contactLogic->getPendingCount();
                 <?php unset($_SESSION['reply_result']); ?>
             <?php endif; ?>
 
-            <!-- Statistics Cards -->
+            <!-- statistics cards -->
             <div class="row mb-4">
                 <div class="col-md-4">
                     <div class="card text-center">
@@ -210,7 +210,7 @@ $pendingCount = $contactLogic->getPendingCount();
                 </div>
             </div>
 
-            <!-- Messages List -->
+            <!-- messages list -->
             <div class="row">
                 <?php if (empty($messages)): ?>
                     <div class="col-12">
@@ -273,7 +273,7 @@ $pendingCount = $contactLogic->getPendingCount();
                             </div>
                         </div>
 
-                        <!-- Reply Modal -->
+                        <!-- reply modal -->
                         <?php if ($msg['status'] === 'pending'): ?>
                             <div class="modal fade" id="replyModal<?php echo $msg['messageId']; ?>" tabindex="-1">
                                 <div class="modal-dialog modal-lg">
@@ -318,7 +318,7 @@ $pendingCount = $contactLogic->getPendingCount();
             </div>
         </div>
 
-        <!--here content-->
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

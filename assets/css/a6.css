@@ -417,9 +417,9 @@ html {
     color: var(----dark-light) !important ;
 }
 
-/* Add this to your existing a2.css file */
 
-/* Skills Section Styles */
+
+/* skills */
 .skills-section {
     background: #f9fafb;
     padding: 16px;
@@ -489,149 +489,156 @@ html {
 
 
 /*message section*/
-        .message-card {
-            border-left: 4px solid #e5e7eb;
-            transition: all 0.3s ease;
-        }
-        .message-card.pending {
-            border-left-color: #ff6200 !important; 
-            background-color: #fff7ed !important;
-        }
-        .message-card.replied {
-            border-left-color: #16a34a;
-        }
-        .message-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .status-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        .status-pending {
-            background-color: #ff6200;
-            color: white;
-        }
-        .status-replied {
-            background-color: #16a34a;
-            color: white;
-        }
-        .reply-section {
-            background-color: #f0fdf4;
-            border-left: 3px solid #16a34a;
-            padding: 15px;
-            margin-top: 15px;
-            border-radius: 8px;
-        }
-        .modal-header {
-            background: linear-gradient(135deg, #ff6200 0%, #994524 100%);
-            color: white;
-        }
+.message-card {
+    border-left: 4px solid #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+.message-card.pending {
+    border-left-color: #ff6200 !important; 
+    background-color: #fff7ed !important;
+}
+
+.message-card.replied {
+    border-left-color: #16a34a;
+}
+
+.message-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-pending {
+    background-color: #ff6200;
+    color: white;
+}
+
+.status-replied {
+    background-color: #16a34a;
+    color: white;
+}
+        
+.reply-section {
+    background-color: #f0fdf4;
+    border-left: 3px solid #16a34a;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 8px;
+}
+        
+.modal-header {
+    background: linear-gradient(135deg, #ff6200 0%, #994524 100%);
+    color: white;
+}
 
 /*csv file generating*/
+.csv-generating {
+    margin: 20px 0;
+}
 
-    .csv-generating {
-        margin: 20px 0;
-    }
+.csv-generating .section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #555;
+    margin: 25px 0 15px 0;
+    padding-left: 10px;
+    border-left: 4px solid #ff6200;
+}
 
-    .csv-generating .section-title {
-        font-size: 18px;
-        font-weight: 600;
-        color: #555;
-        margin: 25px 0 15px 0;
-        padding-left: 10px;
-        border-left: 4px solid #ff6200;
-    }
+.csv-generating .button-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
 
+.csv-generating .csv-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.csv-generating .csv-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: left 0.5s ease;
+}
+
+.csv-generating .csv-button:hover::before {
+    left: 100%;
+}
+
+.csv-generating .csv-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.csv-generating .csv-button:active {
+    transform: translateY(0);
+}
+
+.csv-generating .btn-volunteers {
+    background: linear-gradient(135deg, #195305 0%, #318919 100%);
+}
+
+.csv-generating .btn-coordinators {
+    background: linear-gradient(135deg, #0b3160 0%, #49779c 100%);
+}
+
+.csv-generating .btn-all-users {
+    background: linear-gradient(135deg, #8b0909 0%, #9c4954 100%);
+}
+
+.csv-generating .csv-button i {
+    font-size: 20px;
+}
+
+.csv-generating .csv-button.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.csv-generating .csv-button.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid white;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: csvSpin 0.6s linear infinite;
+}
+
+@keyframes csvSpin {
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
     .csv-generating .button-group {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
+        grid-template-columns: 1fr;
     }
-
-    .csv-generating .csv-button {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 12px;
-        padding: 16px 24px;
-        font-size: 16px;
-        font-weight: 600;
-        color: white;
-        text-decoration: none;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .csv-generating .csv-button::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.2);
-        transition: left 0.5s ease;
-    }
-
-    .csv-generating .csv-button:hover::before {
-        left: 100%;
-    }
-
-    .csv-generating .csv-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    }
-
-    .csv-generating .csv-button:active {
-        transform: translateY(0);
-    }
-
-    .csv-generating .btn-volunteers {
-        background: linear-gradient(135deg, #195305 0%, #318919 100%);
-    }
-
-    .csv-generating .btn-coordinators {
-        background: linear-gradient(135deg, #0b3160 0%, #49779c 100%);
-    }
-
-    .csv-generating .btn-all-users {
-        background: linear-gradient(135deg, #8b0909 0%, #9c4954 100%);
-    }
-
-    .csv-generating .csv-button i {
-        font-size: 20px;
-    }
-
-    .csv-generating .csv-button.loading {
-        pointer-events: none;
-        opacity: 0.7;
-    }
-
-    .csv-generating .csv-button.loading::after {
-        content: '';
-        position: absolute;
-        width: 16px;
-        height: 16px;
-        border: 2px solid white;
-        border-top-color: transparent;
-        border-radius: 50%;
-        animation: csvSpin 0.6s linear infinite;
-    }
-
-    @keyframes csvSpin {
-        to { transform: rotate(360deg); }
-    }
-
-    @media (max-width: 768px) {
-        .csv-generating .button-group {
-            grid-template-columns: 1fr;
-        }
-    }
+}
