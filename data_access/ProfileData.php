@@ -1,5 +1,5 @@
 <?php
-// ProfileData.php --> data_access folder
+
 
 class ProfileData {
     private $conn;
@@ -8,9 +8,9 @@ class ProfileData {
         $this->conn = $conn;
     }
     
-    // ==================== VOLUNTEER METHODS ====================
+    // ==================== volunteer method ====================
     
-    // Get volunteer by ID with skills
+    // get volunteer by ID with skills
     public function getVolunteerById($userId) {
         $stmt = $this->conn->prepare("SELECT userId, name, email, telephoneNo, location, gender FROM users WHERE userId = ? AND role = 'Volunteer'");
         $stmt->bind_param("i", $userId);
@@ -19,7 +19,7 @@ class ProfileData {
         $volunteer = $result->fetch_assoc();
         
         if ($volunteer) {
-            // Manual skill mapping to get skill names from IDs
+            
             $skillMapping = [
                 1 => 'teaching',
                 2 => 'event-organizing',
@@ -35,7 +35,7 @@ class ProfileData {
                 12 => 'mentoring'
             ];
             
-            // Get skill IDs for this volunteer
+            // get skill IDs for this volunteer
             $skillStmt = $this->conn->prepare("SELECT skillId FROM volunteer_skills WHERE userId = ?");
             $skillStmt->bind_param("i", $userId);
             $skillStmt->execute();
@@ -54,20 +54,20 @@ class ProfileData {
         return $volunteer;
     }
     
-    // Update volunteer basic info (without password)
+    // updating volunteer info (without password)
     public function updateVolunteerBasicInfo($userId, $name, $email, $telephoneNo, $location, $gender) {
         $stmt = $this->conn->prepare("UPDATE users SET name = ?, email = ?, telephoneNo = ?, location = ?, gender = ? WHERE userId = ? AND role = 'Volunteer'");
         $stmt->bind_param("sssssi", $name, $email, $telephoneNo, $location, $gender, $userId);
         return $stmt->execute();
     }
     
-    // Get skill IDs by skill names - MANUAL SKILL MAPPING
+    // get skill IDs by skill names
     public function getSkillIdsByNames($skillNames) {
         if (empty($skillNames)) {
             return [];
         }
         
-        // Manual mapping of skill names to IDs
+        
         $skillMapping = [
             'teaching' => 1,
             'event-organizing' => 2,
@@ -93,14 +93,14 @@ class ProfileData {
         return $skillIds;
     }
     
-    // Delete volunteer skills
+    // delete volunteer skills
     public function deleteVolunteerSkills($userId) {
         $stmt = $this->conn->prepare("DELETE FROM volunteer_skills WHERE userId = ?");
         $stmt->bind_param("i", $userId);
         return $stmt->execute();
     }
     
-    // Add volunteer skills
+    // add volunteer skills
     public function addVolunteerSkills($userId, $skillIds) {
         if (empty($skillIds)) {
             return true;
@@ -117,9 +117,9 @@ class ProfileData {
         return true;
     }
     
-    // ==================== COORDINATOR METHODS ====================
+    // ==================== coordinator methods ====================
     
-    // Get coordinator by ID (no skills)
+    // get coordinator by ID (no skills)
     public function getCoordinatorById($userId) {
         $stmt = $this->conn->prepare("SELECT userId, name, email, telephoneNo, location, gender FROM users WHERE userId = ? AND role = 'Coordinator'");
         $stmt->bind_param("i", $userId);
@@ -128,9 +128,9 @@ class ProfileData {
         return $result->fetch_assoc();
     }
     
-    // ==================== ADMIN METHODS ====================
+    // ==================== admin methods ====================
     
-    // Get admin by ID with password (for verification)
+    // get admin by ID with password (for verification)
     public function getAdminById($userId) {
         $stmt = $this->conn->prepare("SELECT userId, name, email, telephoneNo, location, gender, password FROM users WHERE userId = ? AND role = 'Admin'");
         $stmt->bind_param("i", $userId);
@@ -139,23 +139,23 @@ class ProfileData {
         return $result->fetch_assoc();
     }
     
-    // ==================== COMMON METHODS ====================
+   
     
-    // Update user basic info (works for all roles)
+    // updating user basic info 
     public function updateUserBasicInfo($userId, $name, $email, $telephoneNo, $location, $gender) {
         $stmt = $this->conn->prepare("UPDATE users SET name = ?, email = ?, telephoneNo = ?, location = ?, gender = ? WHERE userId = ?");
         $stmt->bind_param("sssssi", $name, $email, $telephoneNo, $location, $gender, $userId);
         return $stmt->execute();
     }
     
-    // Update user password (works for all roles)
+    // updating user password 
     public function updateUserPassword($userId, $hashedPassword) {
         $stmt = $this->conn->prepare("UPDATE users SET password = ? WHERE userId = ?");
         $stmt->bind_param("si", $hashedPassword, $userId);
         return $stmt->execute();
     }
     
-    // Check if email exists for another user
+    // check if email exists for another user
     public function emailExistsForOtherUser($email, $userId) {
         $stmt = $this->conn->prepare("SELECT userId FROM users WHERE email = ? AND userId != ?");
         $stmt->bind_param("si", $email, $userId);

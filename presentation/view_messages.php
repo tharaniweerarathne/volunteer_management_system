@@ -134,7 +134,7 @@ $pendingCount = $contactLogic->getPendingCount();
                 <button class="menu-toggle" id="menuToggle">
                     <i class="ri-menu-line"></i>
                 </button>
-                Welcome Coordinator, <?php echo $name; ?>
+                Welcome <?php echo htmlspecialchars($role); ?>, <?php echo htmlspecialchars($name); ?>
             </div>
             <div class="header-actions">
                 
@@ -165,7 +165,7 @@ $pendingCount = $contactLogic->getPendingCount();
             } elseif ($_SESSION['role'] === 'Coordinator') {
                 echo 'edit_profile_coordinator.php';
             } else {
-                echo '#'; // fallback or for other roles
+                echo '#'; 
             }
         ?>">
             <i class="ri-edit-line me-2"></i>Edit Profile

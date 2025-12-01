@@ -1,8 +1,8 @@
 <?php
-// edit_profile_coordinator.php --> presentation folder
+
 session_start();
 
-// Check if user is logged in as Coordinator
+// checking if user is logged in as Coordinator
 if (!isset($_SESSION['userId']) || $_SESSION['role'] !== 'Coordinator') {
     header('Location: sign_in.php');
     exit;
@@ -14,7 +14,7 @@ require_once __DIR__ . "/../business_logic/ProfileLogic.php";
 $profileLogic = new ProfileLogic($conn);
 $userId = $_SESSION['userId'];
 
-// Fetch current profile data
+// fetching current profile data
 $profileResult = $profileLogic->getCoordinatorProfile($userId);
 $profile = $profileResult['success'] ? $profileResult['data'] : null;
 

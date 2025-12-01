@@ -1,8 +1,8 @@
 <?php
-// edit_profile.php --> presentation folder
+
 session_start();
 
-// Check if user is logged in
+
 if (!isset($_SESSION['userId']) || $_SESSION['role'] !== 'Volunteer') {
     header('Location: sign_in.php');
     exit;
@@ -14,7 +14,7 @@ require_once __DIR__ . "/../business_logic/ProfileLogic.php";
 $profileLogic = new ProfileLogic($conn);
 $userId = $_SESSION['userId'];
 
-// Fetch current profile data
+// fetch current profile data
 $profileResult = $profileLogic->getVolunteerProfile($userId);
 $profile = $profileResult['success'] ? $profileResult['data'] : null;
 
@@ -40,7 +40,7 @@ if (!$profile) {
             <i class="ri-arrow-left-line"></i> Back to Dashboard
         </a>
 
-        <!-- Profile Edit Form -->
+        <!-- profile edit form -->
         <div class="profile-card">
             <div class="card-header">
                 <h2>Edit Profile</h2>
@@ -142,7 +142,7 @@ if (!$profile) {
             </div>
         </div>
 
-        <!-- Password Reset Section -->
+        <!-- password reset section -->
         <div class="profile-card">
             <div class="card-header">
                 <h2>Change Password</h2>
@@ -158,7 +158,7 @@ if (!$profile) {
         </div>
     </div>
 
-    <!-- OTP Modal -->
+    <!-- OTP modal -->
     <div id="otpModal" class="otp-modal">
         <div class="otp-modal-content">
             <h3 style="text-align: center; margin-bottom: 1rem;">Enter OTP</h3>
@@ -182,7 +182,7 @@ if (!$profile) {
         </div>
     </div>
 
-    <!-- Password Reset Modal -->
+    <!-- password reset modal -->
     <div id="passwordModal" class="otp-modal">
         <div class="otp-modal-content">
             <h3 style="text-align: center; margin-bottom: 1rem;">Reset Password</h3>

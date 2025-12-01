@@ -1,6 +1,4 @@
-// edit_profile.js --> assets/js folder
-
-// Profile Form Submission
+// profile form submission
 document.getElementById('profileForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
@@ -47,7 +45,7 @@ document.getElementById('profileForm').addEventListener('submit', async function
     }
 });
 
-// Send OTP Button
+// send OTP button
 document.getElementById('sendOtpBtn').addEventListener('click', async function() {
     const btn = this;
     const originalText = btn.textContent;
@@ -80,7 +78,7 @@ document.getElementById('sendOtpBtn').addEventListener('click', async function()
     }
 });
 
-// OTP Input Handling
+// OTP input handling
 const otpInputs = document.querySelectorAll('.otp-input');
 
 otpInputs.forEach((input, index) => {
@@ -100,7 +98,7 @@ otpInputs.forEach((input, index) => {
     });
 });
 
-// Paste functionality for OTP
+// paste functionality for OTP
 otpInputs[0].addEventListener('paste', (e) => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData('text').slice(0, 6);
@@ -112,7 +110,7 @@ otpInputs[0].addEventListener('paste', (e) => {
     if (pastedData.length === 6) otpInputs[5].focus();
 });
 
-// OTP Form Submission
+// OTP form submission
 document.getElementById('otpForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
@@ -158,7 +156,7 @@ document.getElementById('otpForm').addEventListener('submit', async function(e) 
     }
 });
 
-// Password Toggle
+// password toggle
 document.getElementById('toggleNewPassword')?.addEventListener('click', function() {
     const passwordInput = document.getElementById('newPassword');
     const type = passwordInput.type === 'password' ? 'text' : 'password';
@@ -175,7 +173,7 @@ document.getElementById('toggleConfirmPassword')?.addEventListener('click', func
     this.classList.toggle('ri-eye-off-line');
 });
 
-// Password Validation
+// password validation
 document.getElementById('newPassword')?.addEventListener('input', function() {
     const password = this.value;
     
@@ -184,14 +182,14 @@ document.getElementById('newPassword')?.addEventListener('input', function() {
     document.getElementById('special')?.classList.toggle('valid', /[!@#$%^&*(),.?":{}|<>]/.test(password));
 });
 
-// Reset Password Form Submission
+// reset password form submission
 document.getElementById('resetPasswordForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
     const password = document.getElementById('newPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
     
-    // Validate password
+    // password validation
     if (password.length < 5) {
         showMessage('resetMessage', 'Password must be at least 5 characters long', 'error');
         return;
@@ -246,7 +244,7 @@ document.getElementById('resetPasswordForm').addEventListener('submit', async fu
     }
 });
 
-// Close Modal Buttons
+// close modal buttons
 document.getElementById('closeOtpModal').addEventListener('click', function() {
     document.getElementById('otpModal').style.display = 'none';
     otpInputs.forEach(input => input.value = '');
@@ -258,7 +256,7 @@ document.getElementById('closePasswordModal').addEventListener('click', function
     document.getElementById('confirmPassword').value = '';
 });
 
-// Helper function to show messages
+// helper function to show messages
 function showMessage(elementId, message, type) {
     const element = document.getElementById(elementId);
     if (element) {

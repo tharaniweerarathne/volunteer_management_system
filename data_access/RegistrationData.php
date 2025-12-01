@@ -215,9 +215,9 @@ public function deleteVolunteer($userId) {
 }
 
 
-// ==================== CSV Export Methods ====================
+// ==================== CSV export methods ====================
 
-// Get all volunteers for CSV export (without password)
+// get all volunteers for CSV export 
 public function getAllVolunteersForExport() {
     $query = "SELECT u.userId, u.name, u.email, u.telephoneNo, u.location, u.gender,
               GROUP_CONCAT(s.skillName SEPARATOR ', ') as skills
@@ -232,7 +232,7 @@ public function getAllVolunteersForExport() {
     return $result->fetch_all(MYSQLI_ASSOC);
 }
 
-// Get all coordinators for CSV export (without password)
+// get all coordinators for CSV export 
 public function getAllCoordinatorsForExport() {
     $stmt = $this->conn->prepare("SELECT userId, name, email, telephoneNo, location, gender 
                                    FROM users 
@@ -243,7 +243,7 @@ public function getAllCoordinatorsForExport() {
     return $result->fetch_all(MYSQLI_ASSOC);
 }
 
-// Get all users for CSV export (without password)
+// get all users for CSV export 
 public function getAllUsersForExport() {
     $query = "SELECT u.userId, u.name, u.email, u.telephoneNo, u.location, u.gender, u.role,
               GROUP_CONCAT(s.skillName SEPARATOR ', ') as skills
@@ -257,9 +257,9 @@ public function getAllUsersForExport() {
     return $result->fetch_all(MYSQLI_ASSOC);
 }
 
-// Get all events for CSV export (add this when you have events table)
+// get all events for CSV export (add this when you have events table)
 public function getAllEventsForExport() {
-    // Adjust this query based on your events table structure
+    // adjust this query based on your events table structure
     $query = "SELECT eventId, eventName, description, location, startDate, endDate, status
               FROM events 
               ORDER BY startDate DESC";
@@ -268,7 +268,7 @@ public function getAllEventsForExport() {
     return $result->fetch_all(MYSQLI_ASSOC);
 }
 
-// Generic method for custom queries
+// generic method for custom queries
 public function getDataForExport($query) {
     $result = $this->conn->query($query);
     return $result->fetch_all(MYSQLI_ASSOC);

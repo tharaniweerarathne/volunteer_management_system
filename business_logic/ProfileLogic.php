@@ -1,5 +1,5 @@
 <?php
-// ProfileLogic.php --> business_logic folder
+
 
 require_once __DIR__ . "/../data_access/ProfileData.php";
 require_once __DIR__ . "/../vendor/autoload.php";
@@ -16,9 +16,9 @@ class ProfileLogic {
         $this->profileData = new ProfileData($conn);
     }
     
-    // ==================== VOLUNTEER PROFILE ====================
+    // ==================== volunteer profiles ====================
     
-    // Get volunteer profile by ID
+    // get volunteer profile by ID
     public function getVolunteerProfile($userId) {
         $volunteer = $this->profileData->getVolunteerById($userId);
         if (!$volunteer) {
@@ -27,23 +27,23 @@ class ProfileLogic {
         return ["success" => true, "data" => $volunteer];
     }
     
-    // Update volunteer profile (without password)
+    // update volunteer profile (without password)
     public function updateVolunteerProfile($userId, $name, $email, $telephoneNo, $location, $gender, $skills = []) {
-        // Check if email exists for another user
+        
         if ($this->profileData->emailExistsForOtherUser($email, $userId)) {
             return ["success" => false, "message" => "This email is already used by another user."];
         }
         
-        // Update basic info
+        // update basic info
         if (!$this->profileData->updateVolunteerBasicInfo($userId, $name, $email, $telephoneNo, $location, $gender)) {
             return ["success" => false, "message" => "Failed to update profile."];
         }
         
-        // Update skills if provided
-        // Delete existing skills first
+        
+        // delete existing skills first
         $this->profileData->deleteVolunteerSkills($userId);
         
-        // Add new skills if any
+        
         if (!empty($skills)) {
             $skillIds = $this->profileData->getSkillIdsByNames($skills);
             if (!empty($skillIds)) {
@@ -54,16 +54,16 @@ class ProfileLogic {
         return ["success" => true, "message" => "Profile updated successfully!"];
     }
     
-    // ==================== Password Reset via OTP (VOLUNTEER ONLY) ====================
+    // ==================== password reset via OTP (VOLUNTEER ONLY) ====================
     
-    // Generate 6-digit OTP
+    // generate 6-digit OTP
     private function generateOTP() {
         return sprintf("%06d", mt_rand(0, 999999));
     }
     
-    // Send OTP for password reset
+    // send OTP for password reset
     public function sendPasswordResetOTP($userId) {
-        // Get user email
+        // get user email
         $volunteer = $this->profileData->getVolunteerById($userId);
         if (!$volunteer) {
             return ["success" => false, "message" => "User not found"];
@@ -73,7 +73,7 @@ class ProfileLogic {
         $name = $volunteer['name'];
         $otp = $this->generateOTP();
         
-        // Store OTP in session
+        // store OTP in session
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -81,7 +81,7 @@ class ProfileLogic {
         $_SESSION['password_reset_otp_time'] = time();
         $_SESSION['password_reset_user_id'] = $userId;
         
-        // Send OTP via email
+        // send OTP via email
         $mail = new PHPMailer(true);
         
         try {
@@ -118,7 +118,7 @@ class ProfileLogic {
         }
     }
     
-    // Verify OTP for password reset
+    // verify OTP for password reset
     public function verifyPasswordResetOTP($enteredOTP) {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -128,7 +128,7 @@ class ProfileLogic {
             return ["success" => false, "message" => "OTP session expired. Please request a new OTP."];
         }
         
-        // Check if OTP is expired (10 minutes)
+        // check if OTP is expired (10 minutes)
         if (time() - $_SESSION['password_reset_otp_time'] > 600) {
             return ["success" => false, "message" => "OTP has expired. Please request a new one."];
         }
@@ -141,7 +141,7 @@ class ProfileLogic {
         }
     }
     
-    // Reset password after OTP verification (VOLUNTEER)
+    // reset password after OTP verification (VOLUNTEER)
     public function resetPassword($newPassword) {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -159,7 +159,7 @@ class ProfileLogic {
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
         
         if ($this->profileData->updateUserPassword($userId, $hashedPassword)) {
-            // Clear session variables
+            // clear session variables
             unset($_SESSION['password_reset_otp']);
             unset($_SESSION['password_reset_otp_time']);
             unset($_SESSION['password_reset_user_id']);
@@ -171,9 +171,9 @@ class ProfileLogic {
         }
     }
     
-    // ==================== COORDINATOR PROFILE ====================
+    // ==================== coordinator profile ====================
     
-    // Get coordinator profile by ID
+    // get coordinator profile by ID
     public function getCoordinatorProfile($userId) {
         $coordinator = $this->profileData->getCoordinatorById($userId);
         if (!$coordinator) {
@@ -182,14 +182,14 @@ class ProfileLogic {
         return ["success" => true, "data" => $coordinator];
     }
     
-    // Update coordinator profile (NO password change allowed)
+    // update coordinator profile (NO password change allowed)
     public function updateCoordinatorProfile($userId, $name, $email, $telephoneNo, $location, $gender) {
-        // Check if email exists for another user
+        
         if ($this->profileData->emailExistsForOtherUser($email, $userId)) {
             return ["success" => false, "message" => "This email is already used by another user."];
         }
         
-        // Update basic info
+        // updating info
         if (!$this->profileData->updateUserBasicInfo($userId, $name, $email, $telephoneNo, $location, $gender)) {
             return ["success" => false, "message" => "Failed to update profile."];
         }
@@ -197,9 +197,9 @@ class ProfileLogic {
         return ["success" => true, "message" => "Profile updated successfully!"];
     }
     
-    // ==================== ADMIN PROFILE ====================
+    // ==================== admin profile ====================
     
-    // Get admin profile by ID
+    // get admin profile by ID
     public function getAdminProfile($userId) {
         $admin = $this->profileData->getAdminById($userId);
         if (!$admin) {
@@ -208,14 +208,14 @@ class ProfileLogic {
         return ["success" => true, "data" => $admin];
     }
     
-    // Update admin profile (without password)
+    // update admin profile (without password)
     public function updateAdminProfile($userId, $name, $email, $telephoneNo, $location, $gender) {
-        // Check if email exists for another user
+        
         if ($this->profileData->emailExistsForOtherUser($email, $userId)) {
             return ["success" => false, "message" => "This email is already used by another user."];
         }
         
-        // Update basic info
+        // updating info
         if (!$this->profileData->updateUserBasicInfo($userId, $name, $email, $telephoneNo, $location, $gender)) {
             return ["success" => false, "message" => "Failed to update profile."];
         }
@@ -223,9 +223,9 @@ class ProfileLogic {
         return ["success" => true, "message" => "Profile updated successfully!"];
     }
     
-    // Update admin password (NO OTP required)
+    // update admin password (NO OTP required)
     public function updateAdminPassword($userId, $currentPassword, $newPassword) {
-        // Verify current password
+        // verify current password
         $admin = $this->profileData->getAdminById($userId);
         if (!$admin) {
             return ["success" => false, "message" => "Admin not found"];
@@ -235,7 +235,7 @@ class ProfileLogic {
             return ["success" => false, "message" => "Current password is incorrect"];
         }
         
-        // Update to new password
+        // update to new password
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
         
         if ($this->profileData->updateUserPassword($userId, $hashedPassword)) {

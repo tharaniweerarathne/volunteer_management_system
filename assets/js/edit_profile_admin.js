@@ -1,12 +1,10 @@
-// edit_profile_admin.js --> assets/js folder
-
-// Profile Form Submission
+// profile form submission
 document.getElementById('profileForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
     const formData = new FormData(this);
     const data = {
-        action: 'update_profile', // CHANGED from 'update_admin_profile'
+        action: 'update_profile', 
         name: formData.get('name'),
         email: formData.get('email'),
         phone: formData.get('phone'),
@@ -46,7 +44,7 @@ document.getElementById('profileForm').addEventListener('submit', async function
     }
 });
 
-// Password Toggle Functions
+// password toggle functions
 document.getElementById('toggleCurrentPassword')?.addEventListener('click', function() {
     const passwordInput = document.getElementById('currentPassword');
     const type = passwordInput.type === 'password' ? 'text' : 'password';
@@ -71,7 +69,7 @@ document.getElementById('toggleConfirmPassword')?.addEventListener('click', func
     this.classList.toggle('ri-eye-off-line');
 });
 
-// Password Validation
+// password validation
 document.getElementById('newPassword')?.addEventListener('input', function() {
     const password = this.value;
     
@@ -80,7 +78,7 @@ document.getElementById('newPassword')?.addEventListener('input', function() {
     document.getElementById('special')?.classList.toggle('valid', /[!@#$%^&*(),.?":{}|<>]/.test(password));
 });
 
-// Password Change Form Submission
+// password change form submission
 document.getElementById('passwordForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
@@ -88,7 +86,7 @@ document.getElementById('passwordForm').addEventListener('submit', async functio
     const newPassword = document.getElementById('newPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
     
-    // Validate password
+    // password validation
     if (newPassword.length < 5) {
         showMessage('passwordMessage', 'Password must be at least 5 characters long', 'error');
         return;
@@ -124,7 +122,7 @@ document.getElementById('passwordForm').addEventListener('submit', async functio
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
-                action: 'change_password', // CHANGED from 'update_admin_password'
+                action: 'change_password', 
                 currentPassword: currentPassword,
                 newPassword: newPassword
             })
@@ -134,7 +132,7 @@ document.getElementById('passwordForm').addEventListener('submit', async functio
         
         if (result.success) {
             showMessage('passwordMessage', result.message, 'success');
-            // Clear form
+            // clear form
             document.getElementById('currentPassword').value = '';
             document.getElementById('newPassword').value = '';
             document.getElementById('confirmPassword').value = '';
@@ -150,7 +148,7 @@ document.getElementById('passwordForm').addEventListener('submit', async functio
     }
 });
 
-// Helper function to show messages
+// helper function to show messages
 function showMessage(elementId, message, type) {
     const element = document.getElementById(elementId);
     if (element) {

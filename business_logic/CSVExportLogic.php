@@ -11,9 +11,9 @@ class CSVExportLogic {
         $this->registrationData = new RegistrationData($conn);
     }
     
-    // ==================== Export Methods ====================
+    // ==================== csv file export methods ====================
     
-    // Generate CSV for volunteers
+    // generate CSV for volunteers
     public function exportVolunteersToCSV() {
         $volunteers = $this->registrationData->getAllVolunteersForExport();
         
@@ -24,7 +24,7 @@ class CSVExportLogic {
         return $this->generateCSV($volunteers, 'volunteers_' . date('Y-m-d_H-i-s') . '.csv');
     }
     
-    // Generate CSV for coordinators
+    // generate CSV for coordinators
     public function exportCoordinatorsToCSV() {
         $coordinators = $this->registrationData->getAllCoordinatorsForExport();
         
@@ -35,7 +35,7 @@ class CSVExportLogic {
         return $this->generateCSV($coordinators, 'coordinators_' . date('Y-m-d_H-i-s') . '.csv');
     }
     
-    // Generate CSV for all users
+    // generate CSV for all users
     public function exportAllUsersToCSV() {
         $users = $this->registrationData->getAllUsersForExport();
         
@@ -46,7 +46,7 @@ class CSVExportLogic {
         return $this->generateCSV($users, 'all_users_' . date('Y-m-d_H-i-s') . '.csv');
     }
     
-    // Generate CSV for events
+    // generate CSV for events
     public function exportEventsToCSV() {
         $events = $this->registrationData->getAllEventsForExport();
         
@@ -57,7 +57,7 @@ class CSVExportLogic {
         return $this->generateCSV($events, 'events_' . date('Y-m-d_H-i-s') . '.csv');
     }
     
-    // Generic export method - can be used for any data
+    // generic export method - can be used for any data
     public function exportCustomDataToCSV($data, $filename) {
         if (empty($data)) {
             return ["success" => false, "message" => "No data found to export."];
@@ -66,29 +66,29 @@ class CSVExportLogic {
         return $this->generateCSV($data, $filename);
     }
     
-    // ==================== Private Helper Methods ====================
+    // ==================== private helper methods ====================
     
-    // Private method to generate CSV file
+    // private method to generate CSV file
     private function generateCSV($data, $filename) {
         try {
-            // Set headers for download
+            // set headers for download
             header('Content-Type: text/csv');
             header('Content-Disposition: attachment; filename="' . $filename . '"');
             header('Pragma: no-cache');
             header('Expires: 0');
             
-            // Open output stream
+            // open output stream
             $output = fopen('php://output', 'w');
             
-            // Add BOM for UTF-8 (helps with Excel)
+            // add BOM for UTF-8 (helps with Excel)
             fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
             
-            // Add column headers
+            // add column headers
             if (!empty($data)) {
                 fputcsv($output, array_keys($data[0]));
             }
             
-            // Add data rows
+            // add data rows
             foreach ($data as $row) {
                 fputcsv($output, $row);
             }
@@ -101,7 +101,7 @@ class CSVExportLogic {
         }
     }
     
-    // Remove sensitive fields from data before export
+    // remove sensitive fields from data before export
     private function removeSensitiveFields($data, $fieldsToRemove = ['password', 'token', 'secret']) {
         $cleanedData = [];
         

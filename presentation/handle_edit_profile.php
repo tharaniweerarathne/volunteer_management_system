@@ -1,8 +1,8 @@
 <?php
-// handle_edit_profile.php --> presentation folder
+
 session_start();
 
-// Check if user is logged in
+// checking if user is logged in
 if (!isset($_SESSION['userId']) || !in_array($_SESSION['role'], ['Volunteer', 'Admin', 'Coordinator'])) {
     echo json_encode(["success" => false, "message" => "Unauthorized access"]);
     exit;
@@ -17,7 +17,7 @@ $profileLogic = new ProfileLogic($conn);
 $userId = $_SESSION['userId'];
 $userRole = $_SESSION['role'];
 
-// Get JSON input
+
 $input = json_decode(file_get_contents('php://input'), true);
 $action = $input['action'] ?? '';
 
@@ -30,7 +30,7 @@ switch ($action) {
         $location = trim($input['location'] ?? '');
         $skills = $input['skills'] ?? [];
         
-        // Validation
+        // validation
         if (empty($name) || empty($email) || empty($phone) || empty($gender) || empty($location)) {
             echo json_encode(["success" => false, "message" => "All fields are required"]);
             exit;
@@ -41,7 +41,7 @@ switch ($action) {
             exit;
         }
         
-        // Route to appropriate update method based on role
+        // update method based on role
         switch ($userRole) {
             case 'Volunteer':
                 $result = $profileLogic->updateVolunteerProfile($userId, $name, $email, $phone, $location, $gender, $skills);
@@ -60,7 +60,7 @@ switch ($action) {
         break;
         
     case 'send_otp':
-        // ONLY for Volunteers
+        // only for Volunteers
         if ($userRole !== 'Volunteer') {
             echo json_encode(["success" => false, "message" => "Invalid action for your role"]);
             exit;
@@ -71,7 +71,7 @@ switch ($action) {
         break;
         
     case 'verify_otp':
-        // ONLY for Volunteers
+        // only for Volunteers
         if ($userRole !== 'Volunteer') {
             echo json_encode(["success" => false, "message" => "Invalid action for your role"]);
             exit;
@@ -89,7 +89,7 @@ switch ($action) {
         break;
         
     case 'reset_password':
-        // ONLY for Volunteers (OTP-based reset)
+        // only for Volunteers (OTP-based reset)
         if ($userRole !== 'Volunteer') {
             echo json_encode(["success" => false, "message" => "Invalid action for your role"]);
             exit;
@@ -97,7 +97,7 @@ switch ($action) {
         
         $password = $input['password'] ?? '';
         
-        // Validate password
+        // password validation
         if (strlen($password) < 5) {
             echo json_encode(["success" => false, "message" => "Password must be at least 5 characters long"]);
             exit;
@@ -118,7 +118,7 @@ switch ($action) {
         break;
         
     case 'change_password':
-        // ONLY for Admins (current password verification)
+        // only for Admins (current password verification)
         if ($userRole !== 'Admin') {
             echo json_encode(["success" => false, "message" => "Invalid action for your role"]);
             exit;
@@ -127,13 +127,13 @@ switch ($action) {
         $currentPassword = $input['currentPassword'] ?? '';
         $newPassword = $input['newPassword'] ?? '';
         
-        // Validation
+        // validation
         if (empty($currentPassword) || empty($newPassword)) {
             echo json_encode(["success" => false, "message" => "Both current and new passwords are required"]);
             exit;
         }
         
-        // Validate new password
+        // validation of new password
         if (strlen($newPassword) < 5) {
             echo json_encode(["success" => false, "message" => "Password must be at least 5 characters long"]);
             exit;

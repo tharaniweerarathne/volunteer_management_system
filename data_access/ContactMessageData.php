@@ -8,7 +8,7 @@ class ContactMessageData {
         $this->conn = $conn;
     }
 
-    // Insert new contact message
+    // insert new contact message
     public function createMessage($senderName, $senderEmail, $message) {
         $stmt = $this->conn->prepare("INSERT INTO contact_messages (senderName, senderEmail, message) VALUES (?, ?, ?)");
         $stmt->bind_param("sss", $senderName, $senderEmail, $message);
@@ -19,7 +19,7 @@ class ContactMessageData {
         return false;
     }
 
-    // Get all messages with reply details
+    // get all messages with reply details
     public function getAllMessages() {
         $query = "SELECT 
                     cm.messageId,
@@ -48,7 +48,7 @@ class ContactMessageData {
         return $messages;
     }
 
-    // Get single message by ID
+    // get single message by ID
     public function getMessageById($messageId) {
         $stmt = $this->conn->prepare("SELECT 
                     cm.*,
@@ -64,7 +64,7 @@ class ContactMessageData {
         return $result->fetch_assoc();
     }
 
-    // Update message with reply
+    // update message with reply
     public function replyToMessage($messageId, $repliedBy, $replyMessage) {
         $stmt = $this->conn->prepare("UPDATE contact_messages 
                 SET status = 'replied', 
@@ -77,7 +77,7 @@ class ContactMessageData {
         return $stmt->execute();
     }
 
-    // Get message count by status
+    // get message count by status
     public function getMessageCountByStatus($status) {
         $stmt = $this->conn->prepare("SELECT COUNT(*) as count FROM contact_messages WHERE status = ?");
         $stmt->bind_param("s", $status);

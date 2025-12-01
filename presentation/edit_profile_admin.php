@@ -1,8 +1,8 @@
 <?php
-// edit_profile_admin.php --> presentation folder
+
 session_start();
 
-// Check if user is logged in as Admin
+// checking if user is logged in as Admin
 if (!isset($_SESSION['userId']) || $_SESSION['role'] !== 'Admin') {
     header('Location: sign_in.php');
     exit;
@@ -14,7 +14,7 @@ require_once __DIR__ . "/../business_logic/ProfileLogic.php";
 $profileLogic = new ProfileLogic($conn);
 $userId = $_SESSION['userId'];
 
-// Fetch current profile data
+// fetch current profile data
 $profileResult = $profileLogic->getAdminProfile($userId);
 $profile = $profileResult['success'] ? $profileResult['data'] : null;
 
@@ -40,7 +40,7 @@ if (!$profile) {
             <i class="ri-arrow-left-line"></i> Back to Dashboard
         </a>
 
-        <!-- Profile Edit Form -->
+        <!-- profile edit form -->
         <div class="profile-card">
             <div class="card-header">
                 <h2>Edit Profile</h2>
@@ -107,7 +107,7 @@ if (!$profile) {
             </div>
         </div>
 
-        <!-- Password Change Section -->
+        <!-- password change section -->
         <div class="profile-card">
             <div class="card-header">
                 <h2>Change Password</h2>
