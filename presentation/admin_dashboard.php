@@ -77,15 +77,15 @@ $role = $_SESSION['role'] ?? '';
             </a>
         </div>
         <div class="nav-item">
-            <a href="#">
+            <a href="events.php">
                 <i class="ri-trophy-line"></i>
-                <span>Leaderboard</span>
+                <span>Manage Events</span>
             </a>
         </div>
         <div class="nav-item">
-            <a href="#">
+            <a href="test_event.php">
                 <i class="ri-message-3-line"></i>
-                <span>Messages</span>
+                <span>Test Event</span>
             </a>
         </div>
         <div class="nav-item">

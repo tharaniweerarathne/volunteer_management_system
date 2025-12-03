@@ -18,7 +18,6 @@ $role = $_SESSION['role'] ?? '';
     <title>Coordinator Dashboard</title>
     <link rel="stylesheet" href="../assets/css/v1.css">
     <link rel="icon" type="image/png" href="../assets/images/title.png">
-    <link rel="stylesheet" href="../assets/css/v1.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 
@@ -54,6 +53,13 @@ $role = $_SESSION['role'] ?? '';
                 <span>Dashboard</span>
             </a>
             </div> 
+
+                        <div class="nav-item">
+            <a href="events.php" class="active">
+                <i class="ri-dashboard-line"></i>
+                <span>My events</span>
+            </a>
+            </div> 
         <?php endif; ?>
 
         <?php if ($role === 'Admin' || $role === 'Coordinator'): ?>
@@ -78,9 +84,9 @@ $role = $_SESSION['role'] ?? '';
             </a>
         </div>
         <div class="nav-item">
-            <a href="#">
+            <a href="events.php">
                 <i class="ri-trophy-line"></i>
-                <span>Leaderboard</span>
+                <span>Manage Events</span>
             </a>
         </div>
         <div class="nav-item">
