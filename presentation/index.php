@@ -1,7 +1,37 @@
 <?php
+require_once '../business_logic/eventLogic.php';
+
+// Check if session is already started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// Create instance of EventLogic
+$eventLogic = new EventLogic();
+
+// Get filters from query parameters
+$filters = [
+    'search' => $_GET['search'] ?? '',
+    'skillId' => $_GET['skillId'] ?? '',
+    'category' => $_GET['category'] ?? '',
+    'location' => $_GET['location'] ?? '',
+    'date' => $_GET['date'] ?? ''
+];
+
+// Get upcoming events using EventLogic
+$result = $eventLogic->getUpcomingEvents($filters);
+
+if ($result['success']) {
+    $events = $result['events'];
+} else {
+    $events = [];
+    $error = $result['message'] ?? 'Error loading events';
+}
+
+// Get categories and skills for filter dropdowns
+$eventData = new EventData();
+$categories = $eventData->getCategories();
+$skills = $eventData->getAllSkills();
 ?>
 
 
@@ -148,294 +178,163 @@ if (session_status() === PHP_SESSION_NONE) {
             <h1 class="joinEventsTitle">Be Part of Our Latest Events</h1>
             <p class="joinEventsSubtitle">Find an event that inspires you to make a change.</p>
 
-            <div class="joinEventsSearchContainer">
-                <input type="text" class="joinEventsSearchInput" placeholder="Search ...">
-                <button class="joinEventsSearchBtn">
-                    <i class="ri-search-line"></i>
-                </button>
-            </div>
+<div class="joinEventsSearchContainer">
+            <input type="text" 
+                   class="joinEventsSearchInput" 
+                   placeholder="Search events..."
+                   id="searchInput"
+                   value="<?php echo htmlspecialchars($filters['search']); ?>">
+            <button class="joinEventsSearchBtn" onclick="searchEvents()">
+                <i class="ri-search-line"></i>
+            </button>
+        </div>
 
             
 <div class="filter_details">
-    <div class="search-row">
-        <input type="date" id="date" name="date" placeholder="Date">
-        <select id="category" name="category">
-            <option value="">Category</option>
-            <!-- PHP categories here -->
-        </select>
-        <select id="skill" name="skill">
-            <option value="">Skill Level</option>
-            <option value="beginner">Beginner</option>
-            <option value="intermediate">Intermediate</option>
-            <option value="advanced">Advanced</option>
-        </select>
-        <input type="text" id="location" name="location" placeholder="Location">
-        <button class="search-btn" onclick="searchEvents()">Search</button>
-    </div>
-</div>
+            <form method="GET" id="filterForm">
+                <div class="search-row">
+                    <input type="date" 
+                           id="date" 
+                           name="date" 
+                           placeholder="Date"
+                           value="<?php echo htmlspecialchars($filters['date']); ?>">
+                    
+                    <select id="category" name="category">
+                        <option value="">All Categories</option>
+                        <?php foreach ($categories as $category): ?>
+                            <option value="<?php echo htmlspecialchars($category['category']); ?>"
+                                <?php echo ($filters['category'] == $category['category']) ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($category['category']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    
+                    <select id="skill" name="skillId">
+                        <option value="">All Skills</option>
+                        <?php foreach ($skills as $skill): ?>
+                            <option value="<?php echo $skill['skillId']; ?>"
+                                <?php echo ($filters['skillId'] == $skill['skillId']) ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($skill['skillName']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    
+                    <input type="text" 
+                           id="location" 
+                           name="location" 
+                           placeholder="Location"
+                           value="<?php echo htmlspecialchars($filters['location']); ?>">
+                    
+                    <button type="submit" class="search-btn">
+                        <i class="ri-search-line"></i> Search
+                    </button>
+                </div>
+            </form>
+        </div>
+
 
              <!--test-->
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="joinEventsCard">
-                        <div class="joinEventsCardImage">
-                            <img src="../assets/images/help.png" alt="Mission" class="img-fluid">
-                            <div class="joinEventsDateBadge">
-                                <span class="joinEventsDateDay">20</span>
-                                <span class="joinEventsDateMonth">Feb</span>
-                            </div>
-                        </div>
-                        <div class="joinEventsCardBody">
-                            <!--here badge needed to be changed-->
-                            <div class="joinEventsCardMeta">
-                               <span class="joinEventsCategory">Environment</span>
-                               <span class="joinEventsSkill">Beginner</span>
-                            </div>
-
-                            <h3 class="joinEventsCardTitle">Beach Cleanup</h3>
-                            <p class="joinEventsCardText">Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum</p>
-                            <div class="joinEventsCardDetails">
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-calendar-event-line"></i>
-                                    <span>20/11/2025</span>
-                                </div>
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-time-line"></i>
-                                    <span>12:00 pm to 2:00 pm</span>
-                                </div>
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-map-pin-line"></i>
-                                    <a href="#" class="joinEventsLocationLink">Browns Beach - Negombo</a>
-                                </div>
-                            </div>
-                            <button class="joinEventsJoinBtn" onclick="window.location.href='sign_in.php'">Join Now</button>
-                        </div>
-                    </div>
-                </div>
-
-                 <!--test-->
-                <div class="col-md-4">
-                    <div class="joinEventsCard">
-                        <div class="joinEventsCardImage">
-                            <img src="../assets/images/about.png" alt="Mission" class="img-fluid">
-                            <div class="joinEventsDateBadge">
-                                <span class="joinEventsDateDay">20</span>
-                                <span class="joinEventsDateMonth">Feb</span>
-                            </div>
-                        </div>
-                        <div class="joinEventsCardBody">
-                            <div class="joinEventsCardMeta">
-                               <span class="joinEventsCategory">Environment</span>
-                               <span class="joinEventsSkill">Beginner</span>
-                            </div>
-                            <h3 class="joinEventsCardTitle">Beach Cleanup</h3>
-                            <p class="joinEventsCardText">Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum</p>
-                            <div class="joinEventsCardDetails">
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-calendar-event-line"></i>
-                                    <span>20/11/2025</span>
-                                </div>
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-time-line"></i>
-                                    <span>12:00 pm to 2:00 pm</span>
-                                </div>
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-map-pin-line"></i>
-                                    <a href="#" class="joinEventsLocationLink">Browns Beach - Negombo</a>
-                                </div>
-                            </div>
-                            <button class="joinEventsJoinBtn" onclick="window.location.href='sign_in.php'">Join Now</button>
-                        </div>
-                    </div>
-                </div>
-
-                 <!--test-->
-                <div class="col-md-4">
-                    <div class="joinEventsCard">
-                        <div class="joinEventsCardImage">
-                            <img src="../assets/images/help.png" alt="Mission" class="img-fluid">
-                            <div class="joinEventsDateBadge">
-                                <span class="joinEventsDateDay">20</span>
-                                <span class="joinEventsDateMonth">Feb</span>
-                            </div>
-                        </div>
-                        <div class="joinEventsCardBody">
-                            <div class="joinEventsCardMeta">
-                               <span class="joinEventsCategory">Environment</span>
-                               <span class="joinEventsSkill">Beginner</span>
-                            </div>
-                            <h3 class="joinEventsCardTitle">Beach Cleanup</h3>
-                            <p class="joinEventsCardText">Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum</p>
-                            <div class="joinEventsCardDetails">
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-calendar-event-line"></i>
-                                    <span>30/11/2025</span>
-                                </div>
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-time-line"></i>
-                                    <span>10:00 pm to 2:00 pm</span>
-                                </div>
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-map-pin-line"></i>
-                                    <a href="#" class="joinEventsLocationLink">Browns Beach - Negombo</a>
-                                </div>
-                            </div>
-                            <button class="joinEventsJoinBtn" onclick="window.location.href='sign_in.php'">Join Now</button>
-                        </div>
-                    </div>
-                </div>
-
-                 <!--test-->
-                <div class="col-md-4">
-                    <div class="joinEventsCard">
-                        <div class="joinEventsCardImage">
-                            <img src="../assets/images/help.png" alt="Mission" class="img-fluid">
-                            <div class="joinEventsDateBadge">
-                                <span class="joinEventsDateDay">20</span>
-                                <span class="joinEventsDateMonth">Feb</span>
-                            </div>
-                        </div>
-                        <div class="joinEventsCardBody">
-                            <div class="joinEventsCardMeta">
-                               <span class="joinEventsCategory">Environment</span>
-                               <span class="joinEventsSkill">Beginner</span>
-                            </div>
-                            <h3 class="joinEventsCardTitle">Beach Cleanup</h3>
-                            <p class="joinEventsCardText">Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum</p>
-                            <div class="joinEventsCardDetails">
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-calendar-event-line"></i>
-                                    <span>30/11/2025</span>
-                                </div>
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-time-line"></i>
-                                    <span>10:00 pm to 2:00 pm</span>
-                                </div>
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-map-pin-line"></i>
-                                    <a href="#" class="joinEventsLocationLink">Browns Beach - Negombo</a>
-                                </div>
-                            </div>
-                            <button class="joinEventsJoinBtn" onclick="window.location.href='sign_in.php'">Join Now</button>
-                        </div>
-                    </div>
-                </div>
-
-                 <!--test-->
-                <div class="col-md-4">
-                    <div class="joinEventsCard">
-                        <div class="joinEventsCardImage">
-                            <img src="../assets/images/help.png" alt="Mission" class="img-fluid">
-                            <div class="joinEventsDateBadge">
-                                <span class="joinEventsDateDay">20</span>
-                                <span class="joinEventsDateMonth">Feb</span>
-                            </div>
-                        </div>
-                        <div class="joinEventsCardBody">
-                            <div class="joinEventsCardMeta">
-                               <span class="joinEventsCategory">Environment</span>
-                               <span class="joinEventsSkill">Beginner</span>
-                            </div>
-                            <h3 class="joinEventsCardTitle">Beach Cleanup</h3>
-                            <p class="joinEventsCardText">Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum</p>
-                            <div class="joinEventsCardDetails">
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-calendar-event-line"></i>
-                                    <span>30/11/2025</span>
-                                </div>
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-time-line"></i>
-                                    <span>10:00 pm to 2:00 pm</span>
-                                </div>
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-map-pin-line"></i>
-                                    <a href="#" class="joinEventsLocationLink">Browns Beach - Negombo</a>
-                                </div>
-                            </div>
-                            <button class="joinEventsJoinBtn">Join Now</button>
-                        </div>
-                    </div>
-                </div>
-
-
-                 <!--test-->
-                <div class="col-md-4">
-                    <div class="joinEventsCard">
-                        <div class="joinEventsCardImage">
-                            <img src="../assets/images/help.png" alt="Mission" class="img-fluid">
-                            <div class="joinEventsDateBadge">
-                                <span class="joinEventsDateDay">20</span>
-                                <span class="joinEventsDateMonth">Feb</span>
-                            </div>
-                        </div>
-                        <div class="joinEventsCardBody">
-                            <div class="joinEventsCardMeta">
-                               <span class="joinEventsCategory">Environment</span>
-                               <span class="joinEventsSkill">Beginner</span>
-                            </div>
-                            <h3 class="joinEventsCardTitle">Beach Cleanup</h3>
-                            <p class="joinEventsCardText">Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum</p>
-                            <div class="joinEventsCardDetails">
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-calendar-line"></i>
-                                    <span>30/11/2025</span>
-                                </div>
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-time-line"></i>
-                                    <span>10:00 pm to 2:00 pm</span>
-                                </div>
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-map-pin-line"></i>
-                                    <a href="#" class="joinEventsLocationLink">Browns Beach - Negombo</a>
-                                </div>
-                            </div>
-                            <button class="joinEventsJoinBtn">Join Now</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!--test-->
-                <div class="col-md-4">
-                    <div class="joinEventsCard">
-                        <div class="joinEventsCardImage">
-                            <img src="../assets/images/help.png" alt="Mission" class="img-fluid">
-                            <div class="joinEventsDateBadge">
-                                <span class="joinEventsDateDay">20</span>
-                                <span class="joinEventsDateMonth">Feb</span>
-                            </div>
-                        </div>
-                        <div class="joinEventsCardBody">
+<!-- Events Grid -->
+<div class="row">
+    <?php if (empty($events)): ?>
+        <div class="col-12 text-center py-5">
+            <p class="lead">No events found. Try different search criteria.</p>
+        </div>
+    <?php else: ?>
+        <?php foreach ($events as $event): ?>
+            <div class="col-md-4">
+                <div class="joinEventsCard">
+                    <div class="joinEventsCardImage">
+                        <?php if ($event['eventImage']): ?>
+                            <img src="../<?php echo htmlspecialchars($event['eventImage']); ?>" 
+                                 alt="<?php echo htmlspecialchars($event['eventName']); ?>">
+                        <?php else: ?>
+                            <img src="../assets/images/default-event.jpg" 
+                                 alt="Event Image">
+                        <?php endif; ?>
                         
-                            <div class="joinEventsCardMeta">
-                               <span class="joinEventsCategory">Environment</span>
-                               <span class="joinEventsSkill">Beginner</span>
-                            </div>
-                            <h3 class="joinEventsCardTitle">Beach Cleanup</h3>
-                            <p class="joinEventsCardText">Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum . Lorem ipsum</p>
-                            <div class="joinEventsCardDetails">
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-calendar-line"></i>
-                                    <span>30/11/2025</span>
-                                </div>
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-time-line"></i>
-                                    <span>10:00 pm to 2:00 pm</span>
-                                </div>
-                                <div class="joinEventsCardDetail">
-                                    <i class="ri-map-pin-line"></i>
-                                    <a href="#" class="joinEventsLocationLink">Browns Beach - Negombo</a>
-                                </div>
-                            </div>
-                            <button class="joinEventsJoinBtn">Join Now</button>
+                        <div class="joinEventsDateBadge">
+                            <?php 
+                            $startDate = new DateTime($event['startDate']);
+                            ?>
+                            <span class="joinEventsDateDay"><?php echo $startDate->format('d'); ?></span>
+                            <span class="joinEventsDateMonth"><?php echo $startDate->format('M'); ?></span>
                         </div>
                     </div>
+                    
+                    <div class="joinEventsCardBody">
+                        <div class="joinEventsCardMeta">
+                            <?php if ($event['category']): ?>
+                                <span class="joinEventsCategory"><?php echo htmlspecialchars($event['category']); ?></span>
+                            <?php endif; ?>
+                            
+                            <?php if ($event['skillName']): ?>
+                                <span class="joinEventsSkill"><?php echo htmlspecialchars($event['skillName']); ?></span>
+                            <?php endif; ?>
+                        </div>
+                        
+                        <h3 class="joinEventsCardTitle"><?php echo htmlspecialchars($event['eventName']); ?></h3>
+                        
+                        <p class="joinEventsCardText">
+                            <?php 
+                            $description = $event['eventDescription'];
+                            echo htmlspecialchars(substr($description, 0, 100));
+                            if (strlen($description) > 100) echo '...';
+                            ?>
+                        </p>
+                        
+                        <div class="joinEventsCardDetails">
+                            <div class="joinEventsCardDetail">
+                                <i class="ri-calendar-event-line"></i>
+                                <span><?php echo date('d/m/Y', strtotime($event['startDate'])); ?></span>
+                            </div>
+                            
+                            <div class="joinEventsCardDetail">
+                                <i class="ri-time-line"></i>
+                                <span>
+                                    <?php 
+                                    echo date('h:i A', strtotime($event['startTime']));
+                                    if ($event['endTime']) {
+                                        echo ' to ' . date('h:i A', strtotime($event['endTime']));
+                                    }
+                                    ?>
+                                </span>
+                            </div>
+                            
+                            <div class="joinEventsCardDetail">
+                                <i class="ri-map-pin-line"></i>
+                                <?php if ($event['googleMapLink']): ?>
+                                    <a href="<?php echo htmlspecialchars($event['googleMapLink']); ?>" 
+                                       target="_blank" 
+                                       class="joinEventsLocationLink">
+                                        <?php echo htmlspecialchars($event['location']); ?>
+                                    </a>
+                                <?php else: ?>
+                                    <span><?php echo htmlspecialchars($event['location']); ?></span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        
+                        <?php
+                        // Check if user is logged in (REMOVED session_start() from here)
+                        $joinUrl = isset($_SESSION['userId']) ? 'event_details.php?id=' . $event['eventId'] : 'sign_in.php';
+                        ?>
+                        
+                        <button class="joinEventsJoinBtn" 
+                                onclick="window.location.href='<?php echo $joinUrl; ?>'">
+                            <?php echo isset($_SESSION['userId']) ? 'View Details' : 'Join Now'; ?>
+                        </button>
+                    </div>
                 </div>
-
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>
 
 
              <!--don't remove-->
             </div>
-           <button class="joinEventsMoreBtn" onclick="window.open('join_events_main.html', '_blank')">More Events</button>
+           <button class="joinEventsMoreBtn" onclick="window.open('join_events_main.php', '_blank')">More Events</button>
         </div>
     </section>
 
@@ -1021,6 +920,29 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     });
 });
+
+
+
+
+        // Search function for the main search bar
+        function searchEvents() {
+            const searchInput = document.getElementById('searchInput').value;
+            const url = new URL(window.location.href);
+            url.searchParams.set('search', searchInput);
+            window.location.href = url.toString();
+        }
+        
+        // Enter key support for search
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchEvents();
+            }
+        });
+        
+        // Auto-submit filters when changed (optional)
+        document.getElementById('filterForm').addEventListener('change', function() {
+            this.submit();
+        });
 </script>
 </body>
 </html>

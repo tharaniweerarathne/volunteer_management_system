@@ -14,7 +14,7 @@ require_once __DIR__ . "/../business_logic/ProfileLogic.php";
 $profileLogic = new ProfileLogic($conn);
 $userId = $_SESSION['userId'];
 
-// fetching current profile data
+// fetch current profile data
 $profileResult = $profileLogic->getCoordinatorProfile($userId);
 $profile = $profileResult['success'] ? $profileResult['data'] : null;
 

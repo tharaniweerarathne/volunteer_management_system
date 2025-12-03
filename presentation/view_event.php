@@ -13,7 +13,13 @@ if (!isset($_SESSION['userId'])) {
 }
 
 $userId = $_SESSION['userId'];
-$userRole = getUserRoleSafe();
+
+// Create instances of EventData and EventLogic
+$eventData = new EventData();
+$eventLogic = new EventLogic();
+
+// Get user role
+$userRole = $eventLogic->getUserRoleSafe();
 
 // Get event ID
 $eventId = $_GET['id'] ?? 0;
@@ -22,16 +28,15 @@ if (!$eventId) {
     exit();
 }
 
-// Get event data
-require_once '../data_access/eventData.php';
-$event = getEventById($eventId);
+// Get event data using OOP
+$event = $eventData->getEventById($eventId);
 if (!$event) {
     header('Location: events.php');
     exit();
 }
 
-// Get assigned coordinators
-$coordinators = getAllCoordinators();
+// Get assigned coordinators using OOP
+$coordinators = $eventData->getAllCoordinators();
 $assignedCoordinators = [];
 if (!empty($event['coordinatorIds'])) {
     $coordinatorIds = explode(',', $event['coordinatorIds']);
@@ -40,8 +45,8 @@ if (!empty($event['coordinatorIds'])) {
     });
 }
 
-// Get skill name
-$skills = getAllSkills();
+// Get skill name using OOP
+$skills = $eventData->getAllSkills();
 $skillName = 'No specific skill required';
 foreach ($skills as $skill) {
     if ($skill['skillId'] == $event['requiredSkillId']) {
@@ -153,7 +158,7 @@ $isEventOver = strtotime($eventDateTime) < time();
                 </div>
                 <div class="col-md-4 text-end">
                     <div class="btn-group">
-                        <?php if (canUserEditEvent($eventId, $userId)): ?>
+                        <?php if ($eventData->canUserEditEvent($eventId, $userId)): ?>
                             <a href="events.php?action=edit&id=<?php echo $eventId; ?>" 
                                class="btn btn-warning action-btn">
                                 <i class="bi bi-pencil"></i> Edit
@@ -375,7 +380,7 @@ $isEventOver = strtotime($eventDateTime) < time();
                     </div>
                     <div class="card-body">
                         <div class="d-grid gap-3">
-                            <?php if (canUserEditEvent($eventId, $userId)): ?>
+                            <?php if ($eventData->canUserEditEvent($eventId, $userId)): ?>
                                 <a href="events.php?action=edit&id=<?php echo $eventId; ?>" 
                                    class="btn btn-warning action-btn">
                                     <i class="bi bi-pencil-square"></i> Edit Event Details
@@ -393,7 +398,7 @@ $isEventOver = strtotime($eventDateTime) < time();
                                 <i class="bi bi-arrow-left-circle"></i> Back to Events List
                             </a>
                             
-                            <?php if (canUserEditEvent($eventId, $userId)): ?>
+                            <?php if ($eventData->canUserEditEvent($eventId, $userId)): ?>
                                 <form method="POST" action="events.php" class="d-grid">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="eventId" value="<?php echo $eventId; ?>">
@@ -430,7 +435,7 @@ $isEventOver = strtotime($eventDateTime) < time();
                                 <i class="bi bi-person text-success"></i>
                                 <strong>Created By:</strong> 
                                 <?php 
-                                    $creator = getUserById($event['createdBy']);
+                                    $creator = $eventData->getUserById($event['createdBy']);
                                     echo $creator ? htmlspecialchars($creator['name']) : 'Unknown';
                                 ?>
                             </li>
@@ -448,7 +453,7 @@ $isEventOver = strtotime($eventDateTime) < time();
                                 <i class="bi bi-shield-check text-danger"></i>
                                 <strong>Access:</strong> 
                                 <?php 
-                                    if (canUserEditEvent($eventId, $userId)) {
+                                    if ($eventData->canUserEditEvent($eventId, $userId)) {
                                         echo 'You can edit this event';
                                     } else {
                                         echo 'View only';

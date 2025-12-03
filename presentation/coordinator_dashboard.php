@@ -54,12 +54,6 @@ $role = $_SESSION['role'] ?? '';
             </a>
             </div> 
 
-                        <div class="nav-item">
-            <a href="events.php" class="active">
-                <i class="ri-dashboard-line"></i>
-                <span>My events</span>
-            </a>
-            </div> 
         <?php endif; ?>
 
         <?php if ($role === 'Admin' || $role === 'Coordinator'): ?>

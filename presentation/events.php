@@ -8,10 +8,18 @@ if (!isset($_SESSION['userId'])) {
 }
 
 $userId = $_SESSION['userId'];
-$userRole = $_SESSION['role'] ?? getUserRole($userId);
-$skills = getAllSkills();
-$coordinators = getAllCoordinators();
-$categories = getCategories();
+
+// Create instances of EventData and EventLogic
+$eventData = new EventData();
+$eventLogic = new EventLogic();
+
+// Get user role
+$userRole = $_SESSION['role'] ?? $eventData->getUserRole($userId);
+
+// Get data using OOP methods
+$skills = $eventData->getAllSkills();
+$coordinators = $eventData->getAllCoordinators();
+$categories = $eventData->getCategories();
 
 // Handle actions
 $action = $_GET['action'] ?? '';
@@ -22,7 +30,7 @@ $error = '';
 // Process POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($_POST['action'] === 'create') {
-        $result = handleCreateEvent();
+        $result = $eventLogic->handleCreateEvent();
         if ($result['success']) {
             $message = 'Event created successfully!';
             if (isset($result['warning'])) {
@@ -33,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     elseif ($_POST['action'] === 'update') {
-        $result = handleUpdateEvent($_POST['eventId']);
+        $result = $eventLogic->handleUpdateEvent($_POST['eventId']);
         if ($result['success']) {
             $message = 'Event updated successfully!';
             if (isset($result['warning'])) {
@@ -44,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     elseif ($_POST['action'] === 'delete') {
-        $result = handleDeleteEvent($_POST['eventId']);
+        $result = $eventLogic->handleDeleteEvent($_POST['eventId']);
         if ($result['success']) {
             $message = $result['message'];
         } else {
@@ -56,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = 'Only admins can assign coordinators';
         } else {
             $coordinatorIds = isset($_POST['coordinators']) ? array_map('intval', $_POST['coordinators']) : [];
-            $result = assignCoordinators($_POST['eventId'], $coordinatorIds);
+            $result = $eventData->assignCoordinators($_POST['eventId'], $coordinatorIds);
             
             if ($result['success']) {
                 $message = 'Coordinators assigned successfully!';
@@ -78,13 +86,13 @@ $filters = [
     'category' => $_GET['category'] ?? ''
 ];
 
-$events = getAllEvents($filters);
+$events = $eventData->getAllEvents($filters);
 
 // Get event for editing
 $editEvent = null;
 if ($action === 'edit' && $eventId) {
-    $editEvent = getEventById($eventId);
-    if (!$editEvent || !canUserEditEvent($eventId, $userId)) {
+    $editEvent = $eventData->getEventById($eventId);
+    if (!$editEvent || !$eventData->canUserEditEvent($eventId, $userId)) {
         header('Location: events.php');
         exit();
     }
@@ -93,7 +101,7 @@ if ($action === 'edit' && $eventId) {
 // Get event for assigning
 $assignEvent = null;
 if ($action === 'assign' && $eventId) {
-    $assignEvent = getEventById($eventId);
+    $assignEvent = $eventData->getEventById($eventId);
     if (!$assignEvent || $userRole !== 'Admin') {
         header('Location: events.php');
         exit();
@@ -103,7 +111,7 @@ if ($action === 'assign' && $eventId) {
 // Get coordinator events for dashboard
 $coordinatorEvents = [];
 if ($userRole === 'Coordinator') {
-    $coordinatorEvents = getEventsByCoordinator($userId);
+    $coordinatorEvents = $eventData->getEventsByCoordinator($userId);
 }
 ?>
 <!DOCTYPE html>
@@ -119,20 +127,30 @@ if ($userRole === 'Coordinator') {
     <style>
         .card-img-top { height: 200px; object-fit: cover; }
         .required:after { content: " *"; color: red; }
-        .logo-img {
-    height: 60px;          /* Adjust logo height */
-    width: auto;           /* Keep aspect ratio */
-    margin-right: 10px;    /* Space between logo and text */
-    vertical-align: middle; /* Align with the text */
-}
+        .logo-img { height: 60px; width: auto; margin-right: 10px; vertical-align: middle;}
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#"><img src="../assets/images/logo.png" alt="Logo" class="logo-img"></a>
-            <div class="navbar-nav">
-                <a class="nav-link active" href="#"  onclick="history.back(); return false;">Back</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
+        </a>
+        <!-- Toggle button for mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapsible content -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <div class="navbar-nav ms-auto">
+                <?php if ($userRole === 'Admin'): ?>
+                    <a class="nav-link active" href="admin_dashboard.php">Back</a>
+                <?php endif; ?>
+                <?php if ($userRole === 'Coordinator'): ?>
+                    <a class="nav-link active" href="coordinator_dashboard.php">Back</a>
+                <?php endif; ?>
                 <a class="nav-link" href="events.php">Events</a>
                 <?php if ($userRole === 'Coordinator'): ?>
                     <a class="nav-link" href="events.php?dashboard=1">My Dashboard</a>
@@ -142,10 +160,12 @@ if ($userRole === 'Coordinator') {
                 <?php endif; ?>
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
+
 
     <div class="container mt-4">
-        <!-- Messages -->
+        <!-- error messages -->
         <?php if ($message): ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <?php echo $message; ?>
@@ -187,7 +207,7 @@ if ($userRole === 'Coordinator') {
         <?php elseif (in_array($action, ['create', 'edit'])): ?>
             <h2><?php echo $action === 'create' ? 'Create New Event' : 'Edit Event'; ?></h2>
             <form method="POST" enctype="multipart/form-data" class="row g-3">
-                <input type="hidden" name="action" value="<?php echo $action; ?>">
+                <input type="hidden" name="action" value="<?php echo $action === 'edit' ? 'update' : $action; ?>">
                 <?php if ($action === 'edit'): ?>
                     <input type="hidden" name="eventId" value="<?php echo $eventId; ?>">
                 <?php endif; ?>
@@ -204,7 +224,7 @@ if ($userRole === 'Coordinator') {
         <option value="">Select Category</option>
         <?php 
         // Get categories from database
-        $categories = getCategories();
+        $categories = $eventData->getCategories();
         
         // Always show these default categories
         $defaultCats = ['Charity', 'Education', 'Environment', 'Health', 'Community', 
@@ -247,23 +267,6 @@ if ($userRole === 'Coordinator') {
                     <label class="form-label">Description</label>
                     <textarea name="eventDescription" class="form-control" rows="3"><?php echo $editEvent['eventDescription'] ?? ''; ?></textarea>
                 </div>
-
-                <?php if (!empty($conflictCheck)): ?>
-<div class="alert alert-warning">
-    <h5>⚠️ Warning: Potential Conflicts Detected</h5>
-    <p>The following coordinators have scheduling conflicts:</p>
-    <ul>
-        <?php foreach ($conflictCheck as $conflict): ?>
-        <li>
-            <strong><?php echo htmlspecialchars($conflict['coordinatorName']); ?></strong> 
-            is already assigned to "<?php echo htmlspecialchars($conflict['eventName']); ?>"
-            on <?php echo date('M d, Y', strtotime($conflict['existingEvent']['startDate'])); ?>
-            at <?php echo date('h:i A', strtotime($conflict['existingEvent']['startTime'])); ?>
-        </li>
-        <?php endforeach; ?>
-    </ul>
-</div>
-<?php endif; ?>
                 
                 <div class="col-md-6">
                     <label class="form-label required">Location</label>
@@ -474,7 +477,7 @@ if ($userRole === 'Coordinator') {
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <?php if (isEventOver($event)): ?>
+                                <?php if ($eventLogic->isEventOver($event)): ?>
                                     <span class="badge bg-secondary">Over</span>
                                 <?php else: ?>
                                     <span class="badge bg-success">Upcoming</span>
@@ -482,12 +485,9 @@ if ($userRole === 'Coordinator') {
                             </td>
                             <td>
                                 <div class="d-flex gap-2">
-                                    <!-- In the coordinator dashboard section of events.php: -->
-
-                                   <a href="view_event.php?id=<?php echo $event['eventId']; ?>" class="btn btn-info"><i class="ri-information-line"></i> View Details</a>
-                                       
+                                    <a href="view_event.php?id=<?php echo $event['eventId']; ?>" class="btn btn-info"><i class="ri-information-line"></i> View Details</a>
                                     
-                                    <?php if (canUserEditEvent($event['eventId'], $userId)): ?>
+                                    <?php if ($eventData->canUserEditEvent($event['eventId'], $userId)): ?>
                                         <a href="events.php?action=edit&id=<?php echo $event['eventId']; ?>" 
                                            class="btn btn-success"><i class="ri-pencil-line"></i> Edit</a>
                                         
@@ -514,5 +514,25 @@ if ($userRole === 'Coordinator') {
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Handle new category selection
+    document.getElementById('categorySelect').addEventListener('change', function() {
+        const newCategoryDiv = document.getElementById('newCategoryDiv');
+        const newCategoryInput = document.querySelector('input[name="new_category"]');
+        
+        if (this.value === 'new_category') {
+            newCategoryDiv.style.display = 'block';
+            newCategoryInput.required = true;
+            // Clear the select so the new category name will be used
+            this.name = 'category_old';
+            newCategoryInput.name = 'category';
+        } else {
+            newCategoryDiv.style.display = 'none';
+            newCategoryInput.required = false;
+            this.name = 'category';
+            newCategoryInput.name = 'new_category';
+        }
+    });
+</script>
 </body>
 </html>
