@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Asia/Colombo');
 require_once '../business_logic/eventLogic.php';
 
 // Check login
@@ -483,13 +484,13 @@ if ($userRole === 'Coordinator') {
                                     <span class="text-danger">Not Assigned</span>
                                 <?php endif; ?>
                             </td>
-                            <td>
-                                <?php if ($eventLogic->isEventOver($event)): ?>
-                                    <span class="badge bg-secondary">Over</span>
-                                <?php else: ?>
-                                    <span class="badge bg-success">Upcoming</span>
-                                <?php endif; ?>
-                            </td>
+<td>
+    <?php if ($eventLogic->isEventOver($event)): ?>
+        <span class="badge bg-secondary">Over</span>
+    <?php else: ?>
+        <span class="badge bg-success">Upcoming</span>
+    <?php endif; ?>
+</td>
                             <td>
                                 <div class="d-flex gap-2">
                                     <a href="view_event.php?id=<?php echo $event['eventId']; ?>" class="btn btn-info"><i class="ri-information-line"></i> View Details</a>

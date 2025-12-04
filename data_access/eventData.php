@@ -301,22 +301,22 @@ class eventData {
     }
     
     // Get events by coordinator
-    public function getEventsByCoordinator($coordinatorId) {
-        global $conn;
-        
-        $sql = "SELECT e.*, s.skillName
-                FROM events e
-                JOIN event_coordinators ec ON e.eventId = ec.eventId
-                LEFT JOIN skills s ON e.requiredSkillId = s.skillId
-                WHERE ec.coordinatorId = ?
-                ORDER BY e.startDate DESC";
-        
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $coordinatorId);
-        $stmt->execute();
-        
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-    }
+public function getEventsByCoordinator($coordinatorId) {
+    global $conn;
+    
+    $sql = "SELECT e.*, s.skillName
+            FROM events e
+            JOIN event_coordinators ec ON e.eventId = ec.eventId
+            LEFT JOIN skills s ON e.requiredSkillId = s.skillId
+            WHERE ec.coordinatorId = ?
+            ORDER BY e.startDate DESC, e.eventId DESC";  // Sort by date, then by ID
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $coordinatorId);
+    $stmt->execute();
+    
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
     
     // Get event categories
     public function getCategories() {

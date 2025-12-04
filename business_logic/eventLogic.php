@@ -233,16 +233,16 @@ public function handleUpdateEvent($eventId) {
     
 // Check if event is over
 public function isEventOver($event) {
-    $eventDateTime = $event['endDate'] . ' ' . $event['endTime'];
-    $eventTimestamp = strtotime($eventDateTime);
-    $currentTimestamp = time();
+    // Set timezone (or ensure it's already set globally)
+    date_default_timezone_set('Asia/Colombo');
     
-    // Debug output (remove after testing)
-    error_log("Event end: " . $eventDateTime . " (" . $eventTimestamp . ")");
-    error_log("Current time: " . date('Y-m-d H:i:s') . " (" . $currentTimestamp . ")");
-    error_log("Is over? " . ($eventTimestamp < $currentTimestamp ? 'YES' : 'NO'));
+    $endTime = !empty($event['endTime']) ? $event['endTime'] : '23:59:59';
+    if (strlen($endTime) <= 5) {
+        $endTime .= ':00';
+    }
     
-    return $eventTimestamp < $currentTimestamp;
+    $eventDateTime = $event['endDate'] . ' ' . $endTime;
+    return strtotime($eventDateTime) < time();
 }
 }
 
