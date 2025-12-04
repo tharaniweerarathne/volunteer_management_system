@@ -24,10 +24,19 @@ switch ($exportType) {
     case 'all_users':
         $csvLogic->exportAllUsersToCSV();
         break;
+
+     // ⭐ NEW: Export filtered events
+    case 'events_filtered':
+        // gather filters from GET
+        $filters = [
+            'startDate' => $_GET['startDate'] ?? '',
+            'endDate'   => $_GET['endDate'] ?? '',
+            'category'  => $_GET['category'] ?? ''
+        ];
         
-    case 'events':
-        $csvLogic->exportEventsToCSV();
+        $csvLogic->exportFilteredEventsToCSV($filters);
         break;
+
     
     // Add more export types here as needed
     // case 'registrations':

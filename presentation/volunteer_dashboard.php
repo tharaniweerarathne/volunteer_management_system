@@ -35,9 +35,9 @@ $name = $_SESSION['name'];
                 </a>
             </div>
             <div class="nav-item">
-                <a href="#">
+                <a href="events_volunteer.php">
                     <i class="ri-calendar-check-line"></i>
-                    <span>My Events</span>
+                    <span>Join Events</span>
                 </a>
             </div>
             <div class="nav-item">

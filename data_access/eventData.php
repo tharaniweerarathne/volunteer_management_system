@@ -369,7 +369,7 @@ class eventData {
 
 
 
-    // Get only upcoming events for public index page
+        // Get only upcoming events for public index page
 public function getUpcomingEvents($filters = []) {
     global $conn;
     
@@ -434,6 +434,7 @@ public function getUpcomingEvents($filters = []) {
 }
 
 
+
     
     // Get user role
     public function getUserRole($userId) {
@@ -468,133 +469,6 @@ public function getUpcomingEvents($filters = []) {
         return $stmt->get_result()->fetch_assoc();
     }
     
-    // Get all events for export (with more details)
-    public function getAllEventsForExport($filters = []) {
-        global $conn;
-        
-        $sql = "SELECT 
-                    e.eventId,
-                    e.eventName,
-                    e.eventDescription as description,
-                    e.category,
-                    e.location,
-                    e.googleMapLink,
-                    e.startDate,
-                    e.endDate,
-                    e.startTime,
-                    e.endTime,
-                    e.maxVolunteers,
-                    s.skillName as requiredSkill,
-                    e.eventImage,
-                    e.createdAt,
-                    u.name as createdByName,
-                    u.email as createdByEmail,
-                    GROUP_CONCAT(DISTINCT uc.name SEPARATOR ', ') as assignedCoordinators,
-                    GROUP_CONCAT(DISTINCT uc.email SEPARATOR ', ') as coordinatorEmails,
-                    CASE 
-                        WHEN e.endDate < CURDATE() THEN 'Completed'
-                        WHEN e.endDate = CURDATE() AND e.endTime < CURTIME() THEN 'Completed'
-                        ELSE 'Upcoming'
-                    END as status
-                FROM events e
-                LEFT JOIN skills s ON e.requiredSkillId = s.skillId
-                LEFT JOIN users u ON e.createdBy = u.userId
-                LEFT JOIN event_coordinators ec ON e.eventId = ec.eventId
-                LEFT JOIN users uc ON ec.coordinatorId = uc.userId
-                WHERE 1=1";
-        
-        $params = [];
-        $types = "";
-        
-        // Add filters if provided
-        if (!empty($filters['startDate'])) {
-            $sql .= " AND e.startDate >= ?";
-            $params[] = $filters['startDate'];
-            $types .= "s";
-        }
-        
-        if (!empty($filters['endDate'])) {
-            $sql .= " AND e.endDate <= ?";
-            $params[] = $filters['endDate'];
-            $types .= "s";
-        }
-        
-        if (!empty($filters['category'])) {
-            $sql .= " AND e.category = ?";
-            $params[] = $filters['category'];
-            $types .= "s";
-        }
-        
-        $sql .= " GROUP BY e.eventId ORDER BY e.startDate DESC, e.startTime DESC";
-        
-        $stmt = $conn->prepare($sql);
-        
-        if (!empty($params)) {
-            $stmt->bind_param($types, ...$params);
-        }
-        
-        $stmt->execute();
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-    }
-    
-    // Additional export functions
-    public function getAllUsersForExport() {
-        global $conn;
-        
-        $sql = "SELECT 
-                    userId,
-                    name,
-                    email,
-                    telephoneNo,
-                    location,
-                    gender,
-                    role
-                FROM users
-                ORDER BY role, name";
-        
-        $result = $conn->query($sql);
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-    
-    public function getAllCoordinatorsForExport() {
-        global $conn;
-        
-        $sql = "SELECT 
-                    userId,
-                    name,
-                    email,
-                    telephoneNo,
-                    location,
-                    gender,
-                    (SELECT COUNT(*) FROM event_coordinators WHERE coordinatorId = users.userId) as eventsAssigned
-                FROM users
-                WHERE role = 'Coordinator'
-                ORDER BY name";
-        
-        $result = $conn->query($sql);
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-    
-    public function getAllVolunteersForExport() {
-        global $conn;
-        
-        $sql = "SELECT 
-                    userId,
-                    name,
-                    email,
-                    telephoneNo,
-                    location,
-                    gender
-                FROM users
-                WHERE role = 'Volunteer'
-                ORDER BY name";
-        
-        $result = $conn->query($sql);
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
 }
-
-
-
 
 ?>

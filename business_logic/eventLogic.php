@@ -231,11 +231,19 @@ public function handleUpdateEvent($eventId) {
         return ['success' => $success, 'message' => $success ? 'Event deleted successfully' : 'Failed to delete event'];
     }
     
-    // Check if event is over
-    public function isEventOver($event) {
-        $eventDateTime = $event['endDate'] . ' ' . $event['endTime'];
-        return strtotime($eventDateTime) < time();
-    }
+// Check if event is over
+public function isEventOver($event) {
+    $eventDateTime = $event['endDate'] . ' ' . $event['endTime'];
+    $eventTimestamp = strtotime($eventDateTime);
+    $currentTimestamp = time();
+    
+    // Debug output (remove after testing)
+    error_log("Event end: " . $eventDateTime . " (" . $eventTimestamp . ")");
+    error_log("Current time: " . date('Y-m-d H:i:s') . " (" . $currentTimestamp . ")");
+    error_log("Is over? " . ($eventTimestamp < $currentTimestamp ? 'YES' : 'NO'));
+    
+    return $eventTimestamp < $currentTimestamp;
+}
 }
 
 // Create a global instance for backward compatibility

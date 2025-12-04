@@ -257,16 +257,74 @@ public function getAllUsersForExport() {
     return $result->fetch_all(MYSQLI_ASSOC);
 }
 
-// get all events for CSV export (add this when you have events table)
-public function getAllEventsForExport() {
-    // adjust this query based on your events table structure
-    $query = "SELECT eventId, eventName, description, location, startDate, endDate, status
-              FROM events 
-              ORDER BY startDate DESC";
-    
-    $result = $this->conn->query($query);
-    return $result->fetch_all(MYSQLI_ASSOC);
-}
+    // Get all events for export (with more details)
+    public function getAllEventsForExport($filters = []) {
+        global $conn;
+        
+        $sql = "SELECT 
+                    e.eventId,
+                    e.eventName,
+                    e.eventDescription as description,
+                    e.category,
+                    e.location,
+                    e.googleMapLink,
+                    e.startDate,
+                    e.endDate,
+                    e.startTime,
+                    e.endTime,
+                    e.maxVolunteers,
+                    s.skillName as requiredSkill,
+                    e.eventImage,
+                    e.createdAt,
+                    u.name as createdByName,
+                    u.email as createdByEmail,
+                    GROUP_CONCAT(DISTINCT uc.name SEPARATOR ', ') as assignedCoordinators,
+                    GROUP_CONCAT(DISTINCT uc.email SEPARATOR ', ') as coordinatorEmails,
+                    CASE 
+                        WHEN e.endDate < CURDATE() THEN 'Completed'
+                        WHEN e.endDate = CURDATE() AND e.endTime < CURTIME() THEN 'Completed'
+                        ELSE 'Upcoming'
+                    END as status
+                FROM events e
+                LEFT JOIN skills s ON e.requiredSkillId = s.skillId
+                LEFT JOIN users u ON e.createdBy = u.userId
+                LEFT JOIN event_coordinators ec ON e.eventId = ec.eventId
+                LEFT JOIN users uc ON ec.coordinatorId = uc.userId
+                WHERE 1=1";
+        
+        $params = [];
+        $types = "";
+        
+        // Add filters if provided
+        if (!empty($filters['startDate'])) {
+            $sql .= " AND e.startDate >= ?";
+            $params[] = $filters['startDate'];
+            $types .= "s";
+        }
+        
+        if (!empty($filters['endDate'])) {
+            $sql .= " AND e.endDate <= ?";
+            $params[] = $filters['endDate'];
+            $types .= "s";
+        }
+        
+        if (!empty($filters['category'])) {
+            $sql .= " AND e.category = ?";
+            $params[] = $filters['category'];
+            $types .= "s";
+        }
+        
+        $sql .= " GROUP BY e.eventId ORDER BY e.startDate DESC, e.startTime DESC";
+        
+        $stmt = $conn->prepare($sql);
+        
+        if (!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
+        
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
 
 // generic method for custom queries
 public function getDataForExport($query) {

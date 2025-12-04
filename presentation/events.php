@@ -163,7 +163,6 @@ if ($userRole === 'Coordinator') {
     </div>
 </nav>
 
-
     <div class="container mt-4">
         <!-- error messages -->
         <?php if ($message): ?>
@@ -191,6 +190,11 @@ if ($userRole === 'Coordinator') {
                                 <img src="../<?php echo htmlspecialchars($event['eventImage']); ?>" class="card-img-top">
                             <?php endif; ?>
                             <div class="card-body">
+                                <?php if ($eventLogic->isEventOver($event)): ?>
+                                    <span class="badge bg-secondary">Over</span>
+                                <?php else: ?>
+                                    <span class="badge bg-success">Upcoming</span>
+                                <?php endif; ?>
                                 <h5 class="card-title"><?php echo htmlspecialchars($event['eventName']); ?></h5>
                                 <p class="card-text"><?php echo htmlspecialchars(substr($event['eventDescription'], 0, 100)); ?>...</p>
                                 <p><strong>Date:</strong> <?php echo date('M d, Y', strtotime($event['startDate'])); ?></p>
@@ -214,7 +218,7 @@ if ($userRole === 'Coordinator') {
                 
                 <div class="col-md-6">
                     <label class="form-label required">Event Name</label>
-                    <input type="text" name="eventName" class="form-control" required 
+                    <input type="text" name="eventName" class="form-control" placeholder="Enter the event name" required 
                            value="<?php echo $editEvent['eventName'] ?? ''; ?>">
                 </div>
                 
@@ -265,12 +269,12 @@ if ($userRole === 'Coordinator') {
                 
                 <div class="col-12">
                     <label class="form-label">Description</label>
-                    <textarea name="eventDescription" class="form-control" rows="3"><?php echo $editEvent['eventDescription'] ?? ''; ?></textarea>
+                    <textarea name="eventDescription" placeholder="Description" class="form-control" rows="3"><?php echo $editEvent['eventDescription'] ?? ''; ?></textarea>
                 </div>
                 
                 <div class="col-md-6">
                     <label class="form-label required">Location</label>
-                    <input type="text" name="location" class="form-control" required 
+                    <input type="text" name="location" class="form-control" placeholder="Enter the location " required 
                            value="<?php echo $editEvent['location'] ?? ''; ?>">
                 </div>
                 
@@ -398,6 +402,9 @@ if ($userRole === 'Coordinator') {
                 <h2>Events Management</h2>
                 <?php if (in_array($userRole, ['Admin', 'Coordinator'])): ?>
                     <a href="events.php?action=create" class="btn btn-success">+ Create Event</a>
+                <?php endif; ?>
+                <?php if (in_array($userRole, ['Admin', 'Coordinator'])): ?>
+                    <a href="export_csv.php?type=events_filtered" class="btn btn-primary">Export Data as CSV</a>
                 <?php endif; ?>
                 <?php if ($userRole === 'Coordinator'): ?>
                     <a href="events.php?dashboard=1" class="btn btn-info">My Dashboard</a>

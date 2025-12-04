@@ -118,6 +118,13 @@ $isEventOver = strtotime($eventDateTime) < time();
             padding: 8px 20px;
             border-radius: 25px;
         }
+
+        .logo-img { 
+            height: 60px;
+            width: auto; 
+            margin-right: 10px; 
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
@@ -125,7 +132,7 @@ $isEventOver = strtotime($eventDateTime) < time();
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <i class="bi bi-calendar-event"></i> Volunteer System
+                <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
             </a>
             <div class="navbar-nav ms-auto">
                 <a href="events.php" class="nav-link">
