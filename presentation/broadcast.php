@@ -257,19 +257,19 @@ if (isset($_SESSION['role'])) {
     if ($role == 'Admin') {
         echo '<li class="nav-item mb-2">
                 <a class="nav-link text-white" href="admin_dashboard.php">
-                    <i class="ri-home-4-line"></i> Back Dashboard
+                    <i class="ri-home-4-line"></i> Back to Dashboard
                 </a>
               </li>';
     } elseif ($role == 'Coordinator') {
         echo '<li class="nav-item mb-2">
                 <a class="nav-link text-white" href="coordinator_dashboard.php">
-                    <i class="ri-home-4-line"></i> Back Dashboard
+                    <i class="ri-home-4-line"></i> Back to Dashboard
                 </a>
               </li>';
     } elseif ($role == 'Volunteer') {
         echo '<li class="nav-item mb-2">
                 <a class="nav-link text-white" href="volunteer_dashboard.php">
-                    <i class="ri-home-4-line"></i> Back Dashboard
+                    <i class="ri-home-4-line"></i> Back to Dashboard
                 </a>
               </li>';
     }
@@ -309,7 +309,7 @@ if (isset($_SESSION['role'])) {
 <!--remove this-->
   <div class="flex-grow-1" style="background: linear-gradient(135deg, #fff5f0 0%, #ffe8d9 100%); padding: 20px;">
     <div class="container">
-        <h2>📢 Broadcast to All Volunteers</h2>
+        <h2>Broadcast to All Volunteers</h2>
         
         <div class="info-box">
             <strong>Note:</strong> This message will be sent to <strong><?php echo $volunteerCount; ?></strong> volunteers.
@@ -335,7 +335,7 @@ if (isset($_SESSION['role'])) {
                 <textarea id="message" name="message" required placeholder="Type your broadcast message here..."></textarea>
             </div>
             
-            <button type="submit">📢 Broadcast to All Volunteers</button>
+            <button type="submit">Broadcast</button>
             <a href="send_message.php" style="margin-left: 10px;">Back to Normal Message</a>
         </form>
     </div>

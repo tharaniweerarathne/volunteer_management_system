@@ -307,19 +307,19 @@ if (isset($_SESSION['role'])) {
     if ($role == 'Admin') {
         echo '<li class="nav-item mb-2">
                 <a class="nav-link text-white" href="admin_dashboard.php">
-                    <i class="ri-home-4-line"></i> Back Dashboard
+                    <i class="ri-home-4-line"></i> Back to Dashboard
                 </a>
               </li>';
     } elseif ($role == 'Coordinator') {
         echo '<li class="nav-item mb-2">
                 <a class="nav-link text-white" href="coordinator_dashboard.php">
-                    <i class="ri-home-4-line"></i> Back Dashboard
+                    <i class="ri-home-4-line"></i> Back to Dashboard
                 </a>
               </li>';
     } elseif ($role == 'Volunteer') {
         echo '<li class="nav-item mb-2">
                 <a class="nav-link text-white" href="volunteer_dashboard.php">
-                    <i class="ri-home-4-line"></i> Back Dashboard
+                    <i class="ri-home-4-line"></i> Back to Dashboard
                 </a>
               </li>';
     }
@@ -390,7 +390,7 @@ if (isset($_SESSION['role'])) {
                     <?php endforeach; ?>
                 </div>
                 <?php if ($userRole === 'Admin'): ?>
-                    <p><a href="broadcast.php">Send to all volunteers</a></p>
+                    <p><a href="broadcast.php">Send to all</a></p>
                 <?php endif; ?>
             </div>
             
