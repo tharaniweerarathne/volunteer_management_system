@@ -83,9 +83,9 @@ $role = $_SESSION['role'] ?? '';
             </a>
         </div>
         <div class="nav-item">
-            <a href="test_event.php">
+            <a href="send_message.php">
                 <i class="ri-message-3-line"></i>
-                <span>Test Event</span>
+                <span>Send Messages</span>
             </a>
         </div>
         <div class="nav-item">

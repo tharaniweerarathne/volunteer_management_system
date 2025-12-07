@@ -24,7 +24,7 @@ class eventData {
     $params = [];
     $types = "";
     
-    // Search filter
+    // search filter
     if (!empty($filters['search'])) {
         $sql .= " AND (e.eventName LIKE ? OR e.location LIKE ? OR e.category LIKE ? OR e.eventDescription LIKE ?)";
         $searchTerm = "%{$filters['search']}%";
@@ -35,28 +35,28 @@ class eventData {
         $types .= "ssss";
     }
     
-    // Skill filter
+    // search using skill 
     if (!empty($filters['skillId'])) {
         $sql .= " AND e.requiredSkillId = ?";
         $params[] = $filters['skillId'];
         $types .= "i";
     }
     
-    // Category filter
+    // search using category 
     if (!empty($filters['category'])) {
         $sql .= " AND e.category = ?";
         $params[] = $filters['category'];
         $types .= "s";
     }
     
-    // Location filter - ADDED THIS
+    // search using location 
     if (!empty($filters['location'])) {
         $sql .= " AND e.location LIKE ?";
         $params[] = "%{$filters['location']}%";
         $types .= "s";
     }
     
-    // Date filter - ADDED THIS
+    // search using date 
     if (!empty($filters['date'])) {
         // This finds events that are happening on a specific date
         // The date filter should match events where the selected date is within the event's date range
@@ -76,7 +76,7 @@ class eventData {
     return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 }
     
-    // Create new event
+    // create new event
     public function createEvent($data) {
         global $conn;
         
@@ -105,7 +105,7 @@ class eventData {
         return $stmt->execute() ? $conn->insert_id : false;
     }
     
-    // Get event by ID
+    // get event by ID
     public function getEventById($eventId) {
         global $conn;
         
@@ -124,7 +124,7 @@ class eventData {
         return $stmt->get_result()->fetch_assoc();
     }
     
-    // Update event
+    // update event
     public function updateEvent($eventId, $data) {
         global $conn;
         
@@ -155,7 +155,7 @@ class eventData {
         return $stmt->execute();
     }
     
-    // Delete event
+    // delete event
     public function deleteEvent($eventId) {
         global $conn;
         
@@ -163,7 +163,7 @@ class eventData {
         $conn->autocommit(FALSE);
         
         try {
-            // Delete from event_coordinators first
+            // delete from event_coordinators first
             $sql1 = "DELETE FROM event_coordinators WHERE eventId = ?";
             $stmt1 = $conn->prepare($sql1);
             $stmt1->bind_param("i", $eventId);
@@ -172,7 +172,7 @@ class eventData {
                 throw new Exception("Failed to delete from event_coordinators");
             }
             
-            // Delete from events table
+            // delete from events table
             $sql2 = "DELETE FROM events WHERE eventId = ?";
             $stmt2 = $conn->prepare($sql2);
             $stmt2->bind_param("i", $eventId);
@@ -181,38 +181,38 @@ class eventData {
                 throw new Exception("Failed to delete from events");
             }
             
-            // Commit pseudo-transaction
+            // commit pseudo-transaction
             $conn->commit();
             return true;
             
         } catch (Exception $e) {
-            // Rollback on error
+            
             $conn->rollback();
             error_log("Delete event failed: " . $e->getMessage());
             return false;
         } finally {
-            // Restore autocommit
+            
             $conn->autocommit(TRUE);
         }
     }
     
-    // Assign coordinators to event
+    // assigning coordinators to event
     public function assignCoordinators($eventId, $coordinatorIds) {
         global $conn;
         
-        // Check for scheduling conflicts
+        // checking for scheduling conflicts
         $conflicts = $this->checkSchedulingConflicts($eventId, $coordinatorIds);
         if (!empty($conflicts)) {
             return ['success' => false, 'conflicts' => $conflicts];
         }
         
-        // Remove existing assignments
+        // remove existing assignments
         $sql = "DELETE FROM event_coordinators WHERE eventId = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $eventId);
         $stmt->execute();
         
-        // Add new assignments
+        // adding new assignments
         $sql = "INSERT INTO event_coordinators (eventId, coordinatorId) VALUES (?, ?)";
         $stmt = $conn->prepare($sql);
         
@@ -224,16 +224,16 @@ class eventData {
         return ['success' => true];
     }
     
-    // Most accurate version using PHP DateTime
+    
     public function checkSchedulingConflicts($eventId, $coordinatorIds) {
         global $conn;
         $conflicts = [];
         
-        // Get the event we're trying to assign
+        
         $event = $this->getEventById($eventId);
         if (!$event) return $conflicts;
         
-        // Create DateTime objects for new event
+        // creation of DateTime objects for new event
         $newEventStart = new DateTime($event['startDate'] . ' ' . $event['startTime']);
         $newEventEnd = new DateTime($event['endDate'] . ' ' . $event['endTime']);
         
@@ -253,11 +253,11 @@ class eventData {
             $result = $stmt->get_result();
             
             while ($existingEvent = $result->fetch_assoc()) {
-                // Create DateTime objects for existing event
+                // creation DateTime objects for existing event
                 $existingStart = new DateTime($existingEvent['startDate'] . ' ' . $existingEvent['startTime']);
                 $existingEnd = new DateTime($existingEvent['endDate'] . ' ' . $existingEvent['endTime']);
                 
-                // Check if events overlap
+                // checking if events overlap
                 // Events overlap if one starts before the other ends and ends after the other starts
                 if ($newEventStart < $existingEnd && $newEventEnd > $existingStart) {
                     $conflicts[] = [
@@ -304,15 +304,19 @@ class eventData {
 public function getEventsByCoordinator($coordinatorId) {
     global $conn;
     
+    // Calculate the cutoff datetime (1 day ago from now)
+    $oneDayAgo = date('Y-m-d H:i:s', strtotime('-1 day'));
+    
     $sql = "SELECT e.*, s.skillName
             FROM events e
             JOIN event_coordinators ec ON e.eventId = ec.eventId
             LEFT JOIN skills s ON e.requiredSkillId = s.skillId
             WHERE ec.coordinatorId = ?
-            ORDER BY e.startDate DESC, e.eventId DESC";  // Sort by date, then by ID
+            AND CONCAT(e.endDate, ' ', e.endTime) >= ?
+            ORDER BY e.startDate ASC, e.eventId ASC";
     
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $coordinatorId);
+    $stmt->bind_param("is", $coordinatorId, $oneDayAgo);
     $stmt->execute();
     
     return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
