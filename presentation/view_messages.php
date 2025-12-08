@@ -2,6 +2,7 @@
 session_start();
 require_once __DIR__ . '/../data_access/db.php';
 require_once __DIR__ . '/../business_logic/ContactMessageLogic.php';
+require_once __DIR__ . "/../business_logic/MessageLogic.php";
 
 // checking if user is logged in and is admin or coordinator
 if (!isset($_SESSION['userId']) || !in_array($_SESSION['role'], ['Admin', 'Coordinator'])) {
@@ -15,8 +16,13 @@ if (!isset($_SESSION['name'])) {
     exit();
 }
 
+$userId = $_SESSION['userId'];
 $name = $_SESSION['name'];
 $role = $_SESSION['role'] ?? '';
+
+$messageLogic = new MessageLogic($conn);
+$inboxResult = $messageLogic->getInbox($userId, 1, 1);
+$unreadCount = $inboxResult['unreadCount'];
 
 $contactLogic = new ContactMessageLogic($conn);
 $messages = $contactLogic->getAllMessages();
@@ -139,16 +145,27 @@ $pendingCount = $contactLogic->getPendingCount();
             <div class="header-actions">
                 
 
-                <div class="dropdown">
+               <div class="dropdown me-3">
                     <button class="btn p-0 dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="ri-notification-3-line"></i><span class="notification-badge">3</span>
+                        <i class="ri-notification-3-line"></i>
+                        <?php if ($unreadCount > 0): ?>
+                            <span class="notification-badge"><?php echo $unreadCount; ?></span>
+                        <?php endif; ?>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#"><i class="ri-edit-line me-2"></i>Edit Profile</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#"><i class="ri-logout-box-line me-2"></i>Logout</a></li>
+                        <li>
+                            <a class="dropdown-item" href="inbox.php">
+                                <i class="ri-edit-line me-2"></i>Messages
+                                <?php if ($unreadCount > 0): ?>
+                                    <span class="badge bg-danger float-end"><?php echo $unreadCount; ?> new</span>
+                                <?php endif; ?>
+                            </a>
+                        </li>
+                        <li><a class="dropdown-item" href="sent_messages.php"><i class="ri-send-plane-line me-2"></i>Sent Messages</a></li>
+                        <li><a class="dropdown-item" href="send_message.php"><i class="ri-pencil-line me-2"></i>Compose</a></li>
                     </ul>
                 </div>
+
 
 
 
@@ -353,6 +370,88 @@ $pendingCount = $contactLogic->getPendingCount();
                 sidebar.classList.remove('mobile-visible');
             }
         });
+
+
+
+                // Auto-refresh notification count every 30 seconds
+        setInterval(function() {
+            fetch('get_unread_count.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateNotificationBadge(data.unreadCount);
+                    }
+                })
+                .catch(error => console.error('Error fetching unread count:', error));
+        }, 30000); // 30 seconds
+        
+        function updateNotificationBadge(count) {
+            console.log('Updating badge count:', count);
+            
+            // Update TOP HEADER notification badge (only first dropdown)
+            let topNotificationBadge = document.querySelector('.header-actions .dropdown:first-child .notification-badge');
+            let topNotificationButton = document.querySelector('.header-actions .dropdown:first-child .btn');
+            
+            // Update DROPDOWN MENU badge
+            let dropdownBadge = document.querySelector('.dropdown-menu .badge');
+            
+            // Update SIDEBAR badge
+            let sidebarBadge = document.querySelector('.message-badge');
+            let sidebarLink = document.querySelector('.nav-item a[href*="messages"]');
+            
+            if (count > 0) {
+                // Update or create TOP HEADER badge
+                if (topNotificationBadge) {
+                    topNotificationBadge.textContent = count;
+                } else if (topNotificationButton) {
+                    const newBadge = document.createElement('span');
+                    newBadge.className = 'notification-badge';
+                    newBadge.textContent = count;
+                    topNotificationButton.appendChild(newBadge);
+                }
+                
+                // Update DROPDOWN MENU badge
+                if (dropdownBadge) {
+                    dropdownBadge.textContent = count + ' new';
+                } else {
+                    // Find the Messages dropdown item and add badge
+                    const messagesDropdownItem = document.querySelector('.dropdown-item[href="inbox.php"]');
+                    if (messagesDropdownItem) {
+                        const newBadge = document.createElement('span');
+                        newBadge.className = 'badge bg-danger float-end';
+                        newBadge.textContent = count + ' new';
+                        messagesDropdownItem.appendChild(newBadge);
+                    }
+                }
+                
+                // Update SIDEBAR badge
+                if (sidebarBadge) {
+                    sidebarBadge.textContent = count;
+                } else if (sidebarLink) {
+                    const newBadge = document.createElement('span');
+                    newBadge.className = 'message-badge';
+                    newBadge.textContent = count;
+                    sidebarLink.appendChild(newBadge);
+                }
+            } else {
+                // Remove badges if count is 0
+                
+                // Remove TOP HEADER badge
+                if (topNotificationBadge) {
+                    topNotificationBadge.remove();
+                }
+                
+                // Remove DROPDOWN MENU badge
+                if (dropdownBadge) {
+                    dropdownBadge.remove();
+                }
+                
+                // Remove SIDEBAR badge
+                if (sidebarBadge) {
+                    sidebarBadge.remove();
+                }
+            }
+        }
     </script>
 </body>
 </html>
