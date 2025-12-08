@@ -148,5 +148,63 @@ class MessageLogic {
             return ["success" => false, "message" => "Failed to delete message or access denied"];
         }
     }
+
+    // business_logic/MessageLogic.php
+// Add this method to the MessageLogic class
+
+// Send event assignment notification
+public function sendEventAssignmentMessage($adminId, $coordinatorIds, $eventDetails) {
+    if (empty($coordinatorIds)) {
+        return ["success" => false, "message" => "No coordinators selected"];
+    }
+    
+    $subject = "You've been assigned to an event: " . htmlspecialchars($eventDetails['eventName']);
+    
+    // Remove htmlspecialchars from the description
+    $message = "
+        <p>Hello Coordinator,</p>
+        
+        <p>You have been assigned to coordinate the following event:</p>
+        
+        <div style='background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 15px 0;'>
+            <h3 style='margin-top: 0;'>" . htmlspecialchars($eventDetails['eventName']) . "</h3>
+            
+            <p><strong>📅 Event Dates:</strong><br>
+            From: " . date('F j, Y', strtotime($eventDetails['startDate'])) . " at " . 
+            date('h:i A', strtotime($eventDetails['startTime'])) . "<br>
+            To: " . date('F j, Y', strtotime($eventDetails['endDate'])) . " at " . 
+            date('h:i A', strtotime($eventDetails['endTime'])) . "</p>
+            
+            <p><strong>📍 Location:</strong> " . htmlspecialchars($eventDetails['location']) . "</p>
+            
+            <p><strong>📝 Description:</strong><br>
+            " . nl2br(htmlspecialchars($eventDetails['eventDescription'])) . "</p>
+        </div>
+        
+        <p>Please review the event details and prepare accordingly. If you have any questions or 
+        need to request changes, please contact the admin.</p>
+        
+        <p>Best regards,<br>
+        Unity Volunteers Trust</p>
+    ";
+    
+    // Send to each coordinator
+    $successCount = 0;
+    $failedCount = 0;
+    
+    foreach ($coordinatorIds as $coordinatorId) {
+        if ($this->messageData->sendMessage($adminId, $coordinatorId, $subject, $message)) {
+            $successCount++;
+        } else {
+            $failedCount++;
+        }
+    }
+    
+    return [
+        "success" => $successCount > 0,
+        "message" => "Sent notifications to {$successCount} coordinator(s)" . 
+                    ($failedCount > 0 ? " (Failed: {$failedCount})" : "")
+    ];
+}
 }
 ?>

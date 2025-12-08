@@ -191,9 +191,13 @@ a.button.delete:hover {
             <p><span class="label">Date:</span> <?php echo date('F j, Y g:i A', strtotime($message['sentAt'])); ?></p>
         </div>
         
-        <div class="message-body">
-            <?php echo nl2br(htmlspecialchars($message['message'])); ?>
-        </div>
+<div class="message-body">
+    <?php 
+    // Allow only safe HTML tags
+    $allowed_tags = '<p><br><div><span><strong><em><b><i><u><h1><h2><h3><h4><h5><h6><ul><ol><li><table><tr><td><th>';
+    echo strip_tags($message['message'], $allowed_tags);
+    ?>
+</div>
         
         <div class="button-group">
             <a href="sent_messages.php" class="button">Back</a>

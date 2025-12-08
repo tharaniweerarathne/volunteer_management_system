@@ -197,32 +197,38 @@ class eventData {
     }
     
     // assigning coordinators to event
-    public function assignCoordinators($eventId, $coordinatorIds) {
-        global $conn;
-        
-        // checking for scheduling conflicts
-        $conflicts = $this->checkSchedulingConflicts($eventId, $coordinatorIds);
-        if (!empty($conflicts)) {
-            return ['success' => false, 'conflicts' => $conflicts];
-        }
-        
-        // remove existing assignments
-        $sql = "DELETE FROM event_coordinators WHERE eventId = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $eventId);
-        $stmt->execute();
-        
-        // adding new assignments
-        $sql = "INSERT INTO event_coordinators (eventId, coordinatorId) VALUES (?, ?)";
-        $stmt = $conn->prepare($sql);
-        
-        foreach ($coordinatorIds as $coordinatorId) {
-            $stmt->bind_param("ii", $eventId, $coordinatorId);
-            $stmt->execute();
-        }
-        
-        return ['success' => true];
+// data_access/EventData.php
+// Update the assignCoordinators method
+
+// Assigning coordinators to event
+public function assignCoordinators($eventId, $coordinatorIds) {
+    global $conn;
+    
+    // checking for scheduling conflicts
+    $conflicts = $this->checkSchedulingConflicts($eventId, $coordinatorIds);
+    if (!empty($conflicts)) {
+        return ['success' => false, 'conflicts' => $conflicts];
     }
+    
+    // remove existing assignments
+    $sql = "DELETE FROM event_coordinators WHERE eventId = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $eventId);
+    $stmt->execute();
+    
+    // adding new assignments
+    $sql = "INSERT INTO event_coordinators (eventId, coordinatorId) VALUES (?, ?)";
+    $stmt = $conn->prepare($sql);
+    
+    foreach ($coordinatorIds as $coordinatorId) {
+        $stmt->bind_param("ii", $eventId, $coordinatorId);
+        if (!$stmt->execute()) {
+            return ['success' => false, 'message' => 'Failed to assign coordinators'];
+        }
+    }
+    
+    return ['success' => true, 'coordinatorIds' => $coordinatorIds];
+}
     
     
     public function checkSchedulingConflicts($eventId, $coordinatorIds) {

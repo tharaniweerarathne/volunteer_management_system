@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = $result['message'];
         }
     }
-    elseif ($_POST['action'] === 'assign') {
+elseif ($_POST['action'] === 'assign') {
         if ($userRole !== 'Admin') {
             $error = 'Only admins can assign coordinators';
         } else {
@@ -68,7 +68,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $result = $eventData->assignCoordinators($_POST['eventId'], $coordinatorIds);
             
             if ($result['success']) {
-                $message = 'Coordinators assigned successfully!';
+                // Get event details for the message
+                $eventDetails = $eventData->getEventById($_POST['eventId']);
+                
+                if ($eventDetails && !empty($coordinatorIds)) {
+                    // Send notification messages to coordinators
+                    require_once '../business_logic/MessageLogic.php';
+                    $messageLogic = new MessageLogic($conn);
+                    
+                    $assignmentResult = $messageLogic->sendEventAssignmentMessage(
+                        $userId, // admin ID
+                        $coordinatorIds,
+                        $eventDetails
+                    );
+                    
+                    if ($assignmentResult['success']) {
+                        $message = 'Coordinators assigned successfully! ' . $assignmentResult['message'];
+                    } else {
+                        $message = 'Coordinators assigned but failed to send notifications: ' . $assignmentResult['message'];
+                    }
+                } else {
+                    $message = 'Coordinators assigned successfully!';
+                }
             } else {
                 $conflictMsg = '';
                 foreach ($result['conflicts'] as $conflict) {
