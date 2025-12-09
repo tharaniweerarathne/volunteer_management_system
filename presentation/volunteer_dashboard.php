@@ -49,12 +49,12 @@ $unreadCount = $inboxResult['unreadCount'];
                     <span>Join Events</span>
                 </a>
             </div>
-            <div class="nav-item">
-                <a href="#">
-                    <i class="ri-calendar-line"></i>
-                    <span>Calendar</span>
-                </a>
-            </div>
+<div class="nav-item">
+    <a href="my_events.php">
+        <i class="ri-calendar-line"></i>
+        <span>My Events</span>
+    </a>
+</div>
             <div class="nav-item">
                 <a href="#">
                     <i class="ri-medal-line"></i>

@@ -1,5 +1,9 @@
 <?php
 require_once '../data_access/eventData.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 session_start();
 
@@ -243,6 +247,245 @@ public function isEventOver($event) {
     
     $eventDateTime = $event['endDate'] . ' ' . $endTime;
     return strtotime($eventDateTime) < time();
+}
+
+// Email sending methods
+private function sendEmail($to, $subject, $body) {
+    try {
+        $mail = new PHPMailer(true);
+        
+        // SMTP Configuration - UPDATE THESE!
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'infocontact256@gmail.com';  // Your Gmail
+        $mail->Password   = 'ffvr keeu ztxj bwpa';     // App password (NOT regular password)
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port       = 587;
+        
+        // Sender
+        $mail->setFrom('noreply@volunteer.com', 'Volunteer Management');
+        $mail->addAddress($to);
+        
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = $subject;
+        $mail->Body    = $body;
+        $mail->AltBody = strip_tags($body);
+        
+        return $mail->send();
+    } catch (Exception $e) {
+        error_log("Email error: " . $e->getMessage());
+        return false;
+    }
+}
+
+public function sendRegistrationEmail($userId, $eventId) {
+    require_once __DIR__ . '/../data_access/eventRegistrationData.php';
+    $registrationData = new EventRegistrationData();
+    
+    // Get user details
+    global $conn;
+    $userSql = "SELECT name, email FROM users WHERE userId = ?";
+    $stmt = $conn->prepare($userSql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $user = $stmt->get_result()->fetch_assoc();
+    
+    // Get event details
+    $event = $registrationData->getEventDetails($eventId);
+    
+    if (!$user || !$event) return false;
+    
+    $subject = "Event Registration Confirmation";
+    $body = "
+    <h2>Event Registration Confirmed!</h2>
+    <p>Dear " . htmlspecialchars($user['name']) . ",</p>
+    <p>You have successfully registered for:</p>
+    <h3>" . htmlspecialchars($event['eventName']) . "</h3>
+    <p><strong>Date:</strong> " . date('F j, Y', strtotime($event['startDate'])) . "</p>
+    <p><strong>Time:</strong> " . date('h:i A', strtotime($event['startTime'])) . " - " . 
+                         date('h:i A', strtotime($event['endTime'])) . "</p>
+    <p><strong>Location:</strong> " . htmlspecialchars($event['location']) . "</p>
+    <p>Thank you for volunteering!</p>
+    ";
+    
+    return $this->sendEmail($user['email'], $subject, $body);
+}
+
+public function sendCancellationEmail($userId, $eventId, $reason = null) {
+    // Get user details
+    global $conn;
+    $userSql = "SELECT name, email FROM users WHERE userId = ?";
+    $stmt = $conn->prepare($userSql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $user = $stmt->get_result()->fetch_assoc();
+    
+    // Get event details
+    require_once __DIR__ . '/../data_access/eventRegistrationData.php';
+    $registrationData = new EventRegistrationData();
+    $event = $registrationData->getEventDetails($eventId);
+    
+    if (!$user || !$event) return false;
+    
+    $subject = "Event Registration Cancelled";
+    $reasonText = $reason ? "<p><strong>Reason:</strong> " . htmlspecialchars($reason) . "</p>" : "";
+    
+    $body = "
+    <h2>Registration Cancelled</h2>
+    <p>Dear " . htmlspecialchars($user['name']) . ",</p>
+    <p>Your registration has been cancelled for:</p>
+    <h3>" . htmlspecialchars($event['eventName']) . "</h3>
+    <p><strong>Date:</strong> " . date('F j, Y', strtotime($event['startDate'])) . "</p>
+    " . $reasonText . "
+    <p>We hope to see you in future events!</p>
+    ";
+    
+    return $this->sendEmail($user['email'], $subject, $body);
+}
+
+public function sendConflictEmail($userId, $conflicts, $newEventName) {
+    // Get user details
+    global $conn;
+    $userSql = "SELECT name, email FROM users WHERE userId = ?";
+    $stmt = $conn->prepare($userSql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $user = $stmt->get_result()->fetch_assoc();
+    
+    if (!$user) return false;
+    
+    $subject = "Event Registration Conflict";
+    $conflictList = "";
+    foreach ($conflicts as $conflict) {
+        $conflictList .= "<li>" . htmlspecialchars($conflict['eventName']) . 
+                        " (" . date('M j, Y', strtotime($conflict['startDate'])) . ")</li>";
+    }
+    
+    $body = "
+    <h2>Registration Conflict Detected</h2>
+    <p>Dear " . htmlspecialchars($user['name']) . ",</p>
+    <p>Your registration for <strong>" . htmlspecialchars($newEventName) . "</strong> 
+    conflicts with your existing events:</p>
+    <ul>" . $conflictList . "</ul>
+    <p>Please choose a different event or contact the event coordinator.</p>
+    ";
+    
+    return $this->sendEmail($user['email'], $subject, $body);
+}
+
+// Simple join event function
+public function joinEvent($eventId, $userId) {
+    require_once __DIR__ . '/../data_access/eventRegistrationData.php';
+    $registrationData = new EventRegistrationData();
+    
+    // Check if already joined
+    if ($registrationData->isAlreadyJoined($eventId, $userId)) {
+        return ['success' => false, 'message' => 'Already registered for this event'];
+    }
+    
+    // Check time conflicts
+    $conflicts = $registrationData->checkTimeConflict($userId, $eventId);
+    if (!empty($conflicts)) {
+        // Send conflict email
+        $this->sendConflictEmail($userId, $conflicts, 'Event Name');
+        return ['success' => false, 'message' => 'Time conflict detected', 'conflicts' => $conflicts];
+    }
+    
+    // Get event details
+    $event = $registrationData->getEventDetails($eventId);
+    if ($event['availableSlots'] <= 0) {
+        return ['success' => false, 'message' => 'Event is full'];
+    }
+    
+    // Insert registration
+    if ($registrationData->insertRegistration($eventId, $userId)) {
+        $registrationData->incrementJoinedCount($eventId);
+        
+        // Send confirmation email
+        $this->sendRegistrationEmail($userId, $eventId);
+        
+        return ['success' => true, 'message' => 'Successfully registered'];
+    }
+    
+    return ['success' => false, 'message' => 'Registration failed'];
+}
+
+
+public function sendEditConfirmationEmail($userId, $oldEventId, $newEventId) {
+    // Get user details
+    global $conn;
+    $userSql = "SELECT name, email FROM users WHERE userId = ?";
+    $stmt = $conn->prepare($userSql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $user = $stmt->get_result()->fetch_assoc();
+    
+    // Get event details
+    require_once __DIR__ . '/../data_access/eventRegistrationData.php';
+    $registrationData = new EventRegistrationData();
+    $oldEvent = $registrationData->getEventDetails($oldEventId);
+    $newEvent = $registrationData->getEventDetails($newEventId);
+    
+    if (!$user || !$oldEvent || !$newEvent) return false;
+    
+    $subject = "Event Registration Changed";
+    
+    $body = "
+    <h2>Event Registration Updated</h2>
+    <p>Dear " . htmlspecialchars($user['name']) . ",</p>
+    <p>Your event registration has been changed:</p>
+    
+    <h4>Old Event:</h4>
+    <p><strong>" . htmlspecialchars($oldEvent['eventName']) . "</strong></p>
+    <p><strong>Date:</strong> " . date('F j, Y', strtotime($oldEvent['startDate'])) . "</p>
+    <p><strong>Time:</strong> " . date('h:i A', strtotime($oldEvent['startTime'])) . "</p>
+    
+    <h4>New Event:</h4>
+    <p><strong>" . htmlspecialchars($newEvent['eventName']) . "</strong></p>
+    <p><strong>Date:</strong> " . date('F j, Y', strtotime($newEvent['startDate'])) . "</p>
+    <p><strong>Time:</strong> " . date('h:i A', strtotime($newEvent['startTime'])) . "</p>
+    <p><strong>Location:</strong> " . htmlspecialchars($newEvent['location']) . "</p>
+    
+    <p>Thank you for volunteering!</p>
+    ";
+    
+    return $this->sendEmail($user['email'], $subject, $body);
+}
+
+
+public function sendRejoinEmail($userId, $eventId) {
+    // Get user details
+    global $conn;
+    $userSql = "SELECT name, email FROM users WHERE userId = ?";
+    $stmt = $conn->prepare($userSql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $user = $stmt->get_result()->fetch_assoc();
+    
+    // Get event details
+    require_once __DIR__ . '/../data_access/eventRegistrationData.php';
+    $registrationData = new EventRegistrationData();
+    $event = $registrationData->getEventDetails($eventId);
+    
+    if (!$user || !$event) return false;
+    
+    $subject = "Event Re-joined Successfully";
+    
+    $body = "
+    <h2>Event Re-joined!</h2>
+    <p>Dear " . htmlspecialchars($user['name']) . ",</p>
+    <p>You have successfully re-joined the event:</p>
+    <h3>" . htmlspecialchars($event['eventName']) . "</h3>
+    <p><strong>Date:</strong> " . date('F j, Y', strtotime($event['startDate'])) . "</p>
+    <p><strong>Time:</strong> " . date('h:i A', strtotime($event['startTime'])) . " - " . 
+                         date('h:i A', strtotime($event['endTime'])) . "</p>
+    <p><strong>Location:</strong> " . htmlspecialchars($event['location']) . "</p>
+    <p>Welcome back! We're glad to have you volunteering again for this event.</p>
+    ";
+    
+    return $this->sendEmail($user['email'], $subject, $body);
 }
 }
 
