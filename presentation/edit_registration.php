@@ -1,5 +1,6 @@
 <?php
 // presentation/edit_registration.php
+
 error_reporting(E_ALL & ~E_NOTICE);
 require_once '../business_logic/eventLogic.php';
 error_reporting(E_ALL);
@@ -11,74 +12,78 @@ if (!isset($_SESSION['userId'])) {
 
 require_once '../data_access/eventRegistrationData.php';
 
+$registrationId = $_GET['id'] ?? 0;
 $registrationData = new EventRegistrationData();
 $eventLogic = new EventLogic();
 
-// Get registration ID
-$registrationId = $_GET['id'] ?? ($_POST['registrationId'] ?? 0);
-
-if (!$registrationId) {
-    header('Location: my_events.php');
-    exit();
-}
-
-// Get current registration details
+// Get registration details
 $registration = $registrationData->getRegistrationById($registrationId);
-
 if (!$registration || $registration['userId'] != $_SESSION['userId']) {
     header('Location: my_events.php');
     exit();
 }
 
-// Get current event details
-$currentEvent = $registrationData->getEventDetails($registration['eventId']);
+// Check if registration is active
+if ($registration['status'] !== 'registered') {
+    header('Location: my_events.php');
+    exit();
+}
 
 // Get available events for editing
-$availableEvents = $registrationData->getAvailableEventsForEdit($_SESSION['userId'], $registration['eventId']);
+$availableEvents = $registrationData->getAvailableEventsForEdit(
+    $_SESSION['userId'], 
+    $registration['eventId']
+);
 
 // Handle form submission
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_event'])) {
-    $newEventId = $_POST['new_event_id'] ?? 0;
+    $newEventId = $_POST['new_event_id'];
     
-    if (!$newEventId) {
-        $message = '<div class="alert alert-danger">Please select an event</div>';
+    // Validate new event
+    if ($newEventId == $registration['eventId']) {
+        $message = '<div class="alert alert-warning">Please select a different event.</div>';
     } else {
-        // Check if user already joined new event
-        if ($registrationData->isAlreadyJoined($newEventId, $_SESSION['userId'])) {
-            $message = '<div class="alert alert-danger">You are already registered for the selected event</div>';
+        // Check if new event has available slots
+        $newEvent = $registrationData->getEventDetails($newEventId);
+        if ($newEvent['availableSlots'] <= 0) {
+            $message = '<div class="alert alert-warning">Selected event is full.</div>';
         } else {
-            // Check time conflicts for new event
-            $conflicts = $registrationData->checkTimeConflict($_SESSION['userId'], $newEventId);
+            // Update registration
+            $result = $registrationData->updateRegistration(
+                $registrationId, 
+                $newEventId, 
+                $_SESSION['userId']
+            );
             
-            if (!empty($conflicts)) {
-                $eventLogic->sendConflictEmail($_SESSION['userId'], $conflicts, 'Selected Event');
-                $message = '<div class="alert alert-danger">Time conflict detected with selected event</div>';
-            } else {
-                // Update registration
-                $result = $registrationData->updateRegistration($registrationId, $newEventId, $_SESSION['userId']);
+            if ($result['success']) {
+                // Send email to volunteer
+                $eventLogic->sendEditConfirmationEmail(
+                    $_SESSION['userId'],
+                    $registration['eventId'],
+                    $newEventId
+                );
                 
-                if ($result['success']) {
-                    // Send confirmation email
-                    $eventLogic->sendEditConfirmationEmail($_SESSION['userId'], $registration['eventId'], $newEventId);
-                    
-                    $message = '<div class="alert alert-success">
-                                <i class="bi bi-check-circle"></i> 
-                                Event registration changed successfully! A confirmation email has been sent.
-                                </div>';
-                    
-                    // Get updated registration
-                    $registration = $registrationData->getRegistrationById($result['newRegistrationId']);
-                    $currentEvent = $registrationData->getEventDetails($registration['eventId']);
-                    
-                    // Refresh available events
-                    $availableEvents = $registrationData->getAvailableEventsForEdit($_SESSION['userId'], $registration['eventId']);
-                } else {
-                    $message = '<div class="alert alert-danger">
-                                <i class="bi bi-x-circle"></i> 
-                                Failed to change event: ' . htmlspecialchars($result['message']) . '
-                                </div>';
+                // ✅ SEND INTERNAL MESSAGE FOR EVENT CHANGE
+                $messageSent = $eventLogic->notifyVolunteerEventChange(
+                    $_SESSION['userId'],
+                    $registration['eventId'],
+                    $newEventId
+                );
+                
+                $successMsg = 'Event registration changed successfully! ';
+                $successMsg .= 'A confirmation email has been sent.';
+                
+                if ($messageSent) {
+                    $successMsg .= ' Check your messages for details.';
                 }
+                
+                $_SESSION['success'] = $successMsg;
+                header('Location: my_events.php');
+                exit();
+            } else {
+                $message = '<div class="alert alert-danger">Failed to change event: ' . 
+                          htmlspecialchars($result['message'] ?? 'Unknown error') . '</div>';
             }
         }
     }
@@ -94,10 +99,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_event'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        .event-card { border: 1px solid #ddd; border-radius: 5px; padding: 15px; margin-bottom: 15px; }
-        .current-event { background-color: #e7f3ff; border-left: 4px solid #0d6efd; }
-        .available-event { background-color: #f8f9fa; }
-        .available-event:hover { background-color: #e9ecef; cursor: pointer; }
+        .current-event { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .event-option { border: 1px solid #dee2e6; border-radius: 5px; padding: 15px; margin-bottom: 10px; }
+        .event-option:hover { background-color: #f8f9fa; }
     </style>
 </head>
 <body>
@@ -110,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_event'])) {
         <div class="navbar-nav ms-auto">
             <a class="nav-link" href="volunteer_dashboard.php">Dashboard</a>
             <a class="nav-link" href="events_volunteer.php">Browse Events</a>
-            <a class="nav-link" href="my_events.php">My Events</a>
+            <a class="nav-link active" href="my_events.php">My Events</a>
         </div>
     </div>
 </nav>
@@ -120,127 +124,86 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_event'])) {
         <i class="bi bi-arrow-left"></i> Back to My Events
     </a>
     
-    <h1 class="mb-4">Change Event Registration</h1>
-    
     <?php echo $message; ?>
     
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card event-card current-event">
-                <div class="card-body">
-                    <h5 class="card-title">Current Event</h5>
-                    <h6><?php echo htmlspecialchars($currentEvent['eventName']); ?></h6>
-                    <p class="mb-1"><i class="bi bi-calendar"></i> 
-                        <?php echo date('F j, Y', strtotime($currentEvent['startDate'])); ?>
-                    </p>
-                    <p class="mb-1"><i class="bi bi-clock"></i> 
-                        <?php echo date('h:i A', strtotime($currentEvent['startTime'])); ?>
-                    </p>
-                    <p class="mb-1"><i class="bi bi-geo-alt"></i> 
-                        <?php echo htmlspecialchars($currentEvent['location']); ?>
-                    </p>
-                    <p class="mb-0"><i class="bi bi-people"></i> 
-                        <?php echo $currentEvent['availableSlots']; ?> slots available
-                    </p>
-                </div>
-            </div>
+    <div class="card">
+        <div class="card-header">
+            <h4 class="mb-0">Change Event Registration</h4>
         </div>
-        
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Select New Event</h5>
+        <div class="card-body">
+            <!-- Current Event -->
+            <div class="current-event mb-4">
+                <h5>Current Event</h5>
+                <p><strong><?php echo htmlspecialchars($registration['eventName']); ?></strong></p>
+                <p><i class="bi bi-calendar"></i> 
+                   <?php echo date('F j, Y', strtotime($registration['startDate'])); ?> at 
+                   <?php echo date('h:i A', strtotime($registration['startTime'])); ?></p>
+                <p><i class="bi bi-geo-alt"></i> <?php echo htmlspecialchars($registration['location']); ?></p>
+            </div>
+            
+            <!-- Available Events Form -->
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Select New Event:</label>
                     
                     <?php if (empty($availableEvents)): ?>
                         <div class="alert alert-info">
                             <i class="bi bi-info-circle"></i> 
-                            No other events available to switch to.
+                            No available events to switch to. All other events are either full, 
+                            have time conflicts, or have already passed.
                         </div>
                     <?php else: ?>
-                        <form method="POST">
-                            <input type="hidden" name="registrationId" value="<?php echo $registrationId; ?>">
-                            
-                            <div class="mb-3">
-                                <label class="form-label">Choose a new event:</label>
-                                <select name="new_event_id" class="form-control" required>
-                                    <option value="">-- Select Event --</option>
-                                    <?php foreach ($availableEvents as $event): ?>
-                                        <option value="<?php echo $event['eventId']; ?>">
-                                            <?php echo htmlspecialchars($event['eventName']); ?> 
-                                            (<?php echo date('M j, Y', strtotime($event['startDate'])); ?>)
-                                            - <?php echo $event['availableSlots']; ?> slots left
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
+                        <?php foreach ($availableEvents as $event): ?>
+                            <div class="event-option">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" 
+                                           name="new_event_id" 
+                                           value="<?php echo $event['eventId']; ?>"
+                                           id="event<?php echo $event['eventId']; ?>"
+                                           required>
+                                    <label class="form-check-label" for="event<?php echo $event['eventId']; ?>">
+                                        <strong><?php echo htmlspecialchars($event['eventName']); ?></strong>
+                                        <?php if ($event['category']): ?>
+                                            <span class="badge bg-primary"><?php echo htmlspecialchars($event['category']); ?></span>
+                                        <?php endif; ?>
+                                        <br>
+                                        <small class="text-muted">
+                                            <i class="bi bi-calendar"></i> 
+                                            <?php echo date('F j, Y', strtotime($event['startDate'])); ?> at 
+                                            <?php echo date('h:i A', strtotime($event['startTime'])); ?>
+                                            <br>
+                                            <i class="bi bi-geo-alt"></i> <?php echo htmlspecialchars($event['location']); ?>
+                                            <br>
+                                            <i class="bi bi-people"></i> 
+                                            Available slots: <?php echo $event['availableSlots']; ?> / <?php echo $event['maxVolunteers']; ?>
+                                        </small>
+                                    </label>
+                                </div>
                             </div>
-                            
-                            <div class="alert alert-warning">
-                                <i class="bi bi-exclamation-triangle"></i>
-                                <strong>Note:</strong> Changing events will cancel your current registration 
-                                and register you for the new event.
-                            </div>
-                            
-                            <button type="submit" name="change_event" class="btn btn-primary">
-                                <i class="bi bi-arrow-repeat"></i> Change to Selected Event
-                            </button>
-                            <a href="my_events.php" class="btn btn-secondary">Cancel</a>
-                        </form>
+                        <?php endforeach; ?>
                     <?php endif; ?>
                 </div>
-            </div>
-        </div>
-    </div>
-    
-    <?php if (!empty($availableEvents)): ?>
-    <div class="mt-4">
-        <h5>Available Events</h5>
-        <div class="row">
-            <?php foreach ($availableEvents as $event): ?>
-            <div class="col-md-4 mb-3">
-                <div class="card available-event" onclick="document.querySelector('select[name=\"new_event_id\"]').value='<?php echo $event['eventId']; ?>'">
-                    <div class="card-body">
-                        <h6><?php echo htmlspecialchars($event['eventName']); ?></h6>
-                        <p class="mb-1 small">
-                            <i class="bi bi-calendar"></i> 
-                            <?php echo date('M j, Y', strtotime($event['startDate'])); ?>
-                        </p>
-                        <p class="mb-1 small">
-                            <i class="bi bi-clock"></i> 
-                            <?php echo date('h:i A', strtotime($event['startTime'])); ?>
-                        </p>
-                        <p class="mb-1 small">
-                            <i class="bi bi-geo-alt"></i> 
-                            <?php echo htmlspecialchars($event['location']); ?>
-                        </p>
-                        <p class="mb-0 small text-success">
-                            <i class="bi bi-people"></i> 
-                            <?php echo $event['availableSlots']; ?> slots available
-                        </p>
-                    </div>
+                
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <strong>Note:</strong> Changing events will cancel your current registration 
+                    and register you for the new event. You will receive confirmation messages.
                 </div>
-            </div>
-            <?php endforeach; ?>
+                
+                <div class="d-flex gap-2">
+                    <button type="submit" name="change_event" class="btn btn-primary" 
+                            <?php echo empty($availableEvents) ? 'disabled' : ''; ?>>
+                        <i class="bi bi-check-circle"></i> Change Event
+                    </button>
+                    <a href="my_events.php" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i> Cancel
+                    </a>
+                </div>
+            </form>
         </div>
     </div>
-    <?php endif; ?>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Auto-select event when clicking on event card
-    document.querySelectorAll('.available-event').forEach(card => {
-        card.addEventListener('click', function() {
-            const select = document.querySelector('select[name="new_event_id"]');
-            const eventId = this.getAttribute('onclick').match(/'(\d+)'/)[1];
-            select.value = eventId;
-            
-            // Highlight selected card
-            document.querySelectorAll('.available-event').forEach(c => {
-                c.classList.remove('border-primary');
-            });
-            this.classList.add('border-primary');
-        });
-    });
-</script>
 </body>
 </html>

@@ -37,17 +37,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_registration']
     if ($registration && $registration['userId'] == $_SESSION['userId']) {
         $success = $registrationData->cancelRegistration($registrationId, $reason);
         
-        if ($success) {
-            // Send cancellation email
-            $eventLogic->sendCancellationEmail($_SESSION['userId'], $registration['eventId'], $reason);
-            
-            $successMsg = 'Registration cancelled successfully! A confirmation email has been sent.';
-            
-            // Refresh events
-            $events = $registrationData->getVolunteerEvents($_SESSION['userId']);
-        } else {
-            $errorMsg = 'Failed to cancel registration.';
-        }
+if ($success) {
+    // Send cancellation email to volunteer
+    $emailSent = $eventLogic->sendCancellationEmail($_SESSION['userId'], $registration['eventId'], $reason);
+    
+    // ✅ SEND INTERNAL MESSAGE FOR CANCELLATION
+    $messageSent = $eventLogic->notifyVolunteer($_SESSION['userId'], $registration['eventId'], 'cancel', $reason);
+    
+    $successMsg = 'Registration cancelled successfully! ';
+    
+    if ($emailSent) {
+        $successMsg .= 'A confirmation email has been sent. ';
+    }
+    
+    if ($messageSent) {
+        $successMsg .= 'Check your inbox for cancellation details.';
+    }
+    
+    // Refresh events
+    $events = $registrationData->getVolunteerEvents($_SESSION['userId']);
+}
     }
 }
 ?>

@@ -74,36 +74,43 @@ else {
     // Try to register
     $result = $registrationData->insertRegistration($eventId, $_SESSION['userId']);
     
-    if ($result['success']) {
+if ($result['success']) {
+    
+    // Send appropriate email based on whether it's a re-join or new registration
+    if ($wasCancelled) {
+        // Send re-join email to volunteer
+        $emailSent = $eventLogic->sendRejoinEmail($_SESSION['userId'], $eventId);
         
-        // Send appropriate email based on whether it's a re-join or new registration
-        if ($wasCancelled) {
-            // Send re-join email
-            $emailSent = $eventLogic->sendRejoinEmail($_SESSION['userId'], $eventId);
-            $message = '<div class="alert alert-success">
-                        <i class="bi bi-check-circle"></i> 
-                        Successfully re-joined the event!';
-        } else {
-            // Send regular registration email
-            $emailSent = $eventLogic->sendRegistrationEmail($_SESSION['userId'], $eventId);
-            $message = '<div class="alert alert-success">
-                        <i class="bi bi-check-circle"></i> 
-                        Successfully joined the event!';
-        }
+        // ✅ SEND INTERNAL MESSAGE FOR REJOIN
+        $messageSent = $eventLogic->notifyVolunteer($_SESSION['userId'], $eventId, 'rejoin');
         
-        if ($emailSent) {
-            $message .= ' A confirmation email has been sent.';
-        }
-        
-        $message .= '</div>';
-        $alreadyJoined = true;
-        $wasCancelled = false; // Reset since they joined again
+        $message = '<div class="alert alert-success">
+                    <i class="bi bi-check-circle"></i> 
+                    Successfully re-joined the event!';
     } else {
-        $message = '<div class="alert alert-danger">
-                    <i class="bi bi-x-circle"></i> 
-                    Failed to join event. You may already be registered.
-                    </div>';
+        // Send regular registration email to volunteer
+        $emailSent = $eventLogic->sendRegistrationEmail($_SESSION['userId'], $eventId);
+        
+        // ✅ SEND INTERNAL MESSAGE FOR JOIN
+        $messageSent = $eventLogic->notifyVolunteer($_SESSION['userId'], $eventId, 'join');
+        
+        $message = '<div class="alert alert-success">
+                    <i class="bi bi-check-circle"></i> 
+                    Successfully joined the event!';
     }
+    
+    if ($emailSent) {
+        $message .= ' A confirmation email has been sent.';
+    }
+    
+    if ($messageSent) {
+        $message .= ' Check your inbox for a confirmation message.';
+    }
+    
+    $message .= '</div>';
+    $alreadyJoined = true;
+    $wasCancelled = false;
+}
 }
 }
 ?>

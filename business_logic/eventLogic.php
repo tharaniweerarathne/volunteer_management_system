@@ -487,6 +487,117 @@ public function sendRejoinEmail($userId, $eventId) {
     
     return $this->sendEmail($user['email'], $subject, $body);
 }
+
+
+
+// Simple method for all volunteer notifications
+public function notifyVolunteer($volunteerId, $eventId, $action, $reason = null) {
+    // Get event details
+    require_once __DIR__ . "/../data_access/eventRegistrationData.php";
+    $registrationData = new EventRegistrationData();
+    $event = $registrationData->getEventDetails($eventId);
+    
+    if (!$event) return false;
+    
+    // Get volunteer name
+    global $conn;
+    $stmt = $conn->prepare("SELECT name FROM users WHERE userId = ?");
+    $stmt->bind_param("i", $volunteerId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $volunteer = $result->fetch_assoc();
+    
+    if (!$volunteer) return false;
+    
+    // Get admin ID
+    $adminSql = "SELECT userId FROM users WHERE role = 'Admin' LIMIT 1";
+    $adminResult = $conn->query($adminSql);
+    $admin = $adminResult->fetch_assoc();
+    
+    if (!$admin) return false;
+    
+    $adminId = $admin['userId'];
+    
+    // Set subject and message based on action
+    $messages = [
+        'join' => [
+            'subject' => "✅ Event Registration Confirmed: " . $event['eventName'],
+            'body' => "Hello " . $volunteer['name'] . ",\n\nYour registration has been confirmed for '" . $event['eventName'] . "' on " . date('F j, Y', strtotime($event['startDate'])) . ".\n\nBest regards,\nUnity Volunteers Trust"
+        ],
+        'rejoin' => [
+            'subject' => "🔄 Welcome Back: " . $event['eventName'],
+            'body' => "Hello " . $volunteer['name'] . ",\n\nWelcome back! You have re-joined '" . $event['eventName'] . "'.\n\nBest regards,\nUnity Volunteers Trust"
+        ],
+        'cancel' => [
+            'subject' => "❌ Registration Cancelled: " . $event['eventName'],
+            'body' => "Hello " . $volunteer['name'] . ",\n\nYour registration for '" . $event['eventName'] . "' has been cancelled." . ($reason ? "\nReason: " . $reason : "") . "\n\nBest regards,\nUnity Volunteers Trust"
+        ]
+    ];
+    
+    if (!isset($messages[$action])) return false;
+    
+    // Send message
+    require_once __DIR__ . "/../data_access/MessageData.php";
+    $messageData = new MessageData($conn);
+    
+    return $messageData->sendMessage($adminId, $volunteerId, $messages[$action]['subject'], $messages[$action]['body']);
+}
+
+
+
+
+// edit event notfication
+// In business_logic/EventLogic.php - add this method
+
+// Send message when volunteer changes event registration
+public function notifyVolunteerEventChange($volunteerId, $oldEventId, $newEventId) {
+    // Get event details
+    require_once __DIR__ . "/../data_access/eventRegistrationData.php";
+    $registrationData = new EventRegistrationData();
+    $oldEvent = $registrationData->getEventDetails($oldEventId);
+    $newEvent = $registrationData->getEventDetails($newEventId);
+    
+    if (!$oldEvent || !$newEvent) return false;
+    
+    // Get volunteer name
+    global $conn;
+    $stmt = $conn->prepare("SELECT name FROM users WHERE userId = ?");
+    $stmt->bind_param("i", $volunteerId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $volunteer = $result->fetch_assoc();
+    
+    if (!$volunteer) return false;
+    
+    // Get admin ID
+    $adminSql = "SELECT userId FROM users WHERE role = 'Admin' LIMIT 1";
+    $adminResult = $conn->query($adminSql);
+    $admin = $adminResult->fetch_assoc();
+    
+    if (!$admin) return false;
+    
+    $adminId = $admin['userId'];
+    
+    $subject = "🔄 Event Registration Changed";
+    
+    $message = "Hello " . htmlspecialchars($volunteer['name']) . ",\n\n";
+    $message .= "Your event registration has been updated:\n\n";
+    $message .= "📅 FROM: " . $oldEvent['eventName'] . "\n";
+    $message .= "   Date: " . date('F j, Y', strtotime($oldEvent['startDate'])) . "\n";
+    $message .= "   Time: " . date('h:i A', strtotime($oldEvent['startTime'])) . "\n\n";
+    $message .= "📅 TO: " . $newEvent['eventName'] . "\n";
+    $message .= "   Date: " . date('F j, Y', strtotime($newEvent['startDate'])) . "\n";
+    $message .= "   Time: " . date('h:i A', strtotime($newEvent['startTime'])) . "\n";
+    $message .= "   Location: " . $newEvent['location'] . "\n\n";
+    $message .= "Please review the new event details.\n\n";
+    $message .= "Best regards,\nUnity Volunteers Trust";
+    
+    // Send message
+    require_once __DIR__ . "/../data_access/MessageData.php";
+    $messageData = new MessageData($conn);
+    
+    return $messageData->sendMessage($adminId, $volunteerId, $subject, $message);
+}
 }
 
 // Create a global instance for backward compatibility
