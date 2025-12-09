@@ -1,15 +1,15 @@
 <?php
 require_once '../business_logic/eventLogic.php';
 
-// Check if session is already started
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Create instance of EventLogic
+
 $eventLogic = new EventLogic();
 
-// Get filters from query parameters
+// get filters from query parameters
 $filters = [
     'search' => $_GET['search'] ?? '',
     'skillId' => $_GET['skillId'] ?? '',
@@ -18,7 +18,7 @@ $filters = [
     'date' => $_GET['date'] ?? ''
 ];
 
-// Get upcoming events using EventLogic
+// get upcoming events using EventLogic
 $result = $eventLogic->getUpcomingEvents($filters);
 
 if ($result['success']) {
@@ -28,7 +28,7 @@ if ($result['success']) {
     $error = $result['message'] ?? 'Error loading events';
 }
 
-// Get categories and skills for filter dropdowns
+// get categories and skills for filter dropdowns
 $eventData = new EventData();
 $categories = $eventData->getCategories();
 $skills = $eventData->getAllSkills();
@@ -59,13 +59,13 @@ $skills = $eventData->getAllSkills();
         <a class="navbar-brand" href="#">
             <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
         </a>
-        <!-- Toggle button for mobile -->
+        
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
             aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Collapsible content -->
+        
         <div class="collapse navbar-collapse" id="navbarContent">
             <div class="navbar-nav ms-auto">
                     <a class="nav-link active" href="volunteer_dashboard.php">Back</a>
@@ -218,7 +218,7 @@ $skills = $eventData->getAllSkills();
                         </div>
                         
                         <?php
-                        // Check if user is logged in (REMOVED session_start() from here)
+                        
                         $joinUrl = isset($_SESSION['userId']) ? 'event_details.php?id=' . $event['eventId'] : 'sign_in.php';
                         ?>
                         
@@ -243,7 +243,7 @@ $skills = $eventData->getAllSkills();
     <script>
 
 
-        // Search function for the main search bar
+        // search function 
         function searchEvents() {
             const searchInput = document.getElementById('searchInput').value;
             const url = new URL(window.location.href);
@@ -251,14 +251,14 @@ $skills = $eventData->getAllSkills();
             window.location.href = url.toString();
         }
         
-        // Enter key support for search
+        
         document.getElementById('searchInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 searchEvents();
             }
         });
         
-        // Auto-submit filters when changed (optional)
+        
         document.getElementById('filterForm').addEventListener('change', function() {
             this.submit();
         });
