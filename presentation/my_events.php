@@ -67,15 +67,11 @@ if ($success) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Events</title>
+    <link rel="icon" type="image/png" href="../assets/images/title.png">
+    <link rel="stylesheet" href="../assets/css/my_events_volunteers.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        .event-card { transition: transform 0.2s; }
-        .event-card:hover { transform: translateY(-5px); }
-        .badge-status { font-size: 0.8em; }
-        .cancelled { opacity: 0.7; }
-        .alert { margin-top: 20px; }
-    </style>
+
 </head>
 <body>
 

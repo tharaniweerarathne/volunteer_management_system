@@ -121,16 +121,11 @@ if ($result['success']) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Details</title>
+    <link rel="stylesheet" href="../assets/css/event_details.css">
+    <link rel="icon" type="image/png" href="../assets/images/title.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        .event-image { max-height: 400px; object-fit: cover; }
-        .slot-available { color: green; }
-        .slot-full { color: red; }
-        .conflict-alert { background-color: #fff3cd; border-color: #ffc107; }
-        .btn-join-again { background-color: #ffc107; border-color: #ffc107; }
-        .btn-join-again:hover { background-color: #e0a800; border-color: #d39e00; }
-    </style>
+
 </head>
 <body>
 

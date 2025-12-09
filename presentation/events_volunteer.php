@@ -69,7 +69,7 @@ $skills = $eventData->getAllSkills();
         <div class="collapse navbar-collapse" id="navbarContent">
             <div class="navbar-nav ms-auto">
                     <a class="nav-link active" href="volunteer_dashboard.php">Back</a>
-                    <a class="nav-link" href="events_volunteer.php">Join Event</a>
+                    <a class="nav-link" href="my_events.php">My Events</a>
             </div>
         </div>
     </div>
