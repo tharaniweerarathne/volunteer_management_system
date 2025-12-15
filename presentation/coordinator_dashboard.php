@@ -97,6 +97,13 @@ $unreadCount = $inboxResult['unreadCount'];
                 <span>Mark Attendance</span>
             </a>
         </div>
+
+                <div class="nav-item">
+            <a href="send_message.php">
+                <i class="ri-message-3-line"></i>
+                <span>Send Messages</span>
+            </a>
+        </div>
         <div class="nav-item">
             <a href="#">
                 <i class="ri-feedback-line"></i>

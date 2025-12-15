@@ -2,7 +2,7 @@
 session_start();
 require_once '../business_logic/attendanceLogic.php';
 
-// Check if user is logged in and is a coordinator
+// checking if user is logged in and is a coordinator
 if (!isset($_SESSION['userId']) || $_SESSION['role'] !== 'Coordinator') {
     header('Location: login.php');
     exit();
@@ -12,14 +12,14 @@ $attendanceLogic = new AttendanceLogic();
 $message = '';
 $success = false;
 
-// Handle date selection
+// handle date selection
 $selectedDate = $_GET['date'] ?? date('Y-m-d');
 
-// Get events for the selected date
+// get events for the selected date
 $eventsResult = $attendanceLogic->getCoordinatorEvents($selectedDate);
 $events = $eventsResult['success'] ? $eventsResult['events'] : [];
 
-// Handle event selection
+// handle event selection
 $selectedEventId = $_GET['eventId'] ?? null;
 $volunteers = [];
 $eventDetails = null;
@@ -32,7 +32,7 @@ if ($selectedEventId) {
     }
 }
 
-// Handle attendance submission
+// handle attendance submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_attendance'])) {
     $eventId = $_POST['eventId'];
     $attendances = [];
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_attendance']))
         $message = $result['message'];
         $success = true;
         
-        // Refresh volunteers list
+        
         $volunteersResult = $attendanceLogic->getEventVolunteers($selectedEventId);
         if ($volunteersResult['success']) {
             $volunteers = $volunteersResult['volunteers'];
@@ -84,25 +84,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_attendance']))
     </style>
 </head>
 <body>
-    <!-- Simple Header Bar instead of navbar -->
-    <div class="header-bar">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <h4 class="mb-0">
-                    <i class="bi bi-clipboard-check"></i> Mark Attendance
-                </h4>
-                <div class="text-end">
-                    <span class="me-3"><?php echo htmlspecialchars($_SESSION['name']); ?> (Coordinator)</span>
-                    <a href="../../index.php" class="btn btn-light btn-sm">
-                        <i class="bi bi-house"></i> Home
-                    </a>
-                    <a href="../auth/logout.php" class="btn btn-outline-light btn-sm ms-2">
-                        <i class="bi bi-box-arrow-right"></i> Logout
-                    </a>
-                </div>
-            </div>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <img src="../assets/images/logo.png" alt="Logo" style="height: 40px;">
+        </a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="coordinator_dashboard.php">Back</a>
         </div>
     </div>
+</nav>
     
     <div class="container mt-4">
         <div class="row">
@@ -114,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_attendance']))
                     </div>
                 <?php endif; ?>
                 
-                <!-- Date Selection Card -->
+                <!-- date selection card -->
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0"><i class="bi bi-calendar"></i> Select Date</h5>
@@ -136,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_attendance']))
                     </div>
                 </div>
                 
-                <!-- Events List Card -->
+                <!-- events list card -->
                 <div class="card mb-4">
                     <div class="card-header bg-info text-white">
                         <h5 class="mb-0"><i class="bi bi-calendar-event"></i> Events on <?php echo date('F j, Y', strtotime($selectedDate)); ?></h5>
@@ -192,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_attendance']))
                 </div>
                 
                 <?php if ($selectedEventId && !empty($volunteers)): ?>
-                <!-- Volunteers Attendance Card -->
+                <!-- volunteers attendance card -->
                 <div class="card mb-4" id="volunteers">
                     <div class="card-header bg-success text-white">
                         <h5 class="mb-0"><i class="bi bi-people-fill"></i> Mark Attendance for Volunteers</h5>
@@ -290,7 +282,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_attendance']))
                     </div>
                 <?php endif; ?>
                 
-                <!-- Back Button -->
+                
                 <div class="mt-4">
                     <a href="coordinator_dashboard.php" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i> Back to Dashboard
@@ -308,7 +300,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_attendance']))
             });
         }
         
-        // Auto-submit date change
+        
         document.getElementById('date').addEventListener('change', function() {
             this.form.submit();
         });

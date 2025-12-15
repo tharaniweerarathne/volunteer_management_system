@@ -418,7 +418,7 @@ if ($userRole === 'Coordinator') {
                 <a href="events.php" class="btn btn-secondary">Back</a>
             </form>
 
-        <!-- Main Events List -->
+        <!-- main events list -->
         <?php else: ?>
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Events Management</h2>
@@ -433,7 +433,7 @@ if ($userRole === 'Coordinator') {
                 <?php endif; ?>
             </div>
 
-            <!-- Search Form -->
+            <!-- search form -->
             <form method="GET" class="row g-3 mb-4 p-3 border rounded bg-light">
                 <div class="col-md-4">
                     <input type="text" name="search" class="form-control" placeholder="Search events..." 
@@ -470,7 +470,7 @@ if ($userRole === 'Coordinator') {
                 </div>
             </form>
 
-            <!-- Events Table -->
+            <!-- events Table -->
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
                     <thead class="table-dark">

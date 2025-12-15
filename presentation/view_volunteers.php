@@ -3,7 +3,7 @@ session_start();
 date_default_timezone_set('Asia/Colombo');
 require_once '../business_logic/EventVolunteerLogic.php';
 
-// Check login
+
 if (!isset($_SESSION['userId'])) {
     header('Location: login.php');
     exit();
@@ -12,7 +12,7 @@ if (!isset($_SESSION['userId'])) {
 $userId = $_SESSION['userId'];
 $userRole = $_SESSION['role'] ?? '';
 
-// Check if user has permission
+// checking if user has permission
 if (!in_array($userRole, ['Admin', 'Coordinator'])) {
     header('Location: events.php');
     exit();
@@ -20,10 +20,10 @@ if (!in_array($userRole, ['Admin', 'Coordinator'])) {
 
 $eventId = $_GET['eventId'] ?? 0;
 
-// Initialize business logic
+
 $eventVolunteerLogic = new EventVolunteerLogic();
 
-// Get event details
+// get event details
 $event = $eventVolunteerLogic->getEvent($eventId);
 
 if (!$event) {
@@ -31,13 +31,13 @@ if (!$event) {
     exit();
 }
 
-// Check if user can view volunteers
+// check if user can view volunteers
 if (!$eventVolunteerLogic->canViewVolunteers($eventId, $userId, $userRole)) {
     header('Location: events.php');
     exit();
 }
 
-// Get volunteers
+// get volunteers
 $volunteers = $eventVolunteerLogic->getFormattedVolunteers($eventId);
 $stats = $eventVolunteerLogic->getStatistics($eventId);
 
@@ -80,24 +80,24 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
     
     // Generate CSV using same pattern as your working system
     try { 
-        // set headers for download 
+        
         header('Content-Type: text/csv; charset=utf-8'); 
         header('Content-Disposition: attachment; filename="' . $filename . '"'); 
         header('Pragma: no-cache'); 
         header('Expires: 0'); 
          
-        // open output stream 
+         
         $output = fopen('php://output', 'w'); 
          
-        // add BOM for UTF-8 (helps with Excel) 
+         
         fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF)); 
          
-        // add column headers 
+         
         if (!empty($formattedData)) { 
             fputcsv($output, array_keys($formattedData[0])); 
         } 
          
-        // add data rows
+        
         foreach ($formattedData as $row) { 
             fputcsv($output, $row); 
         } 
@@ -171,15 +171,12 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
                 <i class="ri-arrow-left-line"></i> Back to Events
             </a>
             <div class="navbar-nav ms-auto">
-                <span class="navbar-text">
-                    <?php echo htmlspecialchars($_SESSION['name'] ?? 'User'); ?> (<?php echo $userRole; ?>)
-                </span>
             </div>
         </div>
     </nav>
 
     <div class="container mt-4">
-        <!-- Event Header -->
+        
         <div class="card mb-4">
             <div class="card-body">
                 <h2 class="card-title"><?php echo htmlspecialchars($event['eventName']); ?></h2>
@@ -368,12 +365,6 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
         <?php endif; ?>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-light py-3 mt-5 no-print">
-        <div class="container text-center">
-            <p class="mb-0">Unity Volunteers Trust &copy; <?php echo date('Y'); ?></p>
-        </div>
-    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>

@@ -91,24 +91,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['issue_bulk'])) {
 </head>
 <body>
     <!-- Simple Header Bar instead of navbar -->
-    <div class="header-bar">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <h4 class="mb-0">
-                    <i class="bi bi-award"></i> Issue Certificates
-                </h4>
-                <div class="text-end">
-                    <span class="me-3"><?php echo htmlspecialchars($_SESSION['name']); ?> (Admin)</span>
-                    <a href="../../index.php" class="btn btn-light btn-sm">
-                        <i class="bi bi-house"></i> Home
-                    </a>
-                    <a href="../auth/logout.php" class="btn btn-outline-light btn-sm ms-2">
-                        <i class="bi bi-box-arrow-right"></i> Logout
-                    </a>
-                </div>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <img src="../assets/images/logo.png" alt="Logo" style="height: 40px;">
+        </a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="admin_dashboard.php">Back</a>
         </div>
     </div>
+</nav>
     
     <div class="container mt-4">
         <div class="row">

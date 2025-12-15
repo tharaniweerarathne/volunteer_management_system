@@ -1,13 +1,13 @@
 <?php
 session_start();
 
-// Check if user is logged in
+// checking if user is logged in
 if (!isset($_SESSION['userId'])) {
     header('Location: login.php');
     exit();
 }
 
-// Only volunteers can access this page
+// only volunteers can access this page
 if ($_SESSION['role'] !== 'Volunteer') {
     header('Location: login.php');
     exit();
@@ -17,11 +17,11 @@ require_once '../data_access/certificateData.php';
 $certificateData = new CertificateData();
 $certificates = $certificateData->getCertificatesByVolunteer($_SESSION['userId']);
 
-// Handle certificate download
+// handle certificate download
 if (isset($_GET['download']) && isset($_GET['id'])) {
     $certificateId = $_GET['id'];
     
-    // Verify certificate belongs to this volunteer
+    // verify certificate belongs to this volunteer
     $certificate = $certificateData->getCertificate($certificateId);
     
     if ($certificate && $certificate['userId'] == $_SESSION['userId']) {
@@ -76,25 +76,17 @@ if (isset($_GET['download']) && isset($_GET['id'])) {
     </style>
 </head>
 <body>
-    <!-- Simple Header Bar -->
-    <div class="header-bar">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <h4 class="mb-0">
-                    <i class="bi bi-award"></i> My Certificates
-                </h4>
-                <div class="text-end">
-                    <span class="me-3"><?php echo htmlspecialchars($_SESSION['name']); ?> (Volunteer)</span>
-                    <a href="../../index.php" class="btn btn-light btn-sm">
-                        <i class="bi bi-house"></i> Home
-                    </a>
-                    <a href="../auth/logout.php" class="btn btn-outline-light btn-sm ms-2">
-                        <i class="bi bi-box-arrow-right"></i> Logout
-                    </a>
-                </div>
-            </div>
+    
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <img src="../assets/images/logo.png" alt="Logo" style="height: 40px;">
+        </a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="Volunteer_dashboard.php">Back</a>
         </div>
     </div>
+</nav>
     
     <div class="container mt-4">
         <div class="row">
@@ -126,7 +118,7 @@ if (isset($_GET['download']) && isset($_GET['id'])) {
                         </div>
                     </div>
                 <?php else: ?>
-                    <!-- Certificate Stats -->
+                    <!-- certificate stats -->
                     <div class="row mb-4">
                         <div class="col-md-4">
                             <div class="card bg-primary text-white">
@@ -162,7 +154,7 @@ if (isset($_GET['download']) && isset($_GET['id'])) {
                         </div>
                     </div>
                     
-                    <!-- Certificates List -->
+                    <!-- certificates list -->
                     <div class="row row-cols-1 row-cols-md-2 g-4">
                         <?php foreach ($certificates as $certificate): ?>
                             <div class="col">
@@ -221,7 +213,7 @@ if (isset($_GET['download']) && isset($_GET['id'])) {
                         <?php endforeach; ?>
                     </div>
                     
-                    <!-- Certificate Verification -->
+                    <!-- certificate verification -->
                     <div class="card mt-4">
                         <div class="card-header bg-info text-white">
                             <h5 class="mb-0"><i class="bi bi-shield-check"></i> Certificate Verification</h5>
@@ -240,7 +232,7 @@ if (isset($_GET['download']) && isset($_GET['id'])) {
                     </div>
                 <?php endif; ?>
                 
-                <!-- Back Button -->
+                
                 <div class="mt-4">
                     <a href="volunteer_dashboard.php" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i> Back to Dashboard
