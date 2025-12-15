@@ -52,6 +52,13 @@ $unreadCount = $inboxResult['unreadCount'];
                     <span>Coordinator Management</span>
                 </a>
             </div>
+
+            <div class="nav-item">
+                <a href="issue_certificates.php">
+                    <i class="ri-user-settings-line"></i>
+                    <span>Coordinator Management</span>
+                </a>
+            </div>
         <?php endif; ?>
 
         <?php if ($role === 'Coordinator'): ?>
@@ -71,9 +78,9 @@ $unreadCount = $inboxResult['unreadCount'];
                 </a>
             </div>
             <div class="nav-item">
-                <a href="#">
+                <a href="view_event_volunteers.php">
                     <i class="ri-calendar-line"></i>
-                    <span>Calendar</span>
+                    <span>View Volunteers</span>
                 </a>
             </div>
         <?php endif; ?>

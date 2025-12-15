@@ -71,12 +71,12 @@ $unreadCount = $inboxResult['unreadCount'];
                     <span>Volunteers</span>
                 </a>
             </div>
-            <div class="nav-item">
-                <a href="#">
-                    <i class="ri-calendar-line"></i>
-                    <span>Calendar</span>
-                </a>
-            </div>
+<div class="nav-item">
+    <a href="view_event_volunteers.php?id=<?php echo $eventId ?? ''; ?>">
+        <i class="ri-calendar-line"></i>
+        <span>View Volunteers</span>
+    </a>
+</div>
         <?php endif; ?>
 
         <div class="nav-item">
@@ -92,9 +92,9 @@ $unreadCount = $inboxResult['unreadCount'];
             </a>
         </div>
         <div class="nav-item">
-            <a href="#">
+            <a href="mark_attendance.php">
                 <i class="ri-message-3-line"></i>
-                <span>Messages</span>
+                <span>Mark Attendance</span>
             </a>
         </div>
         <div class="nav-item">

@@ -56,15 +56,15 @@ $unreadCount = $inboxResult['unreadCount'];
     </a>
 </div>
             <div class="nav-item">
-                <a href="#">
+                <a href="my_certificates.php">
                     <i class="ri-medal-line"></i>
                     <span>Certificates</span>
                 </a>
             </div>
             <div class="nav-item">
-                <a href="#">
+                <a href="view_attendance.php">
                     <i class="ri-trophy-line"></i>
-                    <span>Leaderboard</span>
+                    <span>View Attendance</span>
                 </a>
             </div>
 <div class="nav-item">

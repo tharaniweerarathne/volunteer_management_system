@@ -515,6 +515,8 @@ if ($userRole === 'Coordinator') {
                             <td>
                                 <div class="d-flex gap-2">
                                     <a href="view_event.php?id=<?php echo $event['eventId']; ?>" class="btn btn-info"><i class="ri-information-line"></i> View Details</a>
+
+                                            <a href="view_volunteers.php?eventId=<?php echo $event['eventId']; ?>" class="btn btn-outline-danger"><i class="ri-user-heart-line"></i> View Volunteers</a>
                                     
                                     <?php if ($eventData->canUserEditEvent($event['eventId'], $userId)): ?>
                                         <a href="events.php?action=edit&id=<?php echo $event['eventId']; ?>" 

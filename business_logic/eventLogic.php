@@ -258,13 +258,13 @@ private function sendEmail($to, $subject, $body) {
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'infocontact256@gmail.com';  // Your Gmail
-        $mail->Password   = 'ffvr keeu ztxj bwpa';     // App password (NOT regular password)
+        $mail->Username   = 'infocontact256@gmail.com';  
+        $mail->Password   = 'ffvr keeu ztxj bwpa';     
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
         
         // Sender
-        $mail->setFrom('noreply@volunteer.com', 'Volunteer Management');
+        $mail->setFrom('noreply@volunteer.com', 'Unity Volunteers Trust');
         $mail->addAddress($to);
         
         // Content
