@@ -77,32 +77,33 @@ class AttendanceLogic {
     }
     
     // Get volunteers for event
-    public function getEventVolunteers($eventId) {
-        if (!$this->isCoordinator()) {
-            return ['success' => false, 'message' => 'Access denied'];
-        }
-        
-        // Check if coordinator is assigned to this event
-        if (!$this->attendanceData->isCoordinatorAssigned($_SESSION['userId'], $eventId)) {
-            return ['success' => false, 'message' => 'Not assigned to this event'];
-        }
-        
-        try {
-            $volunteers = $this->attendanceData->getEventVolunteers($eventId);
-            $summary = $this->attendanceData->getAttendanceSummary($eventId);
-            
-            return [
-                'success' => true,
-                'volunteers' => $volunteers,
-                'summary' => $summary
-            ];
-        } catch (Exception $e) {
-            return [
-                'success' => false,
-                'message' => 'Error fetching volunteers: ' . $e->getMessage()
-            ];
-        }
+// Get volunteers for event
+public function getEventVolunteers($eventId, $search = '') {
+    if (!$this->isCoordinator()) {
+        return ['success' => false, 'message' => 'Access denied'];
     }
+    
+    // Check if coordinator is assigned to this event
+    if (!$this->attendanceData->isCoordinatorAssigned($_SESSION['userId'], $eventId)) {
+        return ['success' => false, 'message' => 'Not assigned to this event'];
+    }
+    
+    try {
+        $volunteers = $this->attendanceData->getEventVolunteers($eventId, $search);
+        $summary = $this->attendanceData->getAttendanceSummary($eventId);
+        
+        return [
+            'success' => true,
+            'volunteers' => $volunteers,
+            'summary' => $summary
+        ];
+    } catch (Exception $e) {
+        return [
+            'success' => false,
+            'message' => 'Error fetching volunteers: ' . $e->getMessage()
+        ];
+    }
+}
     
     // Mark attendance
     public function markAttendance($eventId, $attendances, $date = null) {

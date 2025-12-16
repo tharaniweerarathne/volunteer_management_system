@@ -41,26 +41,7 @@ class EventVolunteerLogic {
         return $this->eventVolunteerData->exportVolunteersToCSV($eventId);
     }
     
-    // Get formatted volunteers data for display
-    public function getFormattedVolunteers($eventId) {
-        $volunteers = $this->getVolunteers($eventId);
-        $formatted = [];
-        
-        foreach ($volunteers as $volunteer) {
-            $formatted[] = [
-                'id' => $volunteer['userId'],
-                'name' => htmlspecialchars($volunteer['name']),
-                'email' => htmlspecialchars($volunteer['email']),
-                'phone' => $volunteer['telephoneNo'] ? htmlspecialchars($volunteer['telephoneNo']) : 'N/A',
-                'gender' => $volunteer['gender'] ?? 'Not specified',
-                'registrationDate' => date('M d, Y', strtotime($volunteer['registrationDate'])),
-                'skills' => $volunteer['skills'] ? explode(', ', $volunteer['skills']) : [],
-                'profileImage' => $volunteer['profile_image'] ?? null
-            ];
-        }
-        
-        return $formatted;
-    }
+
 
     // Add this method to your EventVolunteerLogic class:
 public function getVolunteersForExport($eventId) {
@@ -79,6 +60,56 @@ public function getVolunteersForExport($eventId) {
             'location' => $volunteer['location'] ?? 'Not specified',
             'registrationDate' => $registrationDate, // Formatted date
             'skills' => $volunteer['skills'] ?? 'No skills'
+        ];
+    }
+    
+    return $formatted;
+}
+
+
+// Add this method to your EventVolunteerLogic class:
+public function searchVolunteers($eventId, $searchParams = []) {
+    $volunteers = $this->eventVolunteerData->searchVolunteersByEvent($eventId, $searchParams);
+    
+    $formatted = [];
+    foreach ($volunteers as $volunteer) {
+        $formatted[] = [
+            'id' => $volunteer['userId'],
+            'name' => htmlspecialchars($volunteer['name']),
+            'email' => htmlspecialchars($volunteer['email']),
+            'phone' => $volunteer['phone'] ? htmlspecialchars($volunteer['phone']) : 'N/A',
+            'gender' => $volunteer['gender'] ?? 'Not specified',
+            'location' => $volunteer['location'] ? htmlspecialchars($volunteer['location']) : 'Not specified',
+            'registrationDate' => date('M d, Y', strtotime($volunteer['registrationDate'])),
+            'registrationTime' => date('h:i A', strtotime($volunteer['registrationDate'])),
+            'skills' => $volunteer['skills'] ? explode(', ', $volunteer['skills']) : []
+        ];
+    }
+    
+    return $formatted;
+}
+
+// Also update the getFormattedVolunteers method to handle search:
+public function getFormattedVolunteers($eventId, $searchParams = []) {
+    if (!empty($searchParams)) {
+        return $this->searchVolunteers($eventId, $searchParams);
+    }
+    
+    // Original code for getting all volunteers
+    $volunteers = $this->getVolunteers($eventId);
+    $formatted = [];
+    
+    foreach ($volunteers as $volunteer) {
+        $formatted[] = [
+            'id' => $volunteer['userId'],
+            'name' => htmlspecialchars($volunteer['name']),
+            'email' => htmlspecialchars($volunteer['email']),
+            'phone' => $volunteer['phone'] ? htmlspecialchars($volunteer['phone']) : 'N/A',
+            'gender' => $volunteer['gender'] ?? 'Not specified',
+            'location' => $volunteer['location'] ? htmlspecialchars($volunteer['location']) : 'Not specified',
+            'registrationDate' => date('M d, Y', strtotime($volunteer['registrationDate'])),
+            'registrationTime' => date('h:i A', strtotime($volunteer['registrationDate'])),
+            'skills' => $volunteer['skills'] ? explode(', ', $volunteer['skills']) : []
         ];
     }
     

@@ -36,28 +36,34 @@ class CertificateLogic {
     }
     
     // Get eligible volunteers for certificate
-    public function getEligibleVolunteers($eventId) {
-        if (!$this->isAdmin()) {
-            return ['success' => false, 'message' => 'Access denied'];
-        }
-        
-        try {
-            $volunteers = $this->certificateData->getEligibleVolunteers($eventId);
-            $event = $this->getEventDetails($eventId);
-            
-            return [
-                'success' => true,
-                'volunteers' => $volunteers,
-                'event' => $event,
-                'count' => count($volunteers)
-            ];
-        } catch (Exception $e) {
-            return [
-                'success' => false,
-                'message' => 'Error fetching volunteers: ' . $e->getMessage()
-            ];
-        }
+// Get eligible volunteers for certificate WITH SEARCH
+public function getEligibleVolunteers($eventId, $search = '') {
+    if (!$this->isAdmin()) {
+        return ['success' => false, 'message' => 'Access denied'];
     }
+    
+    try {
+        $volunteers = $this->certificateData->getEligibleVolunteers($eventId, $search);
+        $event = $this->getEventDetails($eventId);
+        
+        // Get total count without search for comparison
+        $totalCount = $this->certificateData->getTotalEligibleVolunteers($eventId);
+        
+        return [
+            'success' => true,
+            'volunteers' => $volunteers,
+            'event' => $event,
+            'count' => count($volunteers),
+            'totalCount' => $totalCount,
+            'searchTerm' => $search
+        ];
+    } catch (Exception $e) {
+        return [
+            'success' => false,
+            'message' => 'Error fetching volunteers: ' . $e->getMessage()
+        ];
+    }
+}
     
     // Get event details
     private function getEventDetails($eventId) {

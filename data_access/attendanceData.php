@@ -26,24 +26,40 @@ class AttendanceData {
     }
     
     // Get volunteers registered for an event (FIXED - Added table alias to status column)
-    public function getEventVolunteers($eventId) {
-        $sql = "SELECT u.userId, u.name, u.email, 
-                       IFNULL(a.status, 'Not Marked') as attendanceStatus
-                FROM event_registrations er
-                JOIN users u ON er.userId = u.userId
-                LEFT JOIN attendance a ON er.userId = a.userId 
-                    AND er.eventId = a.eventId 
-                    AND a.attendanceDate = CURDATE()
-                WHERE er.eventId = ? 
-                AND er.status = 'registered'
-                AND u.role = 'Volunteer'
-                ORDER BY u.name";
-        
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $eventId);
-        $stmt->execute();
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+// Get volunteers registered for an event with optional search
+public function getEventVolunteers($eventId, $search = '') {
+    $sql = "SELECT u.userId, u.name, u.email, u.telephoneNo,
+                   IFNULL(a.status, 'Not Marked') as attendanceStatus
+            FROM event_registrations er
+            JOIN users u ON er.userId = u.userId
+            LEFT JOIN attendance a ON er.userId = a.userId 
+                AND er.eventId = a.eventId 
+                AND a.attendanceDate = CURDATE()
+            WHERE er.eventId = ? 
+            AND er.status = 'registered'
+            AND u.role = 'Volunteer'";
+    
+    // Add search condition if provided
+    if (!empty($search)) {
+        $sql .= " AND (LOWER(u.name) LIKE LOWER(?) OR 
+                      LOWER(u.email) LIKE LOWER(?) OR 
+                      u.telephoneNo LIKE ?)";
     }
+    
+    $sql .= " ORDER BY u.name";
+    
+    $stmt = $this->conn->prepare($sql);
+    
+    if (!empty($search)) {
+        $searchTerm = "%{$search}%";
+        $stmt->bind_param("isss", $eventId, $searchTerm, $searchTerm, $searchTerm);
+    } else {
+        $stmt->bind_param("i", $eventId);
+    }
+    
+    $stmt->execute();
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
     
     // Mark attendance
     public function markAttendance($eventId, $userId, $date, $status, $coordinatorId, $remarks = '') {
@@ -148,5 +164,8 @@ class AttendanceData {
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
     }
+
+
+    
 }
 ?>
