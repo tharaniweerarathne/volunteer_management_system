@@ -131,7 +131,7 @@ $unreadCount = $inboxResult['unreadCount'];
                         <i class="ri-user-3-fill header-icon"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="edit_profile.php"><i class="ri-edit-line me-2"></i>Edit Profile</a></li>
+                        <li><a class="dropdown-item" href="organizer_edit_profile.php"><i class="ri-edit-line me-2"></i>Edit Profile</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="logout.php"><i class="ri-logout-box-line me-2"></i>Logout</a></li>
                     </ul>

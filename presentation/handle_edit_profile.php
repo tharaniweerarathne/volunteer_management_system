@@ -3,7 +3,7 @@
 session_start();
 
 // checking if user is logged in
-if (!isset($_SESSION['userId']) || !in_array($_SESSION['role'], ['Volunteer', 'Admin', 'Coordinator'])) {
+if (!isset($_SESSION['userId']) || !in_array($_SESSION['role'], ['Volunteer', 'Admin', 'Coordinator', 'Organizer'])) {
     echo json_encode(["success" => false, "message" => "Unauthorized access"]);
     exit;
 }
@@ -52,6 +52,11 @@ switch ($action) {
             case 'Coordinator':
                 $result = $profileLogic->updateCoordinatorProfile($userId, $name, $email, $phone, $location, $gender);
                 break;
+
+            case 'Organizer':
+                $result = $profileLogic->updateOrganizerProfile($userId, $name, $email, $phone, $location, $gender);
+                break;
+
             default:
                 $result = ["success" => false, "message" => "Invalid user role"];
         }
@@ -150,6 +155,66 @@ switch ($action) {
         }
         
         $result = $profileLogic->updateAdminPassword($userId, $currentPassword, $newPassword);
+        echo json_encode($result);
+        break;
+
+    
+
+     case 'send_organizer_otp':
+        // only for Organizers
+        if ($userRole !== 'Organizer') {
+            echo json_encode(["success" => false, "message" => "Invalid action for your role"]);
+            exit;
+        }
+        
+        $result = $profileLogic->sendOrganizerPasswordResetOTP($userId);
+        echo json_encode($result);
+        break;
+        
+    case 'verify_organizer_otp':
+        // only for Organizers
+        if ($userRole !== 'Organizer') {
+            echo json_encode(["success" => false, "message" => "Invalid action for your role"]);
+            exit;
+        }
+        
+        $otp = $input['otp'] ?? '';
+        
+        if (empty($otp) || strlen($otp) !== 6) {
+            echo json_encode(["success" => false, "message" => "Invalid OTP format"]);
+            exit;
+        }
+        
+        $result = $profileLogic->verifyOrganizerPasswordResetOTP($otp);
+        echo json_encode($result);
+        break;
+        
+    case 'reset_organizer_password':
+        // only for Organizers
+        if ($userRole !== 'Organizer') {
+            echo json_encode(["success" => false, "message" => "Invalid action for your role"]);
+            exit;
+        }
+        
+        $password = $input['password'] ?? '';
+        
+        // password validation
+        if (strlen($password) < 5) {
+            echo json_encode(["success" => false, "message" => "Password must be at least 5 characters long"]);
+            exit;
+        }
+        
+        if (!preg_match('/[0-9]/', $password)) {
+            echo json_encode(["success" => false, "message" => "Password must contain at least one number"]);
+            exit;
+        }
+        
+        if (!preg_match('/[!@#$%^&*(),.?":{}|<>]/', $password)) {
+            echo json_encode(["success" => false, "message" => "Password must contain at least one special character"]);
+            exit;
+        }
+        
+        $result = $profileLogic->resetOrganizerPassword($password);
         echo json_encode($result);
         break;
         

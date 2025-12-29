@@ -163,5 +163,21 @@ class ProfileData {
         $result = $stmt->get_result();
         return $result->num_rows > 0;
     }
+
+        // get organizer by ID (no skills)
+    public function getOrganizerById($userId) {
+        $stmt = $this->conn->prepare("SELECT userId, name, email, telephoneNo, location, gender FROM users WHERE userId = ? AND role = 'Organizer'");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+
+        // update organizer basic info
+    public function updateOrganizerBasicInfo($userId, $name, $email, $telephoneNo, $location, $gender) {
+        $stmt = $this->conn->prepare("UPDATE users SET name = ?, email = ?, telephoneNo = ?, location = ?, gender = ? WHERE userId = ? AND role = 'Organizer'");
+        $stmt->bind_param("sssssi", $name, $email, $telephoneNo, $location, $gender, $userId);
+        return $stmt->execute();
+    }
 }
 ?>
