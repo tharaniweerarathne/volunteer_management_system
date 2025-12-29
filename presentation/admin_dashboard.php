@@ -46,6 +46,14 @@ $unreadCount = $inboxResult['unreadCount'];
             </a>
             </div> 
 
+
+            <div class="nav-item">
+                <a href="organizer_requests.php">
+                    <i class="ri-user-settings-line"></i>
+                    <span>Organizers Management</span>
+                </a>
+            </div>
+
             <div class="nav-item">
                 <a href="coordinator_management.php">
                     <i class="ri-user-settings-line"></i>
@@ -56,7 +64,7 @@ $unreadCount = $inboxResult['unreadCount'];
             <div class="nav-item">
                 <a href="issue_certificates.php">
                     <i class="ri-user-settings-line"></i>
-                    <span>Coordinator Management</span>
+                    <span>Certificate issue</span>
                 </a>
             </div>
         <?php endif; ?>

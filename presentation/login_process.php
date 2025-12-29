@@ -25,6 +25,9 @@ if ($result['success']) {
         case 'Coordinator':
             header("Location: ../presentation/coordinator_dashboard.php");
             break;
+        case 'Organizer':
+            header("Location: ../presentation/organizer_dashboard.php");
+            break;
         default:
             header("Location: ../presentation/volunteer_dashboard.php");
     }
