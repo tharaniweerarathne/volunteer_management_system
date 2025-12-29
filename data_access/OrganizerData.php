@@ -177,11 +177,49 @@ class OrganizerData {
     }
     
     // Delete organizer request
-    public function deleteOrganizerRequest($requestId) {
-        $stmt = $this->conn->prepare("DELETE FROM organizer_requests WHERE requestId = ?");
-        $stmt->bind_param("i", $requestId);
-        return $stmt->execute();
+public function deleteOrganizerRequest($requestId) {
+    // 1. Get userId from organizer_requests
+    $stmt = $this->conn->prepare(
+        "SELECT userId FROM organizer_requests WHERE requestId = ?"
+    );
+    $stmt->bind_param("i", $requestId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($row = $result->fetch_assoc()) {
+        $userId = $row['userId'];
+
+        // 2. Get email from users table
+        $stmtUser = $this->conn->prepare(
+            "SELECT email FROM users WHERE userId = ?"
+        );
+        $stmtUser->bind_param("i", $userId);
+        $stmtUser->execute();
+        $userResult = $stmtUser->get_result();
+
+        if ($userRow = $userResult->fetch_assoc()) {
+            $email = $userRow['email'];
+
+            // 3. Delete organizer request
+            $stmtDel = $this->conn->prepare(
+                "DELETE FROM organizer_requests WHERE requestId = ?"
+            );
+            $stmtDel->bind_param("i", $requestId);
+            $stmtDel->execute();
+
+            // 4. Delete user
+            $stmtDelUser = $this->conn->prepare(
+                "DELETE FROM users WHERE userId = ?"
+            );
+            $stmtDelUser->bind_param("i", $userId);
+            return $stmtDelUser->execute();
+        }
     }
+
+    return false;
+}
+
+
     
     // Get organizers for CSV export
     public function getAllOrganizersForExport() {

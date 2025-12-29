@@ -48,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $messageType = $result['success'] ? 'success' : 'danger';
     }
     
+    // ADD THIS DELETE HANDLER
     elseif ($action === 'delete') {
         $result = $organizerLogic->deleteOrganizerRequest($_POST['requestId']);
         $message = $result['message'];
@@ -297,6 +298,10 @@ $stats = $organizerLogic->getRequestStatistics();
                                                         <i class="ri-close-line"></i> Reject
                                                     </button>
                                                 <?php endif; ?>
+                                                <!-- ADD DELETE BUTTON HERE -->
+                                                <button class="btn btn-sm btn-dark" onclick="deleteRequest(<?= $request['requestId'] ?>, '<?= htmlspecialchars($request['userName']) ?>')">
+                                                    <i class="ri-delete-bin-line"></i> Delete
+                                                </button>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -378,6 +383,31 @@ $stats = $organizerLogic->getRequestStatistics();
         </div>
     </div>
 
+    <!-- ADD THIS DELETE MODAL -->
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="POST">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title"><i class="ri-delete-bin-line"></i> Delete Request</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="requestId" id="deleteRequestId">
+                        <p>Are you sure you want to delete the request from <strong id="deleteUserName"></strong>?</p>
+                        <p class="text-danger"><i class="ri-alert-line"></i> This action cannot be undone!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/dashboards.js"></script>
     <script>
@@ -441,6 +471,13 @@ $stats = $organizerLogic->getRequestStatistics();
             document.getElementById('rejectRequestId').value = requestId;
             document.getElementById('rejectUserName').textContent = userName;
             new bootstrap.Modal(document.getElementById('rejectModal')).show();
+        }
+
+        // ADD THIS DELETE FUNCTION
+        function deleteRequest(requestId, userName) {
+            document.getElementById('deleteRequestId').value = requestId;
+            document.getElementById('deleteUserName').textContent = userName;
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
         }
 
         function searchRequests() {
