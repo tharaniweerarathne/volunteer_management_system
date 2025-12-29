@@ -23,7 +23,17 @@ class CSVExportLogic {
         
         return $this->generateCSV($volunteers, 'volunteers_' . date('Y-m-d_H-i-s') . '.csv');
     }
-    
+
+// generate CSV for organizers
+public function exportOrganizersToCSV() {
+    $organizers = $this->registrationData->getAllOrganizersForExport();
+
+    if (empty($organizers)) {
+        die("No organizers found to export.");
+    }
+
+    $this->generateCSV($organizers, 'organizers_' . date('Y-m-d_H-i-s') . '.csv');
+} 
     // generate CSV for coordinators
     public function exportCoordinatorsToCSV() {
         $coordinators = $this->registrationData->getAllCoordinatorsForExport();

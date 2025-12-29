@@ -326,6 +326,34 @@ public function getAllUsersForExport() {
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
+  // generating organizers to csv
+public function getAllOrganizersForExport() {
+    $query = "SELECT 
+                u.userId, 
+                u.name, 
+                u.email, 
+                u.telephoneNo, 
+                u.location, 
+                u.gender,
+                r.organizationName,
+                r.organizationType,
+                r.organizationDescription,
+                r.yearsOfExperience,
+                r.previousEvents,
+                r.motivation,
+                r.requestStatus,
+                r.reviewedBy,
+                r.reviewNotes
+              FROM users u
+              LEFT JOIN organizer_requests r ON u.userId = r.userId
+              WHERE u.role = 'Organizer'
+              ORDER BY u.userId DESC";
+
+    $result = $this->conn->query($query);
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
+
+
 // generic method for custom queries
 public function getDataForExport($query) {
     $result = $this->conn->query($query);

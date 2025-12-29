@@ -206,6 +206,18 @@ $stats = $organizerLogic->getRequestStatistics();
                 </div>
             </div>
 
+                                <!--csv file generating-->
+        <div class="csv-generating">
+    <div class="section-title"><i class="ri-file-chart-line"></i> Export Data to CSV</div>
+    <div class="button-group">
+
+        <a href="export_csv.php?type=organizers" class="csv-button btn-coordinators" onclick="showCsvLoading(this)">
+            <i class="ri-download-cloud-line"></i>
+            Organizers
+        </a>
+    </div>
+</div>
+
             <!-- Filters -->
             <div class="card mb-4">
                 <div class="card-body">
@@ -232,6 +244,7 @@ $stats = $organizerLogic->getRequestStatistics();
                     </div>
                 </div>
             </div>
+
 
             <!-- Requests List -->
             <div class="card">

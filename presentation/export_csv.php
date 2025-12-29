@@ -37,6 +37,9 @@ switch ($exportType) {
         $csvLogic->exportFilteredEventsToCSV($filters);
         break;
 
+    case 'organizers':
+        $csvLogic->exportOrganizersToCSV();
+        break;
     
     // Add more export types here as needed
     // case 'registrations':
