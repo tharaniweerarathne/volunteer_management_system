@@ -254,7 +254,7 @@ a {
 // Assuming you have the role stored in session, e.g., $_SESSION['role']
 if (isset($_SESSION['role'])) {
     $role = $_SESSION['role'];
-    
+
     if ($role == 'Admin') {
         echo '<li class="nav-item mb-2">
                 <a class="nav-link text-white" href="admin_dashboard.php">
@@ -273,9 +273,16 @@ if (isset($_SESSION['role'])) {
                     <i class="ri-home-4-line"></i> Back to Dashboard
                 </a>
               </li>';
+    } elseif ($role == 'Organizer') {
+        echo '<li class="nav-item mb-2">
+                <a class="nav-link text-white" href="organizer_dashboard.php">
+                    <i class="ri-home-4-line"></i> Back to Dashboard
+                </a>
+              </li>';
     }
 }
 ?>
+
         <li class="nav-item mb-2">
             <a class="nav-link text-white" href="inbox.php">
                 <i class="ri-inbox-line"></i> Inbox

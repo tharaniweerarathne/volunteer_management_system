@@ -165,6 +165,19 @@ class MessageData {
         }
         return $coordinatorIds;
     }
+
+    // Get all organizer
+    public function getAllOrganizer() {
+        $stmt = $this->conn->prepare("SELECT userId FROM users WHERE role = 'Organizer'");
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        $organizerIds = [];
+        while ($row = $result->fetch_assoc()) {
+            $organizerIds[] = $row['userId'];
+        }
+        return $organizerIds;
+    }
     
     // Delete message (only by sender or receiver)
     public function deleteMessage($messageId, $userId) {

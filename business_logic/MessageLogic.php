@@ -116,7 +116,8 @@ class MessageLogic {
         $rules = [
             'Admin' => ['Volunteer', 'Coordinator', 'Admin'], // Admin can send to all
             'Volunteer' => ['Admin', 'Coordinator'], // Volunteer can send to Admin/Coordinator only
-            'Coordinator' => ['Volunteer', 'Admin'] // Coordinator can send to Volunteer/Admin
+            'Coordinator' => ['Volunteer', 'Admin'], // Coordinator can send to Volunteer/Admin
+            'Organizer' => ['Admin', 'Coordinator']
         ];
         
         return isset($rules[$senderRole]) && in_array($receiverRole, $rules[$senderRole]);
