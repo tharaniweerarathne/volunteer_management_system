@@ -1,5 +1,5 @@
 <?php
-// presentation/sent_messages.php
+
 
 require_once __DIR__ . "/../data_access/db.php";
 require_once __DIR__ . "/../business_logic/MessageLogic.php";
@@ -15,10 +15,10 @@ $userRole = $_SESSION['role'];
 $userId = $_SESSION['userId'];
 $messageLogic = new MessageLogic($conn);
 
-// Get current page
+// get current page
 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 
-// Get sent messages
+// get sent messages
 $result = $messageLogic->getSentMessages($userId, $page);
 $messages = $result['messages'];
 ?>
@@ -207,14 +207,14 @@ a {
     box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
 }
 
-/* Empty state styling */
+
 .message-list .message-item[style*="text-align: center"] {
     color: #999;
     font-size: 16px;
     background: #fafafa;
 }
 
-/* Responsive design */
+
 @media (max-width: 768px) {
     .container {
         padding: 20px;
@@ -251,7 +251,7 @@ a {
     </a>
     <ul class="nav flex-column w-100">
 <?php
-// Assuming you have the role stored in session, e.g., $_SESSION['role']
+
 if (isset($_SESSION['role'])) {
     $role = $_SESSION['role'];
 

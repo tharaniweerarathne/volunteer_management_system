@@ -1,5 +1,5 @@
 <?php
-// presentation/send_message.php
+
 
 require_once __DIR__ . "/../data_access/db.php";
 require_once __DIR__ . "/../business_logic/MessageLogic.php";
@@ -16,11 +16,11 @@ $userRole = $_SESSION['role'];
 
 $messageLogic = new MessageLogic($conn);
 
-// Get available recipients
+// get available recipients
 $recipientsResult = $messageLogic->getAvailableRecipients($userId, $userRole);
 $availableUsers = $recipientsResult['success'] ? $recipientsResult['users'] : [];
 
-// Handle form submission
+// handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $subject = $_POST['subject'] ?? '';
     $message = $_POST['message'] ?? '';
@@ -265,7 +265,7 @@ form a:hover {
 }
 
 
-/* Responsive design */
+
 @media (max-width: 768px) {
     .container {
         padding: 20px;
@@ -300,7 +300,7 @@ form a:hover {
     </a>
     <ul class="nav flex-column w-100">
 <?php
-// Assuming you have the role stored in session, e.g., $_SESSION['role']
+
 if (isset($_SESSION['role'])) {
     $role = $_SESSION['role'];
 
@@ -363,7 +363,7 @@ if (isset($_SESSION['role'])) {
     </div>
 </nav>
 
-<!--remove this-->
+
   <div class="flex-grow-1" style="background: linear-gradient(135deg, #fff5f0 0%, #ffe8d9 100%); padding: 20px;">
     <div class="container">
         <h2>Send Message</h2>

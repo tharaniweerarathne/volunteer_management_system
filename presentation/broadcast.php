@@ -1,5 +1,5 @@
 <?php
-// presentation/broadcast.php
+
 
 require_once __DIR__ . "/../data_access/db.php";
 require_once __DIR__ . "/../business_logic/MessageLogic.php";
@@ -16,17 +16,17 @@ $userRole = $_SESSION['role'];
 
 $messageLogic = new MessageLogic($conn);
 
-// Get all volunteers for broadcast
+// get all volunteers for broadcast
 $result = $messageLogic->getBroadcastRecipients($userId, $userRole);
 $volunteers = $result['recipients'];
 $volunteerCount = count($volunteers);
 
-// Handle form submission
+// handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $subject = $_POST['subject'] ?? '';
     $message = $_POST['message'] ?? '';
     
-    // Get all volunteer IDs
+    // get all volunteer IDs
     $receiverIds = array_column($volunteers, 'userId');
     
     $result = $messageLogic->sendMessage($userId, $userRole, $receiverIds, $subject, $message);
@@ -210,7 +210,7 @@ form a:hover {
     text-decoration: underline;
 }
 
-/* Responsive design */
+
 @media (max-width: 768px) {
     .container {
         padding: 20px;
@@ -250,7 +250,7 @@ form a:hover {
     </a>
     <ul class="nav flex-column w-100">
 <?php
-// Assuming you have the role stored in session, e.g., $_SESSION['role']
+
 if (isset($_SESSION['role'])) {
     $role = $_SESSION['role'];
     
@@ -306,7 +306,7 @@ if (isset($_SESSION['role'])) {
     </div>
 </nav>
 
-<!--remove this-->
+
   <div class="flex-grow-1" style="background: linear-gradient(135deg, #fff5f0 0%, #ffe8d9 100%); padding: 20px;">
     <div class="container">
         <h2>Broadcast to All Volunteers</h2>
