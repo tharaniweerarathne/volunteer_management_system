@@ -141,13 +141,20 @@ if (!$certificate || $certificate['userId'] != $_SESSION['userId']) {
                 <div class="volunteer-name"><?php echo htmlspecialchars($certificate['volunteerName']); ?></div>
             </div>
             
-            <div class="certificate-details text-center">
-                In recognition of valuable contribution as a volunteer for<br>
-                <strong><?php echo htmlspecialchars($certificate['eventName']); ?></strong><br>
-                <em><?php echo htmlspecialchars($certificate['skillName'] . ' - ' . $certificate['category']); ?></em><br>
-                Held on <?php echo date('F j, Y', strtotime($certificate['startDate'])); ?><br>
-                In appreciation of dedicated service and commitment
-            </div>
+<div class="certificate-details text-center">
+    In recognition of valuable contribution as a volunteer for<br>
+    <strong><?php echo htmlspecialchars($certificate['eventName']); ?></strong><br>
+    <em>
+        <?php 
+            $skillText = $certificate['skillName'] ?? 'Not specified';
+            echo htmlspecialchars($skillText . ' - ' . $certificate['category']); 
+        ?>
+    </em><br>
+    Organizer: <strong><?php echo htmlspecialchars($certificate['organizerName'] ?? 'Unknown Organizer'); ?></strong><br>
+    Held on <?php echo date('F j, Y', strtotime($certificate['startDate'])); ?><br>
+    In appreciation of dedicated service and commitment
+</div>
+
             
             <div class="certificate-footer">
                 <div class="signature">

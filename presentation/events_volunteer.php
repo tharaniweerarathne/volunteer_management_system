@@ -137,7 +137,7 @@ $skills = $eventData->getAllSkills();
         </div>
 
 
-       <div class="row">
+<div class="row">
     <?php if (empty($events)): ?>
         <div class="col-12 text-center py-5">
             <p class="lead">No events found. Try different search criteria.</p>
@@ -162,6 +162,14 @@ $skills = $eventData->getAllSkills();
                             <span class="joinEventsDateDay"><?php echo $startDate->format('d'); ?></span>
                             <span class="joinEventsDateMonth"><?php echo $startDate->format('M'); ?></span>
                         </div>
+                        
+                        <!-- Organizer Badge -->
+                        <?php if (!empty($event['organizerName'])): ?>
+                            <div class="joinEventsOrganizerBadge">
+                                <i class="ri-user-star-line"></i>
+                                <span><?php echo htmlspecialchars($event['organizerName']); ?></span>
+                            </div>
+                        <?php endif; ?>
                     </div>
                     
                     <div class="joinEventsCardBody">
@@ -184,6 +192,38 @@ $skills = $eventData->getAllSkills();
                             if (strlen($description) > 100) echo '...';
                             ?>
                         </p>
+                        
+                        <!-- NEW: Organizer Info Section -->
+                        <div class="joinEventsOrganizerInfo">
+                            <div class="joinEventsCardDetail">
+                                <i class="ri-user-3-line"></i>
+                                <span>
+                                    <?php 
+                                    if (!empty($event['organizerName'])) {
+                                        echo 'Organizer: ' . htmlspecialchars($event['organizerName']);
+                                    } else {
+                                        echo 'Organizer: Not specified';
+                                    }
+                                    ?>
+                                </span>
+                            </div>
+                            
+                            <?php if (!empty($event['coordinators'])): ?>
+                                <div class="joinEventsCardDetail">
+                                    <i class="ri-team-line"></i>
+                                    <span>
+                                        Coordinators: <?php 
+                                        $coordNames = explode(', ', $event['coordinators']);
+                                        if (count($coordNames) > 2) {
+                                            echo htmlspecialchars($coordNames[0]) . ', ' . htmlspecialchars($coordNames[1]) . ' +' . (count($coordNames) - 2) . ' more';
+                                        } else {
+                                            echo htmlspecialchars($event['coordinators']);
+                                        }
+                                        ?>
+                                    </span>
+                                </div>
+                            <?php endif; ?>
+                        </div>
                         
                         <div class="joinEventsCardDetails">
                             <div class="joinEventsCardDetail">
@@ -218,7 +258,7 @@ $skills = $eventData->getAllSkills();
                         </div>
                         
                         <?php
-                        
+                        // Check if user is logged in
                         $joinUrl = isset($_SESSION['userId']) ? 'event_details.php?id=' . $event['eventId'] : 'sign_in.php';
                         ?>
                         
@@ -232,7 +272,6 @@ $skills = $eventData->getAllSkills();
         <?php endforeach; ?>
     <?php endif; ?>
 </div>
-
             
             
         </div>

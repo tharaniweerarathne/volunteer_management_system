@@ -159,6 +159,29 @@ if ($success) {
                                     Registered: <?php echo date('M j, Y', strtotime($event['registrationDate'])); ?>
                                 </small>
                             </p>
+
+                                        <!-- Organizer and Coordinators -->
+            <p class="card-text mt-2">
+                <small>
+                    <i class="bi bi-person-badge"></i> 
+                    Organizer: <?php echo !empty($event['organizerName']) ? htmlspecialchars($event['organizerName']) : 'Not specified'; ?><br>
+                    
+                    <i class="bi bi-people"></i> 
+                    Coordinators: 
+                    <?php
+                    if (!empty($event['coordinators'])) {
+                        $coordNames = explode(', ', $event['coordinators']);
+                        if (count($coordNames) > 2) {
+                            echo htmlspecialchars($coordNames[0]) . ', ' . htmlspecialchars($coordNames[1]) . ' +' . (count($coordNames) - 2) . ' more';
+                        } else {
+                            echo htmlspecialchars($event['coordinators']);
+                        }
+                    } else {
+                        echo 'Not assigned';
+                    }
+                    ?>
+                </small>
+            </p>
                         </div>
                         
 <div class="card-footer bg-transparent border-top-0">

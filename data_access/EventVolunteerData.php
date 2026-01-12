@@ -4,25 +4,28 @@ require_once 'db.php';
 class EventVolunteerData {
     
     // Get event details
-    public function getEventDetails($eventId) {
-        global $conn;
-        
-        $sql = "SELECT e.*, 
-                GROUP_CONCAT(DISTINCT u.name SEPARATOR ', ') as coordinators,
-                s.skillName as requiredSkill
-                FROM events e
-                LEFT JOIN event_coordinators ec ON e.eventId = ec.eventId
-                LEFT JOIN users u ON ec.coordinatorId = u.userId
-                LEFT JOIN skills s ON e.requiredSkillId = s.skillId
-                WHERE e.eventId = ?
-                GROUP BY e.eventId";
-        
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $eventId);
-        $stmt->execute();
-        
-        return $stmt->get_result()->fetch_assoc();
-    }
+public function getEventDetails($eventId) {
+    global $conn;
+    
+    $sql = "SELECT e.*, 
+            GROUP_CONCAT(DISTINCT u.name SEPARATOR ', ') as coordinators,
+            s.skillName as requiredSkill,
+            o.name AS organizerName
+            FROM events e
+            LEFT JOIN event_coordinators ec ON e.eventId = ec.eventId
+            LEFT JOIN users u ON ec.coordinatorId = u.userId
+            LEFT JOIN skills s ON e.requiredSkillId = s.skillId
+            LEFT JOIN users o ON e.createdBy = o.userId
+            WHERE e.eventId = ?
+            GROUP BY e.eventId";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $eventId);
+    $stmt->execute();
+    
+    return $stmt->get_result()->fetch_assoc();
+}
+
     
     // Check if user is coordinator for this event
     public function isUserCoordinatorForEvent($eventId, $userId) {

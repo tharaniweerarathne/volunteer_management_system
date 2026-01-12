@@ -85,22 +85,27 @@ class CertificateData {
     }
     
     // Get certificate details
-    public function getCertificate($certificateId) {
-        $sql = "SELECT c.*, u.name as volunteerName, u.email, u.telephoneNo,
-                       e.eventName, e.category, e.startDate,
-                       s.skillName, iss.name as issuedByName
-                FROM certificates c
-                JOIN users u ON c.userId = u.userId
-                JOIN events e ON c.eventId = e.eventId
-                LEFT JOIN skills s ON e.requiredSkillId = s.skillId
-                JOIN users iss ON c.issuedBy = iss.userId
-                WHERE c.certificateId = ?";
-        
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $certificateId);
-        $stmt->execute();
-        return $stmt->get_result()->fetch_assoc();
-    }
+public function getCertificate($certificateId) {
+    $sql = "SELECT c.*, 
+                   u.name as volunteerName, u.email, u.telephoneNo,
+                   e.eventName, e.category, e.startDate,
+                   s.skillName, 
+                   iss.name as issuedByName,
+                   org.name as organizerName
+            FROM certificates c
+            JOIN users u ON c.userId = u.userId
+            JOIN events e ON c.eventId = e.eventId
+            LEFT JOIN skills s ON e.requiredSkillId = s.skillId
+            JOIN users iss ON c.issuedBy = iss.userId
+            LEFT JOIN users org ON e.createdBy = org.userId
+            WHERE c.certificateId = ?";
+    
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bind_param("i", $certificateId);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_assoc();
+}
+
     
     // Get all certificates for admin
     public function getAllCertificates() {
@@ -144,22 +149,25 @@ class CertificateData {
     }
     
     // Get certificates by volunteer
-    public function getCertificatesByVolunteer($userId) {
-        $sql = "SELECT c.*, e.eventName, e.category, e.startDate,
-                       s.skillName, iss.name as issuedByName
-                FROM certificates c
-                JOIN events e ON c.eventId = e.eventId
-                LEFT JOIN skills s ON e.requiredSkillId = s.skillId
-                JOIN users iss ON c.issuedBy = iss.userId
-                WHERE c.userId = ?
-                ORDER BY c.issueDate DESC";
-        
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $userId);
-        $stmt->execute();
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-    }
+public function getCertificatesByVolunteer($userId) {
+    $sql = "SELECT c.*, e.eventName, e.category, e.startDate,
+                   s.skillName,
+                   iss.name as issuedByName,
+                   org.name as organizerName
+            FROM certificates c
+            JOIN events e ON c.eventId = e.eventId
+            LEFT JOIN skills s ON e.requiredSkillId = s.skillId
+            JOIN users iss ON c.issuedBy = iss.userId
+            LEFT JOIN users org ON e.createdBy = org.userId
+            WHERE c.userId = ?
+            ORDER BY c.issueDate DESC";
     
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
     // Search certificates (for admin) - OPTIONAL
     public function searchCertificates($searchTerm = '') {
         $sql = "SELECT c.*, u.name as volunteerName, e.eventName, 
@@ -188,5 +196,15 @@ class CertificateData {
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
+
+    // Add this method inside CertificateData class
+public function getUserById($userId) {
+    $sql = "SELECT userId, name, email, role FROM users WHERE userId = ?";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_assoc();
+}
+
 }
 ?>

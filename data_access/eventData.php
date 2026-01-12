@@ -9,72 +9,80 @@ class eventData {
         $this->conn = $conn;
     }
     
- public function getAllEvents($filters = []) {
-    global $conn;
-    
-    $sql = "SELECT e.*, s.skillName, 
-            GROUP_CONCAT(u.name SEPARATOR ', ') as coordinators,
-            GROUP_CONCAT(ec.coordinatorId) as coordinatorIds
-            FROM events e
-            LEFT JOIN skills s ON e.requiredSkillId = s.skillId
-            LEFT JOIN event_coordinators ec ON e.eventId = ec.eventId
-            LEFT JOIN users u ON ec.coordinatorId = u.userId
-            WHERE 1=1";
-    
-    $params = [];
-    $types = "";
-    
-    // search filter
-    if (!empty($filters['search'])) {
-        $sql .= " AND (e.eventName LIKE ? OR e.location LIKE ? OR e.category LIKE ? OR e.eventDescription LIKE ?)";
-        $searchTerm = "%{$filters['search']}%";
-        $params[] = $searchTerm;
-        $params[] = $searchTerm;
-        $params[] = $searchTerm;
-        $params[] = $searchTerm;
-        $types .= "ssss";
+    public function getAllEvents($filters = []) {
+        global $conn;
+        
+        $sql = "SELECT e.*, s.skillName, 
+                GROUP_CONCAT(DISTINCT u.name SEPARATOR ', ') as coordinators,
+                GROUP_CONCAT(DISTINCT ec.coordinatorId) as coordinatorIds,
+                organizer.name as organizerName,
+                organizer.userId as organizerId
+                FROM events e
+                LEFT JOIN skills s ON e.requiredSkillId = s.skillId
+                LEFT JOIN event_coordinators ec ON e.eventId = ec.eventId
+                LEFT JOIN users u ON ec.coordinatorId = u.userId
+                LEFT JOIN users organizer ON e.createdBy = organizer.userId
+                WHERE 1=1";
+        
+        $params = [];
+        $types = "";
+        
+        // search filter
+        if (!empty($filters['search'])) {
+            $sql .= " AND (e.eventName LIKE ? OR e.location LIKE ? OR e.category LIKE ? OR e.eventDescription LIKE ?)";
+            $searchTerm = "%{$filters['search']}%";
+            $params[] = $searchTerm;
+            $params[] = $searchTerm;
+            $params[] = $searchTerm;
+            $params[] = $searchTerm;
+            $types .= "ssss";
+        }
+        
+        // search using skill 
+        if (!empty($filters['skillId'])) {
+            $sql .= " AND e.requiredSkillId = ?";
+            $params[] = $filters['skillId'];
+            $types .= "i";
+        }
+        
+        // search using category 
+        if (!empty($filters['category'])) {
+            $sql .= " AND e.category = ?";
+            $params[] = $filters['category'];
+            $types .= "s";
+        }
+        
+        // search using location 
+        if (!empty($filters['location'])) {
+            $sql .= " AND e.location LIKE ?";
+            $params[] = "%{$filters['location']}%";
+            $types .= "s";
+        }
+        
+        // search using date 
+        if (!empty($filters['date'])) {
+            $sql .= " AND ? BETWEEN e.startDate AND e.endDate";
+            $params[] = $filters['date'];
+            $types .= "s";
+        }
+        
+        // Filter by organizer if provided
+        if (!empty($filters['organizerId'])) {
+            $sql .= " AND e.createdBy = ?";
+            $params[] = $filters['organizerId'];
+            $types .= "i";
+        }
+        
+        $sql .= " GROUP BY e.eventId ORDER BY e.startDate DESC";
+        
+        $stmt = $conn->prepare($sql);
+        if (!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
+        
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
-    
-    // search using skill 
-    if (!empty($filters['skillId'])) {
-        $sql .= " AND e.requiredSkillId = ?";
-        $params[] = $filters['skillId'];
-        $types .= "i";
-    }
-    
-    // search using category 
-    if (!empty($filters['category'])) {
-        $sql .= " AND e.category = ?";
-        $params[] = $filters['category'];
-        $types .= "s";
-    }
-    
-    // search using location 
-    if (!empty($filters['location'])) {
-        $sql .= " AND e.location LIKE ?";
-        $params[] = "%{$filters['location']}%";
-        $types .= "s";
-    }
-    
-    // search using date 
-    if (!empty($filters['date'])) {
-        // This finds events that are happening on a specific date
-        // The date filter should match events where the selected date is within the event's date range
-        $sql .= " AND ? BETWEEN e.startDate AND e.endDate";
-        $params[] = $filters['date'];
-        $types .= "s";
-    }
-    
-    $sql .= " GROUP BY e.eventId ORDER BY e.startDate DESC";
-    
-    $stmt = $conn->prepare($sql);
-    if (!empty($params)) {
-        $stmt->bind_param($types, ...$params);
-    }
-    
-    $stmt->execute();
-    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-}
     
     // create new event
     public function createEvent($data) {
@@ -82,8 +90,8 @@ class eventData {
         
         $sql = "INSERT INTO events (eventName, eventDescription, category, location, 
                 googleMapLink, startDate, endDate, startTime, endTime, maxVolunteers, 
-                requiredSkillId, eventImage, createdBy) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                requiredSkillId, eventImage, createdBy, status) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Active')";
         
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sssssssssiisi", 
@@ -110,10 +118,14 @@ class eventData {
         global $conn;
         
         $sql = "SELECT e.*, s.skillName, 
-                GROUP_CONCAT(ec.coordinatorId) as coordinatorIds
+                GROUP_CONCAT(ec.coordinatorId) as coordinatorIds,
+                organizer.name as organizerName,
+                organizer.userId as organizerId,
+                organizer.email as organizerEmail
                 FROM events e
                 LEFT JOIN skills s ON e.requiredSkillId = s.skillId
                 LEFT JOIN event_coordinators ec ON e.eventId = ec.eventId
+                LEFT JOIN users organizer ON e.createdBy = organizer.userId
                 WHERE e.eventId = ?
                 GROUP BY e.eventId";
         
@@ -155,91 +167,98 @@ class eventData {
         return $stmt->execute();
     }
     
-    // delete event
+    // cancel event 
+    public function cancelEvent($eventId) {
+        global $conn;
+        
+        $sql = "UPDATE events SET status = 'Cancelled' WHERE eventId = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $eventId);
+        
+        return $stmt->execute();
+    }
+    
+    // delete event 
     public function deleteEvent($eventId) {
         global $conn;
         
-        // Disable autocommit for pseudo-transaction
         $conn->autocommit(FALSE);
         
         try {
-            // delete from event_coordinators first
+            // delete related records first
             $sql1 = "DELETE FROM event_coordinators WHERE eventId = ?";
             $stmt1 = $conn->prepare($sql1);
             $stmt1->bind_param("i", $eventId);
             
             if (!$stmt1->execute()) {
-                throw new Exception("Failed to delete from event_coordinators");
+                throw new Exception("Failed to delete event coordinators");
             }
             
-            // delete from events table
-            $sql2 = "DELETE FROM events WHERE eventId = ?";
+            // delete event registrations
+            $sql2 = "DELETE FROM event_registrations WHERE eventId = ?";
             $stmt2 = $conn->prepare($sql2);
             $stmt2->bind_param("i", $eventId);
+            $stmt2->execute();
             
-            if (!$stmt2->execute()) {
-                throw new Exception("Failed to delete from events");
+            // delete the event
+            $sql3 = "DELETE FROM events WHERE eventId = ?";
+            $stmt3 = $conn->prepare($sql3);
+            $stmt3->bind_param("i", $eventId);
+            
+            if (!$stmt3->execute()) {
+                throw new Exception("Failed to delete event");
             }
             
-            // commit pseudo-transaction
             $conn->commit();
             return true;
             
         } catch (Exception $e) {
-            
             $conn->rollback();
             error_log("Delete event failed: " . $e->getMessage());
             return false;
         } finally {
-            
             $conn->autocommit(TRUE);
         }
     }
     
-    // assigning coordinators to event
-// data_access/EventData.php
-// Update the assignCoordinators method
-
-// Assigning coordinators to event
-public function assignCoordinators($eventId, $coordinatorIds) {
-    global $conn;
-    
-    // checking for scheduling conflicts
-    $conflicts = $this->checkSchedulingConflicts($eventId, $coordinatorIds);
-    if (!empty($conflicts)) {
-        return ['success' => false, 'conflicts' => $conflicts];
-    }
-    
-    // remove existing assignments
-    $sql = "DELETE FROM event_coordinators WHERE eventId = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $eventId);
-    $stmt->execute();
-    
-    // adding new assignments
-    $sql = "INSERT INTO event_coordinators (eventId, coordinatorId) VALUES (?, ?)";
-    $stmt = $conn->prepare($sql);
-    
-    foreach ($coordinatorIds as $coordinatorId) {
-        $stmt->bind_param("ii", $eventId, $coordinatorId);
-        if (!$stmt->execute()) {
-            return ['success' => false, 'message' => 'Failed to assign coordinators'];
+    // assign coordinators to event
+    public function assignCoordinators($eventId, $coordinatorIds) {
+        global $conn;
+        
+        // check for scheduling conflicts
+        $conflicts = $this->checkSchedulingConflicts($eventId, $coordinatorIds);
+        if (!empty($conflicts)) {
+            return ['success' => false, 'conflicts' => $conflicts];
         }
+        
+        // remove existing assignments
+        $sql = "DELETE FROM event_coordinators WHERE eventId = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $eventId);
+        $stmt->execute();
+        
+        // add new assignments
+        $sql = "INSERT INTO event_coordinators (eventId, coordinatorId) VALUES (?, ?)";
+        $stmt = $conn->prepare($sql);
+        
+        foreach ($coordinatorIds as $coordinatorId) {
+            $stmt->bind_param("ii", $eventId, $coordinatorId);
+            if (!$stmt->execute()) {
+                return ['success' => false, 'message' => 'Failed to assign coordinators'];
+            }
+        }
+        
+        return ['success' => true, 'coordinatorIds' => $coordinatorIds];
     }
     
-    return ['success' => true, 'coordinatorIds' => $coordinatorIds];
-}
-    
-    
+    // check scheduling conflicts
     public function checkSchedulingConflicts($eventId, $coordinatorIds) {
         global $conn;
         $conflicts = [];
         
-        
         $event = $this->getEventById($eventId);
         if (!$event) return $conflicts;
         
-        // creation of DateTime objects for new event
         $newEventStart = new DateTime($event['startDate'] . ' ' . $event['startTime']);
         $newEventEnd = new DateTime($event['endDate'] . ' ' . $event['endTime']);
         
@@ -249,7 +268,8 @@ public function assignCoordinators($eventId, $coordinatorIds) {
                 JOIN events e ON ec.eventId = e.eventId
                 JOIN users u ON ec.coordinatorId = u.userId
                 WHERE ec.coordinatorId = ? 
-                AND ec.eventId != ?";
+                AND ec.eventId != ?
+                AND e.status = 'Active'";
         
         $stmt = $conn->prepare($sql);
         
@@ -259,27 +279,16 @@ public function assignCoordinators($eventId, $coordinatorIds) {
             $result = $stmt->get_result();
             
             while ($existingEvent = $result->fetch_assoc()) {
-                // creation DateTime objects for existing event
                 $existingStart = new DateTime($existingEvent['startDate'] . ' ' . $existingEvent['startTime']);
                 $existingEnd = new DateTime($existingEvent['endDate'] . ' ' . $existingEvent['endTime']);
                 
-                // checking if events overlap
-                // Events overlap if one starts before the other ends and ends after the other starts
                 if ($newEventStart < $existingEnd && $newEventEnd > $existingStart) {
                     $conflicts[] = [
                         'coordinatorId' => $coordinatorId,
                         'coordinatorName' => $existingEvent['coordinatorName'],
                         'eventName' => $existingEvent['eventName'],
                         'existingEvent' => $existingEvent,
-                        'conflictType' => 'Scheduling conflict',
-                        'newEvent' => [
-                            'start' => $newEventStart->format('Y-m-d H:i'),
-                            'end' => $newEventEnd->format('Y-m-d H:i')
-                        ],
-                        'conflictEvent' => [
-                            'start' => $existingStart->format('Y-m-d H:i'),
-                            'end' => $existingEnd->format('Y-m-d H:i')
-                        ]
+                        'conflictType' => 'Scheduling conflict'
                     ];
                 }
             }
@@ -306,27 +315,37 @@ public function assignCoordinators($eventId, $coordinatorIds) {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
     
+    // Get all organizers
+    public function getAllOrganizers() {
+        global $conn;
+        
+        $sql = "SELECT userId, name, email FROM users WHERE role = 'Organizer' ORDER BY name";
+        $result = $conn->query($sql);
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+    
     // Get events by coordinator
-public function getEventsByCoordinator($coordinatorId) {
-    global $conn;
-    
-    // Calculate the cutoff datetime (1 day ago from now)
-    $oneDayAgo = date('Y-m-d H:i:s', strtotime('-1 day'));
-    
-    $sql = "SELECT e.*, s.skillName
-            FROM events e
-            JOIN event_coordinators ec ON e.eventId = ec.eventId
-            LEFT JOIN skills s ON e.requiredSkillId = s.skillId
-            WHERE ec.coordinatorId = ?
-            AND CONCAT(e.endDate, ' ', e.endTime) >= ?
-            ORDER BY e.startDate ASC, e.eventId ASC";
-    
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("is", $coordinatorId, $oneDayAgo);
-    $stmt->execute();
-    
-    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-}
+    public function getEventsByCoordinator($coordinatorId) {
+        global $conn;
+        
+        $oneDayAgo = date('Y-m-d H:i:s', strtotime('-1 day'));
+        
+        $sql = "SELECT e.*, s.skillName, organizer.name as organizerName
+                FROM events e
+                JOIN event_coordinators ec ON e.eventId = ec.eventId
+                LEFT JOIN skills s ON e.requiredSkillId = s.skillId
+                LEFT JOIN users organizer ON e.createdBy = organizer.userId
+                WHERE ec.coordinatorId = ?
+                AND CONCAT(e.endDate, ' ', e.endTime) >= ?
+                AND e.status = 'Active'
+                ORDER BY e.startDate ASC, e.eventId ASC";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("is", $coordinatorId, $oneDayAgo);
+        $stmt->execute();
+        
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
     
     // Get event categories
     public function getCategories() {
@@ -340,7 +359,6 @@ public function getEventsByCoordinator($coordinatorId) {
             $categories[] = $row;
         }
         
-        // If no categories exist in database, return some defaults
         if (empty($categories)) {
             $defaultCategories = [
                 ['category' => 'Charity'],
@@ -360,91 +378,67 @@ public function getEventsByCoordinator($coordinatorId) {
         return $categories;
     }
     
-    // Insert sample categories into existing events
-    public function addCategoriesToExistingEvents() {
+    // Get upcoming events for public
+    public function getUpcomingEvents($filters = []) {
         global $conn;
         
-        $categories = ['Charity', 'Education', 'Environment', 'Health', 'Community'];
+        $sql = "SELECT e.*, s.skillName, 
+                GROUP_CONCAT(u.name SEPARATOR ', ') as coordinators,
+                GROUP_CONCAT(ec.coordinatorId) as coordinatorIds,
+                organizer.name as organizerName
+                FROM events e
+                LEFT JOIN skills s ON e.requiredSkillId = s.skillId
+                LEFT JOIN event_coordinators ec ON e.eventId = ec.eventId
+                LEFT JOIN users u ON ec.coordinatorId = u.userId
+                LEFT JOIN users organizer ON e.createdBy = organizer.userId
+                WHERE (e.endDate > CURDATE() OR (e.endDate = CURDATE() AND e.endTime > CURTIME()))
+                AND e.status = 'Active'";
         
-        // Update events that don't have categories
-        $sql = "UPDATE events SET category = ? WHERE (category IS NULL OR category = '') LIMIT 1";
-        $stmt = $conn->prepare($sql);
+        $params = [];
+        $types = "";
         
-        foreach ($categories as $category) {
-            $stmt->bind_param("s", $category);
-            $stmt->execute();
+        if (!empty($filters['search'])) {
+            $sql .= " AND (e.eventName LIKE ? OR e.location LIKE ? OR e.category LIKE ?)";
+            $params[] = "%{$filters['search']}%";
+            $params[] = "%{$filters['search']}%";
+            $params[] = "%{$filters['search']}%";
+            $types .= "sss";
         }
+        
+        if (!empty($filters['skillId'])) {
+            $sql .= " AND e.requiredSkillId = ?";
+            $params[] = $filters['skillId'];
+            $types .= "i";
+        }
+        
+        if (!empty($filters['category'])) {
+            $sql .= " AND e.category = ?";
+            $params[] = $filters['category'];
+            $types .= "s";
+        }
+        
+        if (!empty($filters['location'])) {
+            $sql .= " AND e.location LIKE ?";
+            $params[] = "%{$filters['location']}%";
+            $types .= "s";
+        }
+        
+        if (!empty($filters['date'])) {
+            $sql .= " AND ? BETWEEN e.startDate AND e.endDate";
+            $params[] = $filters['date'];
+            $types .= "s";
+        }
+        
+        $sql .= " GROUP BY e.eventId ORDER BY e.startDate ASC";
+        
+        $stmt = $conn->prepare($sql);
+        if (!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
+        
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
-
-
-
-
-        // Get only upcoming events for public index page
-public function getUpcomingEvents($filters = []) {
-    global $conn;
-    
-    $sql = "SELECT e.*, s.skillName, 
-            GROUP_CONCAT(u.name SEPARATOR ', ') as coordinators,
-            GROUP_CONCAT(ec.coordinatorId) as coordinatorIds
-            FROM events e
-            LEFT JOIN skills s ON e.requiredSkillId = s.skillId
-            LEFT JOIN event_coordinators ec ON e.eventId = ec.eventId
-            LEFT JOIN users u ON ec.coordinatorId = u.userId
-            WHERE (e.endDate > CURDATE() OR (e.endDate = CURDATE() AND e.endTime > CURTIME()))";
-    
-    $params = [];
-    $types = "";
-    
-    // Search filter
-    if (!empty($filters['search'])) {
-        $sql .= " AND (e.eventName LIKE ? OR e.location LIKE ? OR e.category LIKE ?)";
-        $params[] = "%{$filters['search']}%";
-        $params[] = "%{$filters['search']}%";
-        $params[] = "%{$filters['search']}%";
-        $types .= "sss";
-    }
-    
-    // Skill filter
-    if (!empty($filters['skillId'])) {
-        $sql .= " AND e.requiredSkillId = ?";
-        $params[] = $filters['skillId'];
-        $types .= "i";
-    }
-    
-    // Category filter
-    if (!empty($filters['category'])) {
-        $sql .= " AND e.category = ?";
-        $params[] = $filters['category'];
-        $types .= "s";
-    }
-    
-    // Location filter
-    if (!empty($filters['location'])) {
-        $sql .= " AND e.location LIKE ?";
-        $params[] = "%{$filters['location']}%";
-        $types .= "s";
-    }
-    
-    // Date filter
-    if (!empty($filters['date'])) {
-        $sql .= " AND ? BETWEEN e.startDate AND e.endDate";
-        $params[] = $filters['date'];
-        $types .= "s";
-    }
-    
-    $sql .= " GROUP BY e.eventId ORDER BY e.startDate ASC";
-    
-    $stmt = $conn->prepare($sql);
-    if (!empty($params)) {
-        $stmt->bind_param($types, ...$params);
-    }
-    
-    $stmt->execute();
-    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-}
-
-
-
     
     // Get user role
     public function getUserRole($userId) {
@@ -465,20 +459,48 @@ public function getUpcomingEvents($filters = []) {
         if (!$event) return false;
         
         $userRole = $this->getUserRole($userId);
-        return $event['createdBy'] == $userId || $userRole == 'Admin';
+        // Admin can edit all, Organizer can edit only their own
+        return $userRole == 'Admin' || $event['createdBy'] == $userId;
+    }
+    
+    // Check if user can cancel event
+    public function canUserCancelEvent($eventId, $userId) {
+        $event = $this->getEventById($eventId);
+        if (!$event) return false;
+        
+        $userRole = $this->getUserRole($userId);
+        // Admin can cancel all, Organizer can cancel only their own
+        return $userRole == 'Admin' || ($userRole == 'Organizer' && $event['createdBy'] == $userId);
     }
     
     // Get user by ID
     public function getUserById($userId) {
         global $conn;
         
-        $sql = "SELECT name, email FROM users WHERE userId = ?";
+        $sql = "SELECT name, email, role FROM users WHERE userId = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $userId);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
     }
     
+    // Get all participants of an event (volunteers + coordinators)
+    public function getEventParticipants($eventId) {
+        global $conn;
+        
+        $sql = "SELECT DISTINCT u.userId, u.name, u.email, u.role
+                FROM users u
+                LEFT JOIN event_registrations er ON u.userId = er.userId
+                LEFT JOIN event_coordinators ec ON u.userId = ec.coordinatorId
+                WHERE (er.eventId = ? OR ec.eventId = ?)
+                AND u.role IN ('Volunteer', 'Coordinator')";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ii", $eventId, $eventId);
+        $stmt->execute();
+        
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
 }
 
 ?>

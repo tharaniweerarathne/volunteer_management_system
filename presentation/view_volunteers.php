@@ -12,7 +12,7 @@ $userId = $_SESSION['userId'];
 $userRole = $_SESSION['role'] ?? '';
 
 // checking if user has permission
-if (!in_array($userRole, ['Admin', 'Coordinator'])) {
+if (!in_array($userRole, ['Admin', 'Coordinator', 'Organizer'])) {
     header('Location: events.php');
     exit();
 }
@@ -249,6 +249,15 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
                         <p class="card-text mb-1">
                             <i class="ri-map-pin-line"></i> <?php echo htmlspecialchars($event['location']); ?>
                         </p>
+
+                        <?php if (!empty($event['organizerName'])): ?>
+                           <p class="card-text mb-1">
+                               <i class="ri-user-line"></i> 
+                               <strong>Organizer:</strong> <?php echo htmlspecialchars($event['organizerName']); ?>
+                           </p>
+                        <?php endif; ?>
+
+                        
                         <?php if ($event['coordinators']): ?>
                             <p class="card-text mb-1">
                                 <i class="ri-user-star-line"></i> 

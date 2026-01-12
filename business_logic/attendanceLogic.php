@@ -293,5 +293,11 @@ public function getEventVolunteers($eventId, $search = '') {
             'stats' => $result
         ];
     }
+
+
+    public function getUserById($userId) {
+    return $this->attendanceData->getUserById($userId);
+}
+
 }
 ?>

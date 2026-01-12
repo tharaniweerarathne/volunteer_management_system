@@ -165,6 +165,17 @@ public function getEventVolunteers($eventId, $search = '') {
         return $stmt->get_result()->fetch_assoc();
     }
 
+    // Fetch user details by userId
+public function getUserById($userId) {
+    $sql = "SELECT userId, name, email, telephoneNo, role 
+            FROM users 
+            WHERE userId = ?";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_assoc();
+}
+
 
     
 }

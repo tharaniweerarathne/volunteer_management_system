@@ -14,6 +14,8 @@ if ($_SESSION['role'] !== 'Volunteer') {
 }
 
 require_once '../data_access/certificateData.php';
+require_once '../business_logic/certificateLogic.php'; // path to your CertificateLogic class
+$certificateLogic = new CertificateLogic();
 $certificateData = new CertificateData();
 
 // Get search term if any
@@ -325,6 +327,13 @@ function highlightSearchText($text, $search) {
                                                 <strong>Category:</strong> 
                                                 <?php echo highlightSearchText($certificate['category'], $searchTerm); ?>
                                             </p>
+
+<p class="card-text mb-1">
+    <strong>Organizer:</strong> 
+    <?php echo htmlspecialchars($certificate['organizerName'] ?? 'Unknown Organizer'); ?>
+</p>
+
+
                                             <p class="card-text mb-1">
                                                 <strong>Skill:</strong> 
                                                 <?php 

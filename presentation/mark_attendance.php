@@ -153,6 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_attendance']))
                                     <thead>
                                         <tr>
                                             <th>Event Name</th>
+                                            <th>Organizer</th>
                                             <th>Time</th>
                                             <th>Location</th>
                                             <th>Status</th>
@@ -166,6 +167,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_attendance']))
                                                     <strong><?php echo htmlspecialchars($event['eventName']); ?></strong><br>
                                                     <small class="text-muted"><?php echo htmlspecialchars($event['category']); ?></small>
                                                 </td>
+                                                <td>
+    <?php 
+        $organizer = $attendanceLogic->getUserById($event['createdBy']);
+        if ($organizer):
+    ?>
+        <small class="text-muted">
+            Organizer: <?php echo htmlspecialchars($organizer['name']); ?> 
+            (<?php echo htmlspecialchars($organizer['email']); ?>)
+        </small>
+    <?php else: ?>
+        <small class="text-muted">Organizer: Unknown</small>
+    <?php endif; ?>
+</td>
                                                 <td>
                                                     <?php echo date('h:i A', strtotime($event['startTime'])); ?> - 
                                                     <?php echo date('h:i A', strtotime($event['endTime'])); ?>

@@ -147,24 +147,31 @@ public function insertRegistration($eventId, $userId, $isRejoining = false) {
     }
     
     // Get volunteer's joined events
-    public function getVolunteerEvents($userId) {
-        global $conn;
-        
-        $sql = "SELECT e.*, er.registrationId, er.registrationDate, er.status,
-                es.joinedCount, s.skillName
-                FROM event_registrations er
-                JOIN events e ON er.eventId = e.eventId
-                LEFT JOIN event_stats es ON e.eventId = es.eventId
-                LEFT JOIN skills s ON e.requiredSkillId = s.skillId
-                WHERE er.userId = ? 
-                ORDER BY e.startDate DESC, er.registrationDate DESC";
-        
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $userId);
-        $stmt->execute();
-        
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-    }
+public function getVolunteerEvents($userId) {
+    global $conn;
+
+    $sql = "SELECT e.*, er.registrationId, er.registrationDate, er.status,
+                   es.joinedCount, s.skillName,
+                   organizer.name AS organizerName,
+                   GROUP_CONCAT(DISTINCT u.name SEPARATOR ', ') AS coordinators
+            FROM event_registrations er
+            JOIN events e ON er.eventId = e.eventId
+            LEFT JOIN event_stats es ON e.eventId = es.eventId
+            LEFT JOIN skills s ON e.requiredSkillId = s.skillId
+            LEFT JOIN users organizer ON e.createdBy = organizer.userId
+            LEFT JOIN event_coordinators ec ON e.eventId = ec.eventId
+            LEFT JOIN users u ON ec.coordinatorId = u.userId
+            WHERE er.userId = ?
+            GROUP BY e.eventId
+            ORDER BY e.startDate DESC, er.registrationDate DESC";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
     
     // Cancel registration (soft delete)
     public function cancelRegistration($registrationId, $reason = null) {
@@ -212,27 +219,31 @@ public function insertRegistration($eventId, $userId, $isRejoining = false) {
     }
     
     // Get event details with joined count
-    public function getEventDetails($eventId) {
-        global $conn;
-        
-        $sql = "SELECT e.*, s.skillName, 
-                GROUP_CONCAT(u.name SEPARATOR ', ') as coordinators,
-                es.joinedCount,
-                (e.maxVolunteers - COALESCE(es.joinedCount, 0)) as availableSlots
-                FROM events e
-                LEFT JOIN skills s ON e.requiredSkillId = s.skillId
-                LEFT JOIN event_coordinators ec ON e.eventId = ec.eventId
-                LEFT JOIN users u ON ec.coordinatorId = u.userId
-                LEFT JOIN event_stats es ON e.eventId = es.eventId
-                WHERE e.eventId = ?
-                GROUP BY e.eventId";
-        
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $eventId);
-        $stmt->execute();
-        
-        return $stmt->get_result()->fetch_assoc();
-    }
+public function getEventDetails($eventId) {
+    global $conn;
+
+    $sql = "SELECT e.*, s.skillName, 
+                   GROUP_CONCAT(u.name SEPARATOR ', ') AS coordinators,
+                   es.joinedCount,
+                   (e.maxVolunteers - COALESCE(es.joinedCount, 0)) AS availableSlots,
+                   org.name AS organizerName,
+                   org.userId AS organizerId
+            FROM events e
+            LEFT JOIN skills s ON e.requiredSkillId = s.skillId
+            LEFT JOIN event_coordinators ec ON e.eventId = ec.eventId
+            LEFT JOIN users u ON ec.coordinatorId = u.userId
+            LEFT JOIN users org ON e.createdBy = org.userId
+            LEFT JOIN event_stats es ON e.eventId = es.eventId
+            WHERE e.eventId = ?
+            GROUP BY e.eventId";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $eventId);
+    $stmt->execute();
+
+    return $stmt->get_result()->fetch_assoc();
+}
+
     
     // Get registration by ID
     public function getRegistrationById($registrationId) {

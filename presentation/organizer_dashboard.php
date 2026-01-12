@@ -44,7 +44,7 @@ $unreadCount = $inboxResult['unreadCount'];
                 </a>
             </div>
             <div class="nav-item">
-                <a href="events_volunteer.php">
+                <a href="events.php">
                     <i class="ri-calendar-check-line"></i>
                     <span>Join Events</span>
                 </a>

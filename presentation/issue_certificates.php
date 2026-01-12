@@ -324,7 +324,10 @@ function highlightSearchText($text, $search) {
                                     <strong><?php echo htmlspecialchars($eventDetails['eventName']); ?></strong><br>
                                     Category: <?php echo htmlspecialchars($eventDetails['category']); ?> | 
                                     Skill: <?php echo htmlspecialchars($eventDetails['skillName'] ?? 'Not specified'); ?><br>
-                                    Date: <?php echo date('F j, Y', strtotime($eventDetails['startDate'])); ?>
+                                    Date: <?php echo date('F j, Y', strtotime($eventDetails['startDate'])); ?><br>
+                                    Organizer: <?php $organizer = $certificateLogic->getUserById($eventDetails['createdBy'] ?? 0);echo htmlspecialchars($organizer['name'] ?? 'Unknown Organizer'); 
+?>
+
                                 </div>
                                 <a href="?eventId=<?php echo $selectedEventId; ?>" class="btn btn-sm btn-outline-info">
                                     <i class="bi bi-arrow-clockwise"></i> Refresh

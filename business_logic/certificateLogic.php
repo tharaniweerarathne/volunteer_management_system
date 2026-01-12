@@ -148,14 +148,23 @@ public function getEligibleVolunteers($eventId, $search = '') {
     // Generate certificate PDF
     private function generateCertificatePDF($eventId, $userId) {
         // Get volunteer and event details
-        $sql = "SELECT u.name as volunteerName, u.email, 
-                       e.eventName, e.category, e.startDate,
-                       s.skillName
-                FROM users u
-                JOIN attendance a ON u.userId = a.userId
-                JOIN events e ON a.eventId = e.eventId
-                LEFT JOIN skills s ON e.requiredSkillId = s.skillId
-                WHERE e.eventId = ? AND u.userId = ? AND a.status = 'Present'";
+$sql = "SELECT 
+            u.name AS volunteerName,
+            u.email,
+            e.eventName,
+            e.category,
+            e.startDate,
+            s.skillName,
+            org.name AS organizerName
+        FROM users u
+        JOIN attendance a ON u.userId = a.userId
+        JOIN events e ON a.eventId = e.eventId
+        LEFT JOIN skills s ON e.requiredSkillId = s.skillId
+        LEFT JOIN users org ON e.createdBy = org.userId
+        WHERE e.eventId = ?
+          AND u.userId = ?
+          AND a.status = 'Present'";
+
         
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ii", $eventId, $userId);
@@ -281,13 +290,15 @@ public function getEligibleVolunteers($eventId, $search = '') {
                 <div class="subheader">Certificate of Appreciation</div>
                 <div class="title">This Certificate is Proudly Presented to</div>
                 <div class="name">' . htmlspecialchars($data['volunteerName']) . '</div>
-                <div class="details">
-                    In recognition of valuable contribution as a volunteer for<br>
-                    <strong>' . htmlspecialchars($data['eventName']) . '</strong><br>
-                    <em>' . htmlspecialchars($data['skillName'] . ' - ' . $data['category']) . '</em><br>
-                    Held on ' . $eventDate . '<br>
-                    In appreciation of dedicated service and commitment
-                </div>
+<div class="details">
+    In recognition of valuable contribution as a volunteer for<br>
+    <strong>' . htmlspecialchars($data['eventName']) . '</strong><br>
+    <em>' . htmlspecialchars($data['skillName'] . ' - ' . $data['category']) . '</em><br>
+    Organizer: <strong>' . htmlspecialchars($data['organizerName'] ?? 'Unknown Organizer') . '</strong><br>
+
+    Held on ' . $eventDate . '<br>
+    In appreciation of dedicated service and commitment
+</div>
                 <div class="footer">
                     <div class="signature">
                         <strong>Unity Volunteers Trust</strong><br>
@@ -448,6 +459,10 @@ public function getEligibleVolunteers($eventId, $search = '') {
             'success' => true,
             'stats' => $stats
         ];
+    }
+
+        public function getUserById($userId) {
+        return $this->certificateData->getUserById($userId);
     }
 }
 ?>

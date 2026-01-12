@@ -147,122 +147,120 @@ if ($result['success']) {
         <i class="bi bi-arrow-left"></i> Back to Events
     </a>
     
-    <?php echo $message; ?>
-    
-    <?php if (!empty($conflicts) && !$alreadyJoined): ?>
-    <div class="alert alert-warning conflict-alert">
-        <h5><i class="bi bi-exclamation-triangle"></i> Warning: Time Conflict</h5>
-        <p>This event conflicts with:</p>
-        <ul>
-            <?php foreach ($conflicts as $conflict): ?>
-            <li><?php echo htmlspecialchars($conflict['eventName']); ?> 
-                (<?php echo date('M j, Y', strtotime($conflict['startDate'])); ?>)</li>
-            <?php endforeach; ?>
-        </ul>
-        <p>You cannot join events that overlap in time.</p>
-    </div>
+<div class="card">
+    <?php if ($event['eventImage']): ?>
+        <img src="../<?php echo htmlspecialchars($event['eventImage']); ?>" 
+             class="card-img-top event-image" 
+             alt="<?php echo htmlspecialchars($event['eventName']); ?>">
     <?php endif; ?>
-    
-    <div class="card">
-        <?php if ($event['eventImage']): ?>
-            <img src="../<?php echo htmlspecialchars($event['eventImage']); ?>" 
-                 class="card-img-top event-image" 
-                 alt="<?php echo htmlspecialchars($event['eventName']); ?>">
+
+    <div class="card-body">
+        <h1 class="card-title"><?php echo htmlspecialchars($event['eventName']); ?></h1>
+
+        <?php if ($event['category']): ?>
+            <span class="badge bg-primary mb-2"><?php echo htmlspecialchars($event['category']); ?></span>
         <?php endif; ?>
-        
-        <div class="card-body">
-            <h1 class="card-title"><?php echo htmlspecialchars($event['eventName']); ?></h1>
-            
-            <?php if ($event['category']): ?>
-                <span class="badge bg-primary mb-2"><?php echo htmlspecialchars($event['category']); ?></span>
-            <?php endif; ?>
-            
-            <?php if ($event['skillName']): ?>
-                <span class="badge bg-info mb-2"><?php echo htmlspecialchars($event['skillName']); ?></span>
-            <?php endif; ?>
-            
-            <p class="card-text mt-3"><?php echo nl2br(htmlspecialchars($event['eventDescription'])); ?></p>
-            
-            <div class="row mt-4">
-                <div class="col-md-6">
-                    <h5>Event Details</h5>
-                    <ul class="list-unstyled">
-                        <li><strong>Start Date:</strong> <?php echo date('F j, Y', strtotime($event['startDate'])); ?></li>
-                        <li><strong>End Date:</strong> <?php echo date('F j, Y', strtotime($event['endDate'])); ?></li>
-                        <li><strong>Time:</strong> <?php echo date('h:i A', strtotime($event['startTime'])); ?> 
-                            to <?php echo date('h:i A', strtotime($event['endTime'])); ?></li>
-                        <li><strong>Location:</strong> <?php echo htmlspecialchars($event['location']); ?></li>
-                        <?php if ($event['googleMapLink']): ?>
-                            <li><strong>Map:</strong> <a href="<?php echo htmlspecialchars($event['googleMapLink']); ?>" target="_blank">View on Google Maps</a></li>
-                        <?php endif; ?>
-                        <li><strong>Required Skill:</strong> <?php echo htmlspecialchars($event['skillName'] ?? 'None'); ?></li>
-                        <li><strong>Coordinators:</strong> <?php echo htmlspecialchars($event['coordinators'] ?? 'Not assigned'); ?></li>
-                        <li><strong>Available Slots:</strong> 
-                            <span class="<?php echo ($event['availableSlots'] > 0) ? 'slot-available' : 'slot-full'; ?>">
-                                <?php echo $event['availableSlots']; ?> available
-                            </span>
+
+        <?php if ($event['skillName']): ?>
+            <span class="badge bg-info mb-2"><?php echo htmlspecialchars($event['skillName']); ?></span>
+        <?php endif; ?>
+
+        <p class="card-text mt-3"><?php echo nl2br(htmlspecialchars($event['eventDescription'])); ?></p>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h5>Event Details</h5>
+                <ul class="list-unstyled">
+                    <li><strong>Start Date:</strong> <?php echo date('F j, Y', strtotime($event['startDate'])); ?></li>
+                    <li><strong>End Date:</strong> <?php echo date('F j, Y', strtotime($event['endDate'])); ?></li>
+                    <li><strong>Time:</strong> <?php echo date('h:i A', strtotime($event['startTime'])); ?> 
+                        to <?php echo date('h:i A', strtotime($event['endTime'])); ?></li>
+                    <li><strong>Location:</strong> <?php echo htmlspecialchars($event['location']); ?></li>
+                    <?php if ($event['googleMapLink']): ?>
+                        <li><strong>Map:</strong> <a href="<?php echo htmlspecialchars($event['googleMapLink']); ?>" target="_blank">View on Google Maps</a></li>
+                    <?php endif; ?>
+                    <li><strong>Required Skill:</strong> <?php echo htmlspecialchars($event['skillName'] ?? 'None'); ?></li>
+                    
+                    <!-- Organizer Info -->
+                    <li><strong>Organizer:</strong> 
+                        <?php echo !empty($event['organizerName']) ? htmlspecialchars($event['organizerName']) : 'Not specified'; ?>
+                    </li>
+
+                    <!-- Coordinators Info -->
+                    <?php if (!empty($event['coordinators'])): ?>
+                        <li><strong>Coordinators:</strong> 
+                            <?php 
+                            $coordNames = explode(', ', $event['coordinators']);
+                            if (count($coordNames) > 2) {
+                                echo htmlspecialchars($coordNames[0]) . ', ' . htmlspecialchars($coordNames[1]) . ' +' . (count($coordNames) - 2) . ' more';
+                            } else {
+                                echo htmlspecialchars($event['coordinators']);
+                            }
+                            ?>
                         </li>
-                        <li><strong>Total Volunteers:</strong> <?php echo $event['joinedCount'] ?? 0; ?> / <?php echo $event['maxVolunteers']; ?></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="mt-4">
-                <?php if ($alreadyJoined): ?>
-                    <div class="alert alert-success">
-                        <i class="bi bi-check-circle"></i> You are registered for this event.
-                    </div>
-                    <a href="my_events.php" class="btn btn-primary">
-                        <i class="bi bi-calendar-event"></i> View My Events
-                    </a>
-                <?php elseif ($wasCancelled): ?>
-                    <div class="alert alert-info">
-                        <i class="bi bi-info-circle"></i> 
-                        You previously cancelled this event. You can join again!
-                    </div>
-                    <?php if ($event['availableSlots'] > 0 && empty($conflicts)): ?>
-                        <form method="POST">
-                            <button type="submit" name="join_event" class="btn btn-warning btn-lg btn-join-again">
-                                <i class="bi bi-arrow-clockwise"></i> Join Again
-                            </button>
-                            <p class="text-muted mt-2">
-                                <i class="bi bi-info-circle"></i> 
-                                You can re-join this event since you cancelled previously.
-                            </p>
-                        </form>
-                    <?php elseif (!empty($conflicts)): ?>
-                        <button class="btn btn-secondary btn-lg" disabled>
-                            <i class="bi bi-x-circle"></i> Cannot Join (Time Conflict)
-                        </button>
                     <?php else: ?>
-                        <div class="alert alert-warning">
-                            <i class="bi bi-info-circle"></i> This event is currently full.
-                        </div>
+                        <li><strong>Coordinators:</strong> Not assigned</li>
                     <?php endif; ?>
-                <?php else: ?>
-                    <?php if ($event['availableSlots'] > 0 && empty($conflicts)): ?>
-                        <form method="POST">
-                            <button type="submit" name="join_event" class="btn btn-primary btn-lg">
-                                <i class="bi bi-check-circle"></i> Join This Event
-                            </button>
-                            <p class="text-muted mt-2">
-                                <i class="bi bi-info-circle"></i> 
-                                You will receive a confirmation email after joining.
-                            </p>
-                        </form>
-                    <?php elseif (!empty($conflicts)): ?>
-                        <button class="btn btn-secondary btn-lg" disabled>
-                            <i class="bi bi-x-circle"></i> Cannot Join (Time Conflict)
-                        </button>
-                    <?php else: ?>
-                        <div class="alert alert-warning">
-                            <i class="bi bi-info-circle"></i> This event is currently full.
-                        </div>
-                    <?php endif; ?>
-                <?php endif; ?>
+
+                    <li><strong>Available Slots:</strong> 
+                        <span class="<?php echo ($event['availableSlots'] > 0) ? 'slot-available' : 'slot-full'; ?>">
+                            <?php echo $event['availableSlots']; ?> available
+                        </span>
+                    </li>
+                    <li><strong>Total Volunteers:</strong> <?php echo $event['joinedCount'] ?? 0; ?> / <?php echo $event['maxVolunteers']; ?></li>
+                </ul>
             </div>
         </div>
+
+        <!-- Join Button Section -->
+        <div class="mt-4">
+            <?php if ($alreadyJoined): ?>
+                <div class="alert alert-success">
+                    <i class="bi bi-check-circle"></i> You are registered for this event.
+                </div>
+                <a href="my_events.php" class="btn btn-primary">
+                    <i class="bi bi-calendar-event"></i> View My Events
+                </a>
+            <?php elseif ($wasCancelled): ?>
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> You previously cancelled this event. You can join again!
+                </div>
+                <?php if ($event['availableSlots'] > 0 && empty($conflicts)): ?>
+                    <form method="POST">
+                        <button type="submit" name="join_event" class="btn btn-warning btn-lg btn-join-again">
+                            <i class="bi bi-arrow-clockwise"></i> Join Again
+                        </button>
+                    </form>
+                <?php elseif (!empty($conflicts)): ?>
+                    <button class="btn btn-secondary btn-lg" disabled>
+                        <i class="bi bi-x-circle"></i> Cannot Join (Time Conflict)
+                    </button>
+                <?php else: ?>
+                    <div class="alert alert-warning">
+                        <i class="bi bi-info-circle"></i> This event is currently full.
+                    </div>
+                <?php endif; ?>
+            <?php else: ?>
+                <?php if ($event['availableSlots'] > 0 && empty($conflicts)): ?>
+                    <form method="POST">
+                        <button type="submit" name="join_event" class="btn btn-primary btn-lg">
+                            <i class="bi bi-check-circle"></i> Join This Event
+                        </button>
+                    </form>
+                <?php elseif (!empty($conflicts)): ?>
+                    <button class="btn btn-secondary btn-lg" disabled>
+                        <i class="bi bi-x-circle"></i> Cannot Join (Time Conflict)
+                    </button>
+                <?php else: ?>
+                    <div class="alert alert-warning">
+                        <i class="bi bi-info-circle"></i> This event is currently full.
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
     </div>
+</div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
