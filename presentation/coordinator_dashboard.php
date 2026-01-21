@@ -105,11 +105,19 @@ $unreadCount = $inboxResult['unreadCount'];
             </a>
         </div>
         <div class="nav-item">
-            <a href="#">
+            <a href="results_management.php">
                 <i class="ri-feedback-line"></i>
-                <span>Feedback</span>
+                <span>Result Management</span>
             </a>
         </div>
+
+        <div class="nav-item">
+                <a href="past_event_main.php">
+                    <i class="ri-trophy-line"></i>
+                    <span>Past Events</span>
+                </a>
+        </div>
+        
         <div class="nav-item">
             <a href="logout.php">
                 <i class="ri-logout-box-line me-2"></i>

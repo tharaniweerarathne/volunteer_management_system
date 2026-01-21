@@ -82,6 +82,22 @@ $unreadCount = $inboxResult['unreadCount'];
                     <span>Organizer</span>
                 </a>
             </div>
+
+                        <div class="nav-item">
+                <a href="results_management.php">
+                    <i class="ri-feedback-line"></i>
+                    <span>Result management</span>
+                </a>
+            </div>
+
+            <div class="nav-item">
+                <a href="past_event_main.php">
+                    <i class="ri-trophy-line"></i>
+                    <span>Past Events</span>
+                </a>
+            </div>
+
+
             <div class="nav-item">
                 <a href="logout.php">
                     <i class="ri-logout-box-line me-2"></i>
@@ -99,7 +115,7 @@ $unreadCount = $inboxResult['unreadCount'];
                 <button class="menu-toggle" id="menuToggle">
                     <i class="ri-menu-line"></i>
                 </button>
-                Welcome Volunteer, <?php echo $name; ?>
+                Welcome Organizer, <?php echo $name; ?>
             </div>
             <div class="header-actions">
                 

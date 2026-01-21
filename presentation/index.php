@@ -1,13 +1,15 @@
 <?php
 require_once '../business_logic/eventLogic.php';
+require_once '../business_logic/resultsLogic.php';
 
 // Check if session is already started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Create instance of EventLogic
+// Create instances
 $eventLogic = new EventLogic();
+$resultsLogic = new ResultsLogic();
 
 // Get filters from query parameters
 $filters = [
@@ -18,14 +20,22 @@ $filters = [
     'date' => $_GET['date'] ?? ''
 ];
 
-// Get upcoming events using EventLogic
-$result = $eventLogic->getUpcomingEvents($filters);
-
-if ($result['success']) {
-    $events = $result['events'];
+// Get UPCOMING EVENTS (for events section)
+$eventsData = $eventLogic->getUpcomingEvents($filters);
+if ($eventsData['success']) {
+    $events = $eventsData['events'];
 } else {
     $events = [];
-    $error = $result['message'] ?? 'Error loading events';
+    $eventsError = $eventsData['message'] ?? 'Error loading events';
+}
+
+// Get APPROVED event results (for past events section)
+$resultsData = $resultsLogic->getPublicResults(6, $filters);
+if ($resultsData['success']) {
+    $results = $resultsData['results'];
+} else {
+    $results = [];
+    $resultsError = $resultsData['message'] ?? 'Error loading event results';
 }
 
 // Get categories and skills for filter dropdowns
@@ -41,7 +51,7 @@ $skills = $eventData->getAllSkills();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unity Volunteers Trust</title>
-    <link rel="stylesheet" href="../assets/css/index1.css">
+    <link rel="stylesheet" href="../assets/css/index2.css">
     <link rel="icon" type="image/png" href="../assets/images/title.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" rel="stylesheet">
@@ -475,169 +485,170 @@ $skills = $eventData->getAllSkills();
 
         <!--past events-->
 <section id="past_events" class="past_events py-5">
-  <div class="container">
-   
-    <div class="text-center mb-4">
-      <h2 class="display-5 fw-bold" >Highlights from Our Recent Activities</h2>
-      <p class="lead mb-4">See what our volunteers have accomplished and get inspired to join the next one!</p>
-      
-      
-      <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="joinEventsSearchContainer">
-                <input type="text" class="joinEventsSearchInput" placeholder="Search ...">
-                <button class="joinEventsSearchBtn">
-                    <i class="ri-search-line"></i>
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="display-5 fw-bold">Highlights from Our Recent Activities</h2>
+            <p class="lead mb-4">See what our volunteers have accomplished and get inspired to join the next one!</p>
+        </div>
+
+        <?php if (isset($resultsError)): ?>
+            <div class="alert alert-danger text-center">
+                <?php echo htmlspecialchars($resultsError); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (empty($results)): ?>
+            <div class="text-center py-5">
+                <i class="ri-file-search-line" style="font-size: 4rem; color: #ccc;"></i>
+                <h3 class="mt-3">No event results found</h3>
+                <p class="text-muted">Check back later for more event highlights</p>
+            </div>
+        <?php else: ?>
+            <!-- Carousel for Results -->
+            <div id="resultsCarousel" class="carousel slide position-relative" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <?php 
+                    $first = true;
+                    $chunkedResults = array_chunk($results, 1);
+                    
+                    foreach ($chunkedResults as $index => $chunk): 
+                    ?>
+                        <div class="carousel-item <?php echo $first ? 'active' : ''; ?>">
+                            <div class="row justify-content-center">
+                                <?php foreach ($chunk as $result): ?>
+                                    <div class="col-md-8">
+                                        <div class="card shadow-lg" style="border-radius: 30px; border: 3px solid #333;">
+                                            <div class="card-body p-4">
+                                                <div class="row align-items-center">
+                                                    <!-- Result Image -->
+                                                    <div class="col-md-5">
+                                                        <?php if (!empty($result['resultImage'])): ?>
+                                                            <?php 
+                                                            $resultImage = $result['resultImage'];
+                                                            // Fix path if needed
+                                                            if (!str_starts_with($resultImage, '../') && !str_starts_with($resultImage, 'http')) {
+                                                                $resultImage = '../' . $resultImage;
+                                                            }
+                                                            ?>
+                                                            <img src="<?php echo htmlspecialchars($resultImage); ?>" 
+                                                                 alt="<?php echo htmlspecialchars($result['resultTitle']); ?>" 
+                                                                 class="img-fluid" 
+                                                                 style="border-radius: 20px; object-fit: cover; height: 300px; width: 100%;"
+                                                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&h=400&fit=crop';">
+                                                        <?php else: ?>
+                                                            <div class="d-flex align-items-center justify-content-center bg-light" 
+                                                                 style="border-radius: 20px; height: 300px; width: 100%;">
+                                                                <i class="ri-image-line" style="font-size: 3rem; color: #ccc;"></i>
+                                                            </div>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                    
+                                                    <!-- Result Details -->
+                                                    <div class="col-md-7">
+                                                        <h3 class="fw-bold mb-2"><?php echo htmlspecialchars($result['resultTitle']); ?></h3>
+                                                        
+                                                        <!-- Event Name -->
+                                                        <p class="text-muted mb-2">
+                                                            <i class="ri-calendar-event-line me-1"></i>
+                                                            Event: <?php echo htmlspecialchars($result['eventName'] ?? 'N/A'); ?>
+                                                        </p>
+                                                        
+                                                        
+                                                        <!-- Category and Skill -->
+                                                        <div class="joinEventsCardMeta mb-3">
+                                                            <?php if (!empty($result['category'])): ?>
+                                                                <span class="joinEventsCategory">
+                                                                    <?php echo htmlspecialchars($result['category']); ?>
+                                                                </span>
+                                                            <?php endif; ?>
+                                                            
+                                                            <?php if (!empty($result['skillName'])): ?>
+                                                                <span class="joinEventsSkill">
+                                                                    <?php echo htmlspecialchars($result['skillName']); ?>
+                                                                </span>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                        
+                                                        
+                                                        
+                                                        <!-- Result Date -->
+                                                        <div class="d-flex align-items-center mb-3">
+                                                            <i class="ri-calendar-line" style="color: #ff6b35; font-size: 24px;"></i>
+                                                            <span class="ms-2 fw-semibold">
+                                                                <?php echo date('d M, Y', strtotime($result['resultDate'])); ?>
+                                                            </span>
+                                                        </div>
+
+                                                        <p class="mb-2">
+                                                                <i class="ri-user-star-line me-1" style="color: #ff6b35;"></i>
+                                                                <span class="fw-semibold">Organized by:</span> 
+                                                                <?php echo htmlspecialchars($result['organizerName']); ?>
+                                                            </p>
+                                                        
+                                                        <!-- Description -->
+                                                        <p class="text-muted mb-4">
+                                                            <?php 
+                                                            $description = htmlspecialchars($result['description'] ?? '');
+                                                            if (strlen($description) > 200) {
+                                                                echo substr($description, 0, 200) . '...';
+                                                            } else {
+                                                                echo $description;
+                                                            }
+                                                            ?>
+                                                        </p>
+                                                        
+
+                                                        <!-- View Details Button -->
+                                                        <a href="view_result.php?resultId=<?php echo $result['resultId']; ?>" 
+                                                           class="btn btn-link text-decoration-none fw-bold p-0" 
+                                                           style="color: #ff6b35; font-size: 1.1rem;">
+                                                            View Full Details <i class="ri-arrow-right-line"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                        <?php $first = false; ?>
+                    <?php endforeach; ?>
+                </div>
+
+                <!-- Carousel Controls -->
+                <?php if (count($chunkedResults) > 1): ?>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#resultsCarousel" data-bs-slide="prev">
+                        <i class="ri-arrow-left-s-fill" style="font-size: 60px; color: black;"></i>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#resultsCarousel" data-bs-slide="next">
+                        <i class="ri-arrow-right-s-fill" style="font-size: 60px; color: black;"></i>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                <?php endif; ?>
+            </div>
+            
+            <!-- Carousel Indicators -->
+            <?php if (count($chunkedResults) > 1): ?>
+                <div class="carousel-indicators position-static mt-4">
+                    <?php for ($i = 0; $i < count($chunkedResults); $i++): ?>
+                        <button type="button" data-bs-target="#resultsCarousel" data-bs-slide-to="<?php echo $i; ?>" 
+                                class="<?php echo $i === 0 ? 'active' : ''; ?>">
+                        </button>
+                    <?php endfor; ?>
+                </div>
+            <?php endif; ?>
+            
+            <!-- More Events Button -->
+            <div class="text-center mt-5">
+                <button class="joinEventsMoreBtn" onclick="window.open('past_events.php', '_blank')">
+                    View All Past Events
                 </button>
             </div>
-        </div>
-      </div>
-
-    <div class="filter_details">
-    <div class="search-row">
-        <input type="date" id="date" name="date" placeholder="Date">
-        <select id="category" name="category">
-            <option value="">Category</option>
-            <!-- PHP categories here -->
-        </select>
-        <select id="skill" name="skill">
-            <option value="">Skill Level</option>
-            <option value="beginner">Beginner</option>
-            <option value="intermediate">Intermediate</option>
-            <option value="advanced">Advanced</option>
-        </select>
-        <input type="text" id="location" name="location" placeholder="Location">
-        <button class="search-btn" onclick="searchEvents()">Search</button>
+        <?php endif; ?>
     </div>
-</div>
-    </div>
-
-  
-    <div id="eventsCarousel" class="carousel slide position-relative" data-bs-ride="carousel">
-      <div class="carousel-inner">
-        
-        
-        <div class="carousel-item active">
-          <div class="row justify-content-center">
-            <div class="col-md-8">
-              <div class="card shadow-lg" style="border-radius: 30px; border: 3px solid #333;">
-                <div class="card-body p-4">
-                  <div class="row align-items-center">
-                    <div class="col-md-5">
-                      <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&h=400&fit=crop" alt="Beach Cleanup" class="img-fluid" style="border-radius: 20px; object-fit: cover; height: 300px; width: 100%;">
-                    </div>
-                    <div class="col-md-7">
-                      <h3 class="fw-bold mb-3">Beach Cleanup</h3>
-
-                    <!--this needed to be changed-->
-                          <div class="joinEventsCardMeta">
-                               <span class="joinEventsCategory">Environment</span>
-                               <span class="joinEventsSkill">Beginner</span>
-                            </div>
-
-                      <div class="d-flex align-items-center mb-3">
-                        <i class="ri-calendar-event-line" style="color: #ff6b35; font-size: 24px;"></i>
-                        <span class="ms-2 fw-semibold">20 Jun</span>
-                      </div>
-                      <p class="text-muted mb-4">Over 50 volunteers cleaned 2 km of beach and collected 120 kg of waste, spreading awareness about ocean pollution.</p>
-                      <a href="#" class="btn btn-link text-decoration-none fw-bold p-0" style="color: #ff6b35; font-size: 1.1rem;">
-                        View Details <i class="ri-arrow-right-line"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-
-        
-        <div class="carousel-item">
-          <div class="row justify-content-center">
-            <div class="col-md-8">
-              <div class="card shadow-lg" style="border-radius: 30px; border: 3px solid #333;">
-                <div class="card-body p-4">
-                  <div class="row align-items-center">
-                    <div class="col-md-5">
-                      <img src="https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=400&h=400&fit=crop" alt="Tree Plantation" class="img-fluid" style="border-radius: 20px; object-fit: cover; height: 300px; width: 100%;">
-                    </div>
-                    <div class="col-md-7">
-                      <h3 class="fw-bold mb-3">Tree Plantation Drive</h3>
-                            <div class="joinEventsCardMeta">
-                               <span class="joinEventsCategory">Environment</span>
-                               <span class="joinEventsSkill">Beginner</span>
-                            </div>
-                      <div class="d-flex align-items-center mb-3">
-                        <i class="ri-calendar-event-line" style="color: #ff6b35; font-size: 24px;"></i>
-                        <span class="ms-2 fw-semibold">15 May</span>
-                      </div>
-                      <p class="text-muted mb-4">35 volunteers planted 200+ trees in local parks, contributing to urban greenery and combating climate change.</p>
-                      <a href="#" class="btn btn-link text-decoration-none fw-bold p-0" style="color: #ff6b35; font-size: 1.1rem;">
-                        View Details <i class="ri-arrow-right-line"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        
-        <div class="carousel-item">
-          <div class="row justify-content-center">
-            <div class="col-md-8">
-              <div class="card shadow-lg" style="border-radius: 30px; border: 3px solid #333;">
-                <div class="card-body p-4">
-                  <div class="row align-items-center">
-                    <div class="col-md-5">
-                      <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=400&h=400&fit=crop" alt="Food Drive" class="img-fluid" style="border-radius: 20px; object-fit: cover; height: 300px; width: 100%;">
-                    </div>
-                    <div class="col-md-7">
-                      <h3 class="fw-bold mb-3">Community Food Drive</h3>
-                            <div class="joinEventsCardMeta">
-                               <span class="joinEventsCategory">Environment</span>
-                               <span class="joinEventsSkill">Beginner</span>
-                            </div>
-                      <div class="d-flex align-items-center mb-3">
-                        <i class="ri-calendar-event-line" style="color: #ff6b35; font-size: 24px;"></i>
-                        <span class="ms-2 fw-semibold">8 Apr</span>
-                      </div>
-                      <p class="text-muted mb-4">60 volunteers collected and distributed food packages to 150 families in need, making a real difference in our community.</p>
-                      <a href="#" class="btn btn-link text-decoration-none fw-bold p-0" style="color: #ff6b35; font-size: 1.1rem;">
-                        View Details <i class="ri-arrow-right-line"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      
-      <button class="carousel-control-prev" type="button" data-bs-target="#eventsCarousel" data-bs-slide="prev" style="width: 60px; height: 60px; background-color: #000; border-radius: 50%; top: 50%; transform: translateY(-50%); left: 5%;">
-        <i class="ri-arrow-left-s-fill" style="font-size: 30px;"></i>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#eventsCarousel" data-bs-slide="next" style="width: 60px; height: 60px; background-color: #000; border-radius: 50%; top: 50%; transform: translateY(-50%); right: 5%;">
-        <i class="ri-arrow-right-s-fill" style="font-size: 30px;"></i>
-        <span class="visually-hidden">Next</span>
-      </button>
-    </div>
-
-    
-    <div class="text-center mt-5">
-      <button class="btn btn-lg px-5 py-3" style="background-color: #ff6b35; color: white; border-radius: 50px; font-weight: 600; border: none;" onclick="window.open('past_events.html', '_blank')">
-        More Recent Events
-      </button>
-    </div>
-  </div>
 </section>
-
 
 <!--contact us section-->
 <section class="contact-section" id="contact">
@@ -983,6 +994,11 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('filterForm').addEventListener('change', function() {
             this.submit();
         });
+
+        
+
+
+        
 </script>
 </body>
 </html>

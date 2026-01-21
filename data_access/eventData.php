@@ -501,6 +501,8 @@ class eventData {
         
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
+
+    
 }
 
 ?>

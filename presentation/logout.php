@@ -6,5 +6,5 @@ session_destroy();  // destroy the session completely
 
 <script>
     alert("You have logged out successfully!");
-    window.location.href = "sign_in.php"; 
+    window.location.href = "index.php"; 
 </script>
