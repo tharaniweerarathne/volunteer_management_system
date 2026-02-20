@@ -51,7 +51,7 @@ $skills = $eventData->getAllSkills();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unity Volunteers Trust</title>
-    <link rel="stylesheet" href="../assets/css/index2.css">
+    <link rel="stylesheet" href="../assets/css/index4.css">
     <link rel="icon" type="image/png" href="../assets/images/title.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" rel="stylesheet">
@@ -122,7 +122,7 @@ $skills = $eventData->getAllSkills();
                         <div class="welcome-text">Welcome to Unity Volunteers Trust</div>
                         <h1 class="main-heading">Our Goal Is to Make a Difference Together</h1>
                         <p class="description">
-                            Unity Volunteers Trust, established in 2023 and located in Seeduwa, is dedicated to empowering communities through volunteer action. We organize events such as beach cleanups, blood donation drives, and awareness campaigns, bringing people together to create positive social impact. Our mission is to connect passionate volunteers with meaningful causes, inspire collective action, and make a lasting difference in the lives of those in need.
+                            Unity Volunteers Trust is a community-based volunteer management system launched in 2026. This system enables organizers to create and manage volunteer events such as beach cleanups, blood donation drives, and awareness campaigns. Organizers can easily post new events, update event details, and monitor volunteer registrations. Volunteers can register, view upcoming events, and join activities based on their interests. The platform also stores past event results and images to showcase community impact. The mission is to connect passionate volunteers with meaningful causes and empower community action through organized volunteering.
                         </p>
                         <a href="about.html" class="cta-button">Learn More</a>
                     </div>
@@ -130,6 +130,42 @@ $skills = $eventData->getAllSkills();
             </div>
     </div>
 </section>
+
+
+<!-- help section -->
+<section class="help-section animate-on-scroll">
+        <div class="container">
+            <h1 class="help-title">Powerful Features for Everyone</h1>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="help-card help-card-orange"  onclick="location.href='sign_in.php';" style="cursor:pointer;">
+                        <i class="ri-user-fill help-icon"></i>
+                        <p class="help-text">Easy Registration</p>
+                        <p class="help-text1">Join in seconds with a simple sign-up process.
+                             No complicated forms or lengthy approvals required.</p>
+                        
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="help-card help-card-orange"  onclick="location.href='sign_in.php';" style="cursor:pointer;">
+                        <i class="ri-calendar-2-line help-icon"></i>
+                        <p class="help-text">Organize Event</p>
+                        <p class="help-text1">Create and manage your own volunteer events with our
+                             intuitive event management tools.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="help-card help-card-orange"  onclick="location.href='sign_in.php';" style="cursor:pointer;">
+                        <i class="ri-megaphone-fill help-icon"></i>
+                        <p class="help-text">Promote Your Cause</p>
+                        <p class="help-text1">Share your events across social media and attract volunteers to support 
+                            your initiative.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 
 
 <!-- statistics section -->
@@ -149,37 +185,6 @@ $skills = $eventData->getAllSkills();
         </div>
     </div>
 </section>
-
-<!-- help section -->
-<section class="help-section animate-on-scroll">
-        <div class="container">
-            <h1 class="help-title">Help Today</h1>
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6">
-                    <div class="help-card help-card-orange">
-                        <i class="ri-service-fill help-icon"></i>
-                        <p class="help-text">Join a Volunteer Event</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="help-card help-card-orange">
-                        <i class="ri-leaf-fill help-icon" ></i>
-                        <p class="help-text">Clean Together</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="help-card help-card-orange">
-                        <i class="ri-flashlight-fill help-icon"></i>
-                        <p class="help-text">Take Action Today</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-
-
 
 
 <!-- join events section -->
@@ -382,7 +387,7 @@ $skills = $eventData->getAllSkills();
 </div>
 
 
-             <!--don't remove-->
+            
             </div>
            <button class="joinEventsMoreBtn" onclick="window.open('join_events_main.php', '_blank')">More Events</button>
         </div>
@@ -395,7 +400,7 @@ $skills = $eventData->getAllSkills();
     <div class="content-wrapper">
       
       <div class="text-content">
-        <h2>Earn Recognition</h2>
+        <h2>AI-Powered Volunteer Matching and Certification System</h2>
         <p>Our <span>AI-powered </span>system intelligently analyzes your skills and interests to match you with the most suitable volunteer
              events. Participate, make a real impact, and earn <span>official certificates</span>recognizing your valuable contributions!</p>
         <div class="button2"><a href="sign_in.php" class="cta-button1">Join Us</a></div>
@@ -599,7 +604,7 @@ $skills = $eventData->getAllSkills();
                                                         
 
                                                         <!-- View Details Button -->
-                                                        <a href="view_result.php?resultId=<?php echo $result['resultId']; ?>" 
+                                                        <a href="view_result.php?resultId=<?php echo $result['resultId']; ?>"  
                                                            class="btn btn-link text-decoration-none fw-bold p-0" 
                                                            style="color: #ff6b35; font-size: 1.1rem;">
                                                             View Full Details <i class="ri-arrow-right-line"></i>
