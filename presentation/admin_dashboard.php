@@ -887,111 +887,112 @@ $totalEvents = $calendarData['totalEvents'];
                 return;
             }
             
-var calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: 'dayGridMonth',
-    headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay'
-    },
-    buttonText: {
-        today: 'Today',
-        month: 'Month',
-        week: 'Week',
-        day: 'Day'
-    },
-    titleFormat: {
-        month: 'long',   // Show full month name (e.g., "January")
-        year: 'numeric'  // Show year (e.g., "2024")
-    },
-    themeSystem: 'bootstrap5',
-    events: function(fetchInfo, successCallback, failureCallback) {
-        console.log('Fetching events from:', 'get_calendar_events.php');
-        fetch('get_calendar_events.php?start=' + fetchInfo.startStr + '&end=' + fetchInfo.endStr)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                buttonText: {
+                    today: 'Today',
+                    month: 'Month',
+                    week: 'Week',
+                    day: 'Day'
+                },
+                titleFormat: {
+                    month: 'long',
+                    year: 'numeric'
+                },
+                themeSystem: 'bootstrap5',
+                events: function(fetchInfo, successCallback, failureCallback) {
+                    console.log('Fetching events from:', 'get_calendar_events.php');
+                    fetch('get_calendar_events.php?start=' + fetchInfo.startStr + '&end=' + fetchInfo.endStr)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Events data received:', data);
+                            if (data.success) {
+                                successCallback(data.events);
+                                updateEventCounts(data);
+                            } else {
+                                console.error('Failed to load events:', data.message);
+                                showToast('Error', 'Failed to load calendar events', 'danger');
+                                failureCallback(data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error loading events:', error);
+                            showToast('Error', 'Network error loading events', 'danger');
+                            failureCallback('Failed to load events');
+                        });
+                },
+                eventClick: function(info) {
+                    showEventDetails(info.event);
+                },
+                eventDidMount: function(info) {
+                    // Add tooltip with event details
+                    const event = info.event;
+                    const extendedProps = event.extendedProps;
+                    
+                    // Create tooltip content
+                    const tooltipContent = `
+                        <strong>${event.title}</strong><br>
+                        <strong>Date:</strong> ${event.start.toLocaleDateString()}<br>
+                        <strong>Status:</strong> ${extendedProps.status ? extendedProps.status.toUpperCase() : 'ACTIVE'}
+                    `;
+                    
+                    // Add tooltip
+                    info.el.setAttribute('data-bs-toggle', 'tooltip');
+                    info.el.setAttribute('data-bs-html', 'true');
+                    info.el.setAttribute('title', tooltipContent);
+                    
+                    // Initialize tooltip
+                    new bootstrap.Tooltip(info.el);
+                    
+                    // Add status indicator
+                    if (extendedProps.status === 'cancelled') {
+                        info.el.style.opacity = '0.7';
+                        info.el.style.textDecoration = 'line-through';
+                        info.el.style.borderLeft = '4px solid #dc3545';
+                    } else if (extendedProps.status === 'over') {
+                        info.el.style.opacity = '0.8';
+                        info.el.style.borderLeft = '4px solid #6c757d';
+                    } else {
+                        // Add color-coded border based on user role
+                        const userRole = '<?php echo $userRole; ?>';
+                        let borderColor = '#20c997'; // default teal
+                        
+                        switch(userRole) {
+                            case 'Admin': borderColor = '#198754'; break;
+                            case 'Coordinator': borderColor = '#0d6efd'; break;
+                            case 'Organizer': borderColor = '#ffc107'; break;
+                            case 'Volunteer': borderColor = '#6f42c1'; break;
+                        }
+                        
+                        info.el.style.borderLeft = '4px solid ' + borderColor;
+                    }
+                },
+                height: 'auto',
+                contentHeight: 550,
+                nowIndicator: true,
+                navLinks: true,
+                editable: false,
+                selectable: false,
+                dayMaxEvents: 3,
+                // Optional: Add these for better mobile experience
+                dayHeaderFormat: { weekday: 'short' },
+                views: {
+                    dayGridMonth: {
+                        dayHeaderFormat: { weekday: 'short' }
+                    }
                 }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Events data received:', data);
-                if (data.success) {
-                    successCallback(data.events);
-                    updateEventCounts(data);
-                } else {
-                    console.error('Failed to load events:', data.message);
-                    showToast('Error', 'Failed to load calendar events', 'danger');
-                    failureCallback(data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error loading events:', error);
-                showToast('Error', 'Network error loading events', 'danger');
-                failureCallback('Failed to load events');
             });
-    },
-    eventClick: function(info) {
-        showEventDetails(info.event);
-    },
-    eventDidMount: function(info) {
-        // Add tooltip with event details
-        const event = info.event;
-        const extendedProps = event.extendedProps;
-        
-        // Create tooltip content
-        const tooltipContent = `
-            <strong>${event.title}</strong><br>
-            <strong>Date:</strong> ${event.start.toLocaleDateString()}<br>
-            <strong>Status:</strong> ${extendedProps.status ? extendedProps.status.toUpperCase() : 'ACTIVE'}
-        `;
-        
-        // Add tooltip
-        info.el.setAttribute('data-bs-toggle', 'tooltip');
-        info.el.setAttribute('data-bs-html', 'true');
-        info.el.setAttribute('title', tooltipContent);
-        
-        // Initialize tooltip
-        new bootstrap.Tooltip(info.el);
-        
-        // Add status indicator
-        if (extendedProps.status === 'cancelled') {
-            info.el.style.opacity = '0.7';
-            info.el.style.textDecoration = 'line-through';
-            info.el.style.borderLeft = '4px solid #dc3545';
-        } else if (extendedProps.status === 'over') {
-            info.el.style.opacity = '0.8';
-            info.el.style.borderLeft = '4px solid #6c757d';
-        } else {
-            // Add color-coded border based on user role
-            const userRole = '<?php echo $userRole; ?>';
-            let borderColor = '#20c997'; // default teal
             
-            switch(userRole) {
-                case 'Admin': borderColor = '#198754'; break;
-                case 'Coordinator': borderColor = '#0d6efd'; break;
-                case 'Organizer': borderColor = '#ffc107'; break;
-                case 'Volunteer': borderColor = '#6f42c1'; break;
-            }
-            
-            info.el.style.borderLeft = '4px solid ' + borderColor;
-        }
-    },
-    height: 'auto',
-    contentHeight: 550,
-    nowIndicator: true,
-    navLinks: true,
-    editable: false,
-    selectable: false,
-    dayMaxEvents: 3,
-    // Optional: Add these for better mobile experience
-    dayHeaderFormat: { weekday: 'short' },
-    views: {
-        dayGridMonth: {
-            dayHeaderFormat: { weekday: 'short' }
-        }
-    }
-});
             console.log('Calendar created, rendering...');
             calendar.render();
             console.log('Calendar rendered');
@@ -1167,16 +1168,6 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl);
             });
-            
-            // Add a test event to verify calendar is working
-            setTimeout(function() {
-                calendar.addEvent({
-                    title: 'Test Event - Calendar Working',
-                    start: new Date(),
-                    color: '#198754'
-                });
-                console.log('Test event added');
-            }, 1000);
         });
 
         // Mobile menu toggle

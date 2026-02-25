@@ -1,6 +1,8 @@
 <?php
 require_once '../business_logic/eventLogic.php';
 require_once '../business_logic/resultsLogic.php';
+require_once '../business_logic/LeaderboardLogic.php';
+require_once '../business_logic/StatisticsLogic.php';
 
 // Check if session is already started
 if (session_status() === PHP_SESSION_NONE) {
@@ -42,6 +44,14 @@ if ($resultsData['success']) {
 $eventData = new EventData();
 $categories = $eventData->getCategories();
 $skills = $eventData->getAllSkills();
+
+$leaderboardLogic = new LeaderboardLogic();
+$podiumVolunteers = $leaderboardLogic->getPodiumData();
+
+$statisticsLogic = new StatisticsLogic();
+$simpleStats = $statisticsLogic->getSimpleStats();
+$detailedStats = $statisticsLogic->getDetailedStats();
+$allStats = $statisticsLogic->getAllStatistics();
 ?>
 
 
@@ -169,20 +179,14 @@ $skills = $eventData->getAllSkills();
 
 
 <!-- statistics section -->
-    <section class="statistics">
+<section class="statistics">
     <div class="stats-container">
+        <?php foreach ($simpleStats as $stat): ?>
         <div class="stat-item">
-            <span class="stat-number">+250</span>
-            <span class="stat-label">Volunteers</span>
+            <span class="stat-number"><?php echo $stat['number']; ?></span>
+            <span class="stat-label"><?php echo $stat['label']; ?></span>
         </div>
-        <div class="stat-item">
-            <span class="stat-number">+30 Events</span>
-            <span class="stat-label">Completed</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-number">+5 Areas</span>
-            <span class="stat-label">Served</span>
-        </div>
+        <?php endforeach; ?>
     </div>
 </section>
 
@@ -413,81 +417,49 @@ $skills = $eventData->getAllSkills();
 
 
     <!-- leadership section -->
-    <section id="leadership_board" class="leaderboard-section animate-on-scroll">
-        <div class="container">
-            <div class="section-header">
-                <h1 class="section-title">
-                    <i class="ri-trophy-line"></i> Top Volunteers
-                </h1>
-                <p class="section-subtitle">Celebrating our most dedicated community heroes</p>
-            </div>
+<section id="leadership_board" class="leaderboard-section animate-on-scroll">
+    <div class="container">
+        <div class="section-header">
+            <h1 class="section-title">
+                <i class="ri-trophy-line"></i> Top Volunteers
+            </h1>
+            <p class="section-subtitle">Celebrating our most dedicated community heroes based on attendance</p>
+        </div>
 
-            <div class="podium-container">
-                <div class="podium-item first">
+        <div class="podium-container">
+            <?php foreach ($podiumVolunteers as $volunteer): ?>
+                <div class="podium-item <?php echo $volunteer['class']; ?>">
                     <div class="rank-badge">
-                        <i class="ri-trophy-fill"></i>
+                        <i class="<?php echo $volunteer['icon']; ?>" style="color: <?php echo $volunteer['icon_color']; ?>;"></i>
                     </div>
-                    <div class="volunteer-avatar">SM</div>
-                    <h3 class="volunteer-name">Sarah Mitchell</h3>
+                    
+                    <div class="volunteer-avatar" style="background: linear-gradient(135deg, <?php echo $volunteer['level_color']; ?>20, #fc5d0e);">
+                        <?php echo htmlspecialchars($volunteer['initials']); ?>
+                    </div>
+                    
+                    <h3 class="volunteer-name"><?php echo htmlspecialchars($volunteer['name']); ?></h3>
+                    
                     <p class="volunteer-level">
-                        <i class="ri-star-fill" style="color: #ffd700;"></i> Elite Volunteer
+                        <i class="ri-star-fill" style="color: <?php echo $volunteer['level_color']; ?>;"></i> 
+                        <?php echo $volunteer['level']; ?>
                     </p>
-                    <div class="volunteer-stats">
-                        <div class="stat-item">
-                            <span class="stat-value">248</span>
-                            <span class="stat-label">Hours</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value">52</span>
-                            <span class="stat-label">Events</span>
-                        </div>
-                    </div>
+                    
+<div class="volunteer-stats">
+    <div class="stat-item">
+        <span class="stat-value"><?php echo $volunteer['total_hours']; ?></span>
+        <span class="stat-label">Hours</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-value"><?php echo $volunteer['unique_events']; ?></span>
+        <span class="stat-label">Events</span>
+    </div>
+</div>
                 </div>
-
-                <div class="podium-item second">
-                    <div class="rank-badge">
-                        <i class="ri-medal-2-fill"></i>
-                    </div>
-                    <div class="volunteer-avatar">JD</div>
-                    <h3 class="volunteer-name">John Davis</h3>
-                    <p class="volunteer-level">
-                        <i class="ri-star-fill" style="color: #c0c0c0;"></i> Senior Volunteer
-                    </p>
-                    <div class="volunteer-stats">
-                        <div class="stat-item">
-                            <span class="stat-value">215</span>
-                            <span class="stat-label">Hours</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value">47</span>
-                            <span class="stat-label">Events</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="podium-item third">
-                    <div class="rank-badge">
-                        <i class="ri-medal-fill"></i>
-                    </div>
-                    <div class="volunteer-avatar">EA</div>
-                    <h3 class="volunteer-name">Emma Anderson</h3>
-                    <p class="volunteer-level">
-                        <i class="ri-star-fill" style="color: #cd7f32;"></i> Senior Volunteer
-                    </p>
-                    <div class="volunteer-stats">
-                        <div class="stat-item">
-                            <span class="stat-value">189</span>
-                            <span class="stat-label">Hours</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value">41</span>
-                            <span class="stat-label">Events</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+            <?php endforeach; ?>
+        </div>
+    </div>
+    
+</section>
         <!--past events-->
 <section id="past_events" class="past_events py-5">
     <div class="container">
