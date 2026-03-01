@@ -2,13 +2,12 @@
 $conn = new mysqli("localhost","root","","volunteer_management");
 
 // Event ID 26
-$eventId = 33;
-$registrationDate = date('Y-m-d H:i:s'); // Current timestamp
+$eventId = 75;
+$registrationDate = "2026-02-27 17:35:05";
 
 // List of 10 volunteer user IDs for first event
 $volunteers = [
-    50,52,53,55,57,
-    58,60,61,63,64
+    55,56.57
 ];
 
 foreach($volunteers as $userId){
