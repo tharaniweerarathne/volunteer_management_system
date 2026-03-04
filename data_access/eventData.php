@@ -502,6 +502,38 @@ class eventData {
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
+
+
+    // ai functions
+
+    public function getEventAttendanceCount($eventId){
+    global $conn;
+
+    $sql = "SELECT COUNT(*) as total 
+            FROM attendance 
+            WHERE eventId = ? AND status = 'Present'";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $eventId);
+    $stmt->execute();
+
+    $result = $stmt->get_result()->fetch_assoc();
+
+    return $result['total'] ?? 0;
+}
+
+
+    public function getAllUpcomingEventsRaw() {
+        $sql = "SELECT e.*, s.skillName 
+                FROM events e
+                LEFT JOIN skills s ON e.requiredSkillId = s.skillId
+                WHERE e.endDate >= CURDATE() 
+                AND e.status = 'Active'
+                ORDER BY e.startDate ASC";
+        
+        $result = $this->conn->query($sql);
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
     
 }
 

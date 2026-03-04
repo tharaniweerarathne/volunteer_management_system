@@ -78,32 +78,52 @@ $userRequests = $organizerLogic->getUserOrganizerRequests($userId);
         </div>
         <div class="nav-items">
             <div class="nav-item">
-                <a href="volunteer_dashboard.php">
+                <a href="volunteer_dashboard">
                     <i class="ri-dashboard-line"></i>
                     <span>Dashboard</span>
                 </a>
             </div>
             <div class="nav-item">
-                <a href="events.php">
+                <a href="events_volunteer.php">
+                    <i class="ri-calendar-check-line"></i>
+                    <span>Join Events</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="my_events.php">
                     <i class="ri-calendar-line"></i>
-                    <span>Events</span>
+                    <span>My Events</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="my_certificates.php">
+                    <i class="ri-medal-line"></i>
+                    <span>Download Certificates</span>
                 </a>
             </div>
             <div class="nav-item">
                 <a href="apply_organizer.php" class="active">
-                    <i class="ri-award-line"></i>
-                    <span>Become Organizer</span>
+                    <i class="ri-file-add-line"></i>
+                    <span>Apply to become an Organizer</span>
                 </a>
             </div>
+
             <div class="nav-item">
-                <a href="view_messages.php">
-                    <i class="ri-message-3-line"></i>
-                    <span>Messages</span>
+                <a href="inbox.php" class="messages-link">
+                    <i class="ri-send-plane-line"></i>
+                    <span>Send Messages</span>
+                </a>
+            </div>
+
+            <div class="nav-item">
+                <a href="past_event_main.php">
+                    <i class="ri-history-line"></i>
+                    <span>Past Events</span>
                 </a>
             </div>
             <div class="nav-item">
                 <a href="logout.php">
-                    <i class="ri-logout-box-line"></i>
+                    <i class="ri-logout-box-line me-2"></i>
                     <span>Logout</span>
                 </a>
             </div>

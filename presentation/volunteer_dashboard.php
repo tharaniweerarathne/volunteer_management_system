@@ -31,199 +31,11 @@ $totalEvents = $calendarData['totalEvents'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volunteer Dashboard</title>
-    <link rel="stylesheet" href="../assets/css/a7.css">
+    <link rel="stylesheet" href="../assets/css/a9.css">
     <link rel="icon" type="image/png" href="../assets/images/title.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    
-    <!-- FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
-    <style>
-        /* Calendar Custom Styles */
-        #calendar-container {
-            padding: 20px;
-            min-height: 600px;
-        }
-        
-        .fc {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        .fc .fc-toolbar-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-        
-        .fc .fc-button {
-            background-color: #f8f9fa;
-            border-color: #dee2e6;
-            color: #495057;
-        }
-        
-        .fc .fc-button-primary:not(:disabled).fc-button-active,
-        .fc .fc-button-primary:not(:disabled):active {
-            background-color: #0d6efd;
-            border-color: #0d6efd;
-        }
-        
-        .fc-event {
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            padding: 2px 5px;
-            margin: 1px 0;
-        }
-        
-        .fc-event:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        
-        .fc-daygrid-day.fc-day-today {
-            background-color: rgba(13, 110, 253, 0.1) !important;
-        }
-        
-        /* Event status indicators */
-        .event-status-badge {
-            display: inline-block;
-            padding: 0.25em 0.6em;
-            font-size: 75%;
-            font-weight: 700;
-            line-height: 1;
-            text-align: center;
-            white-space: nowrap;
-            vertical-align: baseline;
-            border-radius: 10rem;
-        }
-        
-        .status-cancelled {
-            background-color: #dc3545;
-            color: white;
-        }
-        
-        .status-over {
-            background-color: #6c757d;
-            color: white;
-        }
-        
-        .status-active {
-            background-color: #198754;
-            color: white;
-        }
-        
-        /* Dashboard Cards */
-        .dashboard-card {
-            border-radius: 10px;
-            border: none;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease;
-        }
-        
-        .dashboard-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .card-icon {
-            font-size: 2.5rem;
-            opacity: 0.8;
-        }
-        
-        /* Quick Actions */
-        .quick-action-item {
-            padding: 15px;
-            border-radius: 8px;
-            background: white;
-            border: 1px solid #e9ecef;
-            transition: all 0.3s ease;
-        }
-        
-        .quick-action-item:hover {
-            background: #f8f9fa;
-            border-color: #0d6efd;
-        }
-        
-        .quick-action-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-        
-        /* Statistics Cards */
-        .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 10px;
-        }
-        
-        .stat-card.secondary {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-        
-        .stat-card.success {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-        
-        .stat-card.warning {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-        }
-        
-        /* Role Badges */
-        .role-badge {
-            padding: 0.5em 1em;
-            border-radius: 20px;
-            font-weight: 500;
-        }
-        
-        .badge-admin {
-            background-color: #198754;
-            color: white;
-        }
-        
-        .badge-coordinator {
-            background-color: #0d6efd;
-            color: white;
-        }
-        
-        .badge-organizer {
-            background-color: #ffc107;
-            color: #000;
-        }
-        
-        .badge-volunteer {
-            background-color: #6f42c1;
-            color: white;
-        }
-        
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .fc .fc-toolbar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .fc .fc-toolbar .fc-toolbar-chunk {
-                margin-bottom: 0.5rem;
-            }
-            
-            .fc .fc-toolbar-title {
-                font-size: 1rem;
-            }
-            
-            #calendar-container {
-                padding: 10px;
-            }
-            
-            .dashboard-card .card-body {
-                padding: 1rem;
-            }
-        }
-    </style>
 </head>
 <body>
     <!-- sidebar navigation -->
@@ -253,34 +65,26 @@ $totalEvents = $calendarData['totalEvents'];
             <div class="nav-item">
                 <a href="my_certificates.php">
                     <i class="ri-medal-line"></i>
-                    <span>Certificates</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="view_attendance.php">
-                    <i class="ri-trophy-line"></i>
-                    <span>View Attendance</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="inbox.php" class="messages-link">
-                    <i class="ri-message-3-line"></i>
-                    <span>Messages</span>
-                    <?php if ($unreadCount > 0): ?>
-                        <span class="message-badge"><?php echo $unreadCount; ?></span>
-                    <?php endif; ?>
+                    <span>Download Certificates</span>
                 </a>
             </div>
             <div class="nav-item">
                 <a href="apply_organizer.php">
-                    <i class="ri-feedback-line"></i>
-                    <span>Organizer</span>
+                    <i class="ri-file-add-line"></i>
+                    <span>Apply to become an Organizer</span>
+                </a>
+            </div>
+
+            <div class="nav-item">
+                <a href="inbox.php" class="messages-link">
+                    <i class="ri-send-plane-line"></i>
+                    <span>Send Messages</span>
                 </a>
             </div>
 
             <div class="nav-item">
                 <a href="past_event_main.php">
-                    <i class="ri-trophy-line"></i>
+                    <i class="ri-history-line"></i>
                     <span>Past Events</span>
                 </a>
             </div>
@@ -305,7 +109,7 @@ $totalEvents = $calendarData['totalEvents'];
             </div>
             <div class="header-actions">
                 
-                <!-- Notification Dropdown - FIRST dropdown -->
+                <!-- Notification Dropdown  -->
                 <div class="dropdown me-3">
                     <button class="btn p-0 dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         <i class="ri-notification-3-line"></i>
@@ -327,7 +131,7 @@ $totalEvents = $calendarData['totalEvents'];
                     </ul>
                 </div>
 
-                <!-- Profile Dropdown - LAST dropdown -->
+                <!-- Profile Dropdown-->
                 <div class="dropdown">
                     <button class="btn p-0 dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         <i class="ri-user-3-fill header-icon"></i>
@@ -343,6 +147,72 @@ $totalEvents = $calendarData['totalEvents'];
 
         <!-- Main Content -->
         <div class="container-fluid mt-4">
+
+<div style="
+    width: 100%;
+    max-width: 950px;
+    background: linear-gradient(135deg, #042818, #126d2d);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    box-shadow: 0 4px 15px rgba(40,167,69,0.15);
+    margin: 18px auto;
+    font-family: Segoe UI, sans-serif;
+">
+
+    <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <span style="
+            font-size:24px;
+        ">💡</span>
+
+        <div>
+            <div style="font-size:16px; font-weight:600; color:#ceedd7;">
+                Smart Event Recommendations Available
+            </div>
+
+            <div style="font-size:12px; color:#fcfcfc;">
+                AI will help you find events that match your skills and interest
+            </div>
+        </div>
+    </div>
+
+    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <a href="recommended_events.php" style="
+            background:#28a745;
+            color:white;
+            padding:7px 16px;
+            border-radius:20px;
+            text-decoration:none;
+            font-size:13px;
+            font-weight:600;
+        ">
+            View Recommendations
+        </a>
+
+        <a href="chatbot_ui.php" style="
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color:white;
+            padding:7px 14px;
+            border-radius:20px;
+            text-decoration:none;
+            font-size:13px;
+            display:flex;
+            align-items:center;
+            gap:6px;
+        ">
+            🤖 AI Assistant
+            <span style="
+                background:#10b981;
+                padding:2px 6px;
+                border-radius:12px;
+                font-size:9px;
+            ">NEW</span>
+        </a>
+    </div>
+
+</div>
             <!-- Dashboard Stats -->
             <div class="row mb-4">
                 <div class="col-xl-3 col-md-6 mb-4">

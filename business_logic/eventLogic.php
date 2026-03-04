@@ -635,6 +635,80 @@ class eventLogic {
         
         return $messageData->sendMessage($adminId, $volunteerId, $subject, $message);
     }
+
+    
+
+    // ai functions
+
+    public function predictEventParticipation($eventId){
+    require_once __DIR__ . "/PredictionService.php";
+
+    $event = $this->eventData->getEventById($eventId);
+
+    if (!$event) {
+        return [
+            'success' => false,
+            'message' => 'Event not found'
+        ];
+    }
+
+    $attendanceCount = $this->eventData->getEventAttendanceCount($eventId);
+
+    // Parse the time to get hour AND minute
+    $startTime = strtotime($event['startTime']);
+    
+    $featureData = [
+        "eventId" => intval($event['eventId']),
+        "category" => $event['category'],
+        "location" => $event['location'],
+        "startDate" => $event['startDate'],
+        "startTime" => $event['startTime'],
+        "maxVolunteers" => intval($event['maxVolunteers']),
+        "requiredSkillId" => intval($event['requiredSkillId'] ?? 0),
+        "attendance_count" => intval($attendanceCount),
+
+        // Derived time features (matching your test file)
+        "month" => intval(date('m', strtotime($event['startDate']))),
+        "day" => intval(date('d', strtotime($event['startDate']))),
+        "year" => intval(date('Y', strtotime($event['startDate']))),
+        "day_of_week" => intval(date('w', strtotime($event['startDate']))),
+        "hour" => intval(date('H', $startTime)),
+        "minute" => intval(date('i', $startTime))  // ← ADD THIS LINE
+    ];
+
+    try {
+        $predictionService = new PredictionService();
+        $result = $predictionService->predictParticipation($featureData);
+
+        // Debug logging
+        error_log("Prediction features: " . json_encode($featureData));
+        error_log("Prediction result: " . json_encode($result));
+
+        return [
+            'success' => true,
+            'prediction' => $result['prediction'] ?? null
+        ];
+
+    } catch (Exception $e){
+        error_log("Prediction error: " . $e->getMessage());
+        return [
+            'success' => false,
+            'message' => $e->getMessage()
+        ];
+    }
+}
+
+
+
+public function getRecommendedEvents($userId){
+
+    require_once "RecommendationService.php";
+
+    $service = new RecommendationService();
+
+    return $service->getRecommendedEventsForVolunteer($userId);
+}
+
 }
 
 // Create a global instance for backward compatibility

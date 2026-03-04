@@ -114,166 +114,131 @@ $eventsForDropdown = $events['events'] ?? [];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Results Management</title>
-    <link rel="stylesheet" href="../assets/css/a7.css">
+    <link rel="stylesheet" href="../assets/css/a9.css">
+    <link rel="stylesheet" href="../assets/css/result_management.css">
     <link rel="icon" type="image/png" href="../assets/images/title.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <style>
-        .status-badge {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        .status-pending { background: #fff3cd; color: #856404; }
-        .status-approved { background: #d4edda; color: #155724; }
-        .status-rejected { background: #f8d7da; color: #721c24; }
-        .result-image {
-            width: 100px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-        .filter-section {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .action-buttons {
-            white-space: nowrap;
-        }
-        .action-buttons .btn {
-            margin: 2px;
-        }
-        .organizer-badge {
-            background: #e3f2fd;
-            color: #1565c0;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-        }
-        .image-preview-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .image-preview {
-            position: relative;
-            width: 100px;
-            height: 100px;
-        }
-        .image-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-        .image-preview .keep-checkbox {
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            background: white;
-            padding: 2px;
-            border-radius: 3px;
-        }
-        .additional-images-section {
-            border-top: 1px solid #dee2e6;
-            padding-top: 15px;
-            margin-top: 15px;
-        }
-    </style>
 </head>
 <body>
 
     <!-- Sidebar Navigation -->
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-logo">
-            <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
-        </div>
-        <div class="nav-items">
-            <?php if ($role === 'Admin'): ?>
-                <div class="nav-item">
-                    <a href="admin_dashboard.php">
-                        <i class="ri-dashboard-line"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a href="coordinator_management.php">
-                        <i class="ri-user-settings-line"></i>
-                        <span>Coordinator Management</span>
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a href="organizer_requests.php">
-                        <i class="ri-award-line"></i>
-                        <span>Organizer Requests</span>
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a href="results_management.php" class="active">
-                        <i class="ri-file-chart-line"></i>
-                        <span>Event Results</span>
-                    </a>
-                </div>
-            <?php elseif ($role === 'Organizer'): ?>
-                <div class="nav-item">
-                    <a href="organizer_dashboard.php">
-                        <i class="ri-dashboard-line"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a href="organizer_events.php">
-                        <i class="ri-calendar-line"></i>
-                        <span>My Events</span>
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a href="results_management.php" class="active">
-                        <i class="ri-file-chart-line"></i>
-                        <span>Event Results</span>
-                    </a>
-                </div>
-            <?php elseif ($role === 'Coordinator'): ?>
-                <div class="nav-item">
-                    <a href="coordinator_dashboard.php">
-                        <i class="ri-dashboard-line"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a href="coordinator_events.php">
-                        <i class="ri-calendar-line"></i>
-                        <span>My Events</span>
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a href="results_management.php" class="active">
-                        <i class="ri-file-chart-line"></i>
-                        <span>Event Results</span>
-                    </a>
-                </div>
-            <?php endif; ?>
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
+    </div>
+    <div class="nav-items">
+
+        <?php if ($role === 'Admin'): ?>
             <div class="nav-item">
-                <a href="view_messages.php">
-                    <i class="ri-message-3-line"></i>
-                    <span>Messages</span>
-                    <?php if ($unreadCount > 0): ?>
-                        <span class="notification-badge"><?= $unreadCount ?></span>
-                    <?php endif; ?>
+            <a href="admin_dashboard.php">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
+        </div> 
+        <?php endif; ?>
+
+        <?php if ($role === 'Coordinator'): ?>
+            <div class="nav-item">
+            <a href="coordinator_dashboard.php">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
+            </div> 
+        <?php endif; ?>
+
+        <?php if ($role === 'Organizer'): ?>
+            <div class="nav-item">
+            <a href="coordinator_dashboard.php">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
+            </div> 
+        <?php endif; ?>
+
+        <div class="nav-item">
+            <a href="events.php">
+                <i class="ri-calendar-event-line"></i>
+                <span>Manage Events</span>
+            </a>
+        </div>
+
+        <?php if ($role === 'Coordinator'): ?>
+        <div class="nav-item">
+            <a href="mark_attendance.php">
+                <i class="ri-checkbox-circle-line"></i>
+                <span>Mark Attendance</span>
+            </a>
+        </div>
+        <?php endif; ?>
+
+        <?php if ($role === 'Admin' || $role === 'Coordinator'): ?>
+            <div class="nav-item">
+                <a href="volunteer_management.php">
+                    <i class="ri-user-star-line"></i>
+                    <span>Volunteers Management</span>
                 </a>
             </div>
+        <?php endif; ?>
+
+        <?php if ($role === 'Admin'): ?>
+        <div class="nav-item">
+                <a href="coordinator_management.php">
+                    <i class="ri-group-line"></i>
+                    <span>Coordinator Management</span>
+                </a>
+        </div> 
+        <?php endif; ?>
+
+        <?php if ($role === 'Admin'): ?>
             <div class="nav-item">
-                <a href="logout.php">
-                    <i class="ri-logout-box-line"></i>
-                    <span>Logout</span>
+                <a href="organizer_requests.php">
+                    <i class="ri-shield-user-line"></i>
+                    <span>Organizers Management</span>
+                </a>
+            </div> 
+        <?php endif; ?>
+
+        <?php if ($role === 'Admin'): ?>
+            <div class="nav-item">
+                <a href="issue_certificates.php">
+                    <i class="ri-user-settings-line"></i>
+                    <span>Certificate issue</span>
                 </a>
             </div>
+        <?php endif; ?>
+
+        <?php if ($role === 'Admin' || $role === 'Coordinator'): ?>
+         <div class="nav-item">
+            <a href="view_messages.php"> 
+                <i class="ri-chat-3-line"></i>
+                <span>Support Messages</span>
+            </a>
         </div>
-    </nav>
+        <?php endif; ?>
+
+        <div class="nav-item">
+            <a href="send_message.php">
+                <i class="ri-send-plane-line"></i>
+                <span>Send Messages</span>
+            </a>
+        </div>
+
+        <div class="nav-item">
+            <a href="results_management.php" class="active">
+                <i class="ri-history-line"></i>
+                <span>Results Management</span>
+            </a>
+        </div>     
+
+        <div class="nav-item">
+            <a href="logout.php">
+                <i class="ri-logout-box-line me-2"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+</nav>
 
     <!-- Main Content -->
     <div class="main-content" id="mainContent">

@@ -2,12 +2,12 @@
 $conn = new mysqli("localhost","root","","volunteer_management");
 
 // Event ID 26
-$eventId = 75;
-$registrationDate = "2026-02-27 17:35:05";
+$eventId = 128;
+$registrationDate = "2026-03-01 13:20:05";
 
 // List of 10 volunteer user IDs for first event
 $volunteers = [
-    55,56.57
+   51,52
 ];
 
 foreach($volunteers as $userId){

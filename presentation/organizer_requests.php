@@ -70,7 +70,7 @@ $stats = $organizerLogic->getRequestStatistics();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Organizer Requests Management</title>
-    <link rel="stylesheet" href="../assets/css/a7.css">
+    <link rel="stylesheet" href="../assets/css/a9.css">
     <link rel="icon" type="image/png" href="../assets/images/title.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
@@ -78,49 +78,122 @@ $stats = $organizerLogic->getRequestStatistics();
 <body>
 
     <!-- Sidebar Navigation -->
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-logo">
-            <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
+    </div>
+    <div class="nav-items">
+
+        <?php if ($role === 'Admin'): ?>
+            <div class="nav-item">
+            <a href="admin_dashboard.php">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
+        </div> 
+        <?php endif; ?>
+
+        <?php if ($role === 'Coordinator'): ?>
+            <div class="nav-item">
+            <a href="coordinator_dashboard.php">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
+            </div> 
+        <?php endif; ?>
+
+        <?php if ($role === 'Organizer'): ?>
+            <div class="nav-item">
+            <a href="coordinator_dashboard.php">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
+            </div> 
+        <?php endif; ?>
+
+        <div class="nav-item">
+            <a href="events.php">
+                <i class="ri-calendar-event-line"></i>
+                <span>Manage Events</span>
+            </a>
         </div>
-        <div class="nav-items">
-            <div class="nav-item">
-                <a href="admin_dashboard.php">
-                    <i class="ri-dashboard-line"></i>
-                    <span>Dashboard</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="coordinator_management.php">
-                    <i class="ri-user-settings-line"></i>
-                    <span>Coordinator Management</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="organizer_requests.php" class="active">
-                    <i class="ri-award-line"></i>
-                    <span>Organizer Requests</span>
-                </a>
-            </div>
+
+        <?php if ($role === 'Coordinator'): ?>
+        <div class="nav-item">
+            <a href="mark_attendance.php">
+                <i class="ri-checkbox-circle-line"></i>
+                <span>Mark Attendance</span>
+            </a>
+        </div>
+        <?php endif; ?>
+
+        <?php if ($role === 'Admin' || $role === 'Coordinator'): ?>
             <div class="nav-item">
                 <a href="volunteer_management.php">
-                    <i class="ri-add-circle-line"></i>
-                    <span>Volunteers</span>
+                    <i class="ri-user-star-line"></i>
+                    <span>Volunteers Management</span>
                 </a>
             </div>
+        <?php endif; ?>
+
+        <?php if ($role === 'Admin'): ?>
+        <div class="nav-item">
+                <a href="coordinator_management.php">
+                    <i class="ri-group-line"></i>
+                    <span>Coordinator Management</span>
+                </a>
+        </div> 
+        <?php endif; ?>
+
+        <?php if ($role === 'Admin'): ?>
             <div class="nav-item">
-                <a href="view_messages.php">
-                    <i class="ri-message-3-line"></i>
-                    <span>Messages</span>
+                <a href="organizer_requests.php" class="active">
+                    <i class="ri-shield-user-line"></i>
+                    <span>Organizers Management</span>
                 </a>
-            </div>
+            </div> 
+        <?php endif; ?>
+
+        <?php if ($role === 'Admin'): ?>
             <div class="nav-item">
-                <a href="logout.php">
-                    <i class="ri-logout-box-line"></i>
-                    <span>Logout</span>
+                <a href="issue_certificates.php">
+                    <i class="ri-user-settings-line"></i>
+                    <span>Certificate issue</span>
                 </a>
             </div>
+        <?php endif; ?>
+
+        <?php if ($role === 'Admin' || $role === 'Coordinator'): ?>
+         <div class="nav-item">
+            <a href="view_messages.php"> 
+                <i class="ri-chat-3-line"></i>
+                <span>Support Messages</span>
+            </a>
         </div>
-    </nav>
+        <?php endif; ?>
+
+        <div class="nav-item">
+            <a href="send_message.php">
+                <i class="ri-send-plane-line"></i>
+                <span>Send Messages</span>
+            </a>
+        </div>
+
+        <div class="nav-item">
+            <a href="results_management.php">
+                <i class="ri-history-line"></i>
+                <span>Results Management</span>
+            </a>
+        </div>     
+
+        <div class="nav-item">
+            <a href="logout.php">
+                <i class="ri-logout-box-line me-2"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+</nav>
 
     <!-- Main Content -->
     <div class="main-content" id="mainContent">

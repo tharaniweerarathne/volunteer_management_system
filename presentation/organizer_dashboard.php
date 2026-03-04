@@ -31,267 +31,133 @@ $totalEvents = $calendarData['totalEvents'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volunteer Dashboard</title>
-    <link rel="stylesheet" href="../assets/css/a7.css">
+    <link rel="stylesheet" href="../assets/css/a9.css">
     <link rel="icon" type="image/png" href="../assets/images/title.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     
     <!-- FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
-    <style>
-        /* Calendar Custom Styles */
-        #calendar-container {
-            padding: 20px;
-            min-height: 600px;
-        }
-        
-        .fc {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        .fc .fc-toolbar-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-        
-        .fc .fc-button {
-            background-color: #f8f9fa;
-            border-color: #dee2e6;
-            color: #495057;
-        }
-        
-        .fc .fc-button-primary:not(:disabled).fc-button-active,
-        .fc .fc-button-primary:not(:disabled):active {
-            background-color: #0d6efd;
-            border-color: #0d6efd;
-        }
-        
-        .fc-event {
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            padding: 2px 5px;
-            margin: 1px 0;
-        }
-        
-        .fc-event:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        
-        .fc-daygrid-day.fc-day-today {
-            background-color: rgba(13, 110, 253, 0.1) !important;
-        }
-        
-        /* Event status indicators */
-        .event-status-badge {
-            display: inline-block;
-            padding: 0.25em 0.6em;
-            font-size: 75%;
-            font-weight: 700;
-            line-height: 1;
-            text-align: center;
-            white-space: nowrap;
-            vertical-align: baseline;
-            border-radius: 10rem;
-        }
-        
-        .status-cancelled {
-            background-color: #dc3545;
-            color: white;
-        }
-        
-        .status-over {
-            background-color: #6c757d;
-            color: white;
-        }
-        
-        .status-active {
-            background-color: #198754;
-            color: white;
-        }
-        
-        /* Dashboard Cards */
-        .dashboard-card {
-            border-radius: 10px;
-            border: none;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease;
-        }
-        
-        .dashboard-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .card-icon {
-            font-size: 2.5rem;
-            opacity: 0.8;
-        }
-        
-        /* Quick Actions */
-        .quick-action-item {
-            padding: 15px;
-            border-radius: 8px;
-            background: white;
-            border: 1px solid #e9ecef;
-            transition: all 0.3s ease;
-        }
-        
-        .quick-action-item:hover {
-            background: #f8f9fa;
-            border-color: #0d6efd;
-        }
-        
-        .quick-action-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-        
-        /* Statistics Cards */
-        .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 10px;
-        }
-        
-        .stat-card.secondary {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-        
-        .stat-card.success {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-        
-        .stat-card.warning {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-        }
-        
-        /* Role Badges */
-        .role-badge {
-            padding: 0.5em 1em;
-            border-radius: 20px;
-            font-weight: 500;
-        }
-        
-        .badge-admin {
-            background-color: #198754;
-            color: white;
-        }
-        
-        .badge-coordinator {
-            background-color: #0d6efd;
-            color: white;
-        }
-        
-        .badge-organizer {
-            background-color: #ffc107;
-            color: #000;
-        }
-        
-        .badge-volunteer {
-            background-color: #6f42c1;
-            color: white;
-        }
-        
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .fc .fc-toolbar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .fc .fc-toolbar .fc-toolbar-chunk {
-                margin-bottom: 0.5rem;
-            }
-            
-            .fc .fc-toolbar-title {
-                font-size: 1rem;
-            }
-            
-            #calendar-container {
-                padding: 10px;
-            }
-            
-            .dashboard-card .card-body {
-                padding: 1rem;
-            }
-        }
-    </style>
 </head>
 <body>
     <!-- sidebar navigation -->
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-logo">
-            <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
-        </div>
-        <div class="nav-items">
-            <div class="nav-item">
-                <a href="#" class="active">
-                    <i class="ri-dashboard-line"></i>
-                    <span>Dashboard</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="events_volunteer.php">
-                    <i class="ri-calendar-check-line"></i>
-                    <span>Join Events</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="my_events.php">
-                    <i class="ri-calendar-line"></i>
-                    <span>My Events</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="my_certificates.php">
-                    <i class="ri-medal-line"></i>
-                    <span>Certificates</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="view_attendance.php">
-                    <i class="ri-trophy-line"></i>
-                    <span>View Attendance</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="inbox.php" class="messages-link">
-                    <i class="ri-message-3-line"></i>
-                    <span>Messages</span>
-                    <?php if ($unreadCount > 0): ?>
-                        <span class="message-badge"><?php echo $unreadCount; ?></span>
-                    <?php endif; ?>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="apply_organizer.php">
-                    <i class="ri-feedback-line"></i>
-                    <span>Organizer</span>
-                </a>
-            </div>
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <img src="../assets/images/logo.png" alt="Logo" class="logo-img">
+    </div>
+    <div class="nav-items">
 
+        <?php if ($userRole === 'Admin'): ?>
             <div class="nav-item">
-                <a href="past_event_main.php">
-                    <i class="ri-trophy-line"></i>
-                    <span>Past Events</span>
-                </a>
-            </div>
+            <a href="admin_dashboard.php" class="active">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
+        </div> 
+        <?php endif; ?>
+
+        <?php if ($userRole === 'Coordinator'): ?>
             <div class="nav-item">
-                <a href="logout.php">
-                    <i class="ri-logout-box-line me-2"></i>
-                    <span>Logout</span>
-                </a>
-            </div>
+            <a href="coordinator_dashboard.php" class="active">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
+            </div> 
+        <?php endif; ?>
+
+        <?php if ($userRole === 'Organizer'): ?>
+            <div class="nav-item">
+            <a href="coordinator_dashboard.php" class="active">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
+            </div> 
+        <?php endif; ?>
+
+        <div class="nav-item">
+            <a href="events.php">
+                <i class="ri-calendar-event-line"></i>
+                <span>Manage Events</span>
+            </a>
         </div>
-    </nav>
+
+        <?php if ($userRole === 'Coordinator'): ?>
+        <div class="nav-item">
+            <a href="mark_attendance.php">
+                <i class="ri-checkbox-circle-line"></i>
+                <span>Mark Attendance</span>
+            </a>
+        </div>
+        <?php endif; ?>
+
+        <?php if ($userRole === 'Admin' || $userRole === 'Coordinator'): ?>
+            <div class="nav-item">
+                <a href="volunteer_management.php">
+                    <i class="ri-user-star-line"></i>
+                    <span>Volunteers Management</span>
+                </a>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($userRole === 'Admin'): ?>
+        <div class="nav-item">
+                <a href="coordinator_management.php">
+                    <i class="ri-group-line"></i>
+                    <span>Coordinator Management</span>
+                </a>
+        </div> 
+        <?php endif; ?>
+
+        <?php if ($userRole === 'Admin'): ?>
+            <div class="nav-item">
+                <a href="organizer_requests.php">
+                    <i class="ri-shield-user-line"></i>
+                    <span>Organizers Management</span>
+                </a>
+            </div> 
+        <?php endif; ?>
+
+        <?php if ($userRole === 'Admin'): ?>
+            <div class="nav-item">
+                <a href="issue_certificates.php">
+                    <i class="ri-user-settings-line"></i>
+                    <span>Certificate issue</span>
+                </a>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($userRole === 'Admin' || $userRole === 'Coordinator'): ?>
+         <div class="nav-item">
+            <a href="view_messages.php"> 
+                <i class="ri-chat-3-line"></i>
+                <span>Support Messages</span>
+            </a>
+        </div>
+        <?php endif; ?>
+
+        <div class="nav-item">
+            <a href="send_message.php">
+                <i class="ri-send-plane-line"></i>
+                <span>Send Messages</span>
+            </a>
+        </div>
+
+        <div class="nav-item">
+            <a href="results_management.php">
+                <i class="ri-feedback-line"></i>
+                <span>Results Management</span>
+            </a>
+        </div>     
+
+        <div class="nav-item">
+            <a href="logout.php">
+                <i class="ri-logout-box-line me-2"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
 
     <!-- main content -->
     <div class="main-content" id="mainContent">

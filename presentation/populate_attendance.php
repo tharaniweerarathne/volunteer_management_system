@@ -7,10 +7,10 @@ if ($conn->connect_error) {
 }
 
 // Event ID
-$eventId = 75;
-$attendanceDate = '2026-02-27'; // Event date
-$markedBy = 44; // Admin/Coordinator ID who marks attendance
-$markedAt = "2026-02-27 17:45:05";
+$eventId = 128;
+$attendanceDate = '2026-03-02'; // Event date
+$markedBy = 45; // Admin/Coordinator ID who marks attendance
+$markedAt = "2026-03-02 15:45:05";
 
 // Get all registered volunteers for this event
 $result = $conn->query("SELECT userId FROM event_registrations WHERE eventId=$eventId AND status='registered'");

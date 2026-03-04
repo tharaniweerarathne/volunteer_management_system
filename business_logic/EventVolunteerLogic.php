@@ -9,18 +9,19 @@ class EventVolunteerLogic {
     }
     
     // Check if user can view volunteers (Admin or assigned Coordinator)
-    public function canViewVolunteers($eventId, $userId, $userRole) {
-        if ($userRole === 'Admin') {
-            return true;
-        }
-        
-        if ($userRole === 'Coordinator') {
-            return $this->eventVolunteerData->isUserCoordinatorForEvent($eventId, $userId);
-        }
-        
-        return false;
+// Check if user can view volunteers
+public function canViewVolunteers($eventId, $userId, $userRole) {
+    if ($userRole === 'Admin') {
+        return true;
     }
     
+    // Allow ALL coordinators and organizers to see ALL events
+    if ($userRole === 'Organizer' || $userRole === 'Coordinator') {
+        return true;
+    }
+    
+    return false;
+}
     // Get volunteers for event
     public function getVolunteers($eventId) {
         return $this->eventVolunteerData->getVolunteersByEvent($eventId);

@@ -119,6 +119,16 @@ if ($action === 'cancel' && $eventId) {
     }
 }
 
+$predictionLogic = new EventLogic();
+
+if ($action === 'predict' && $eventId){
+
+    $predictionResult = $predictionLogic->predictEventParticipation($eventId);
+
+    require_once "prediction.php";
+    exit();
+}
+
 $coordinatorEvents = [];
 if ($userRole === 'Coordinator') {
     $coordinatorEvents = $eventData->getEventsByCoordinator($userId);
@@ -546,6 +556,11 @@ if ($userRole === 'Coordinator') {
                                         <a href="events.php?action=cancel&id=<?php echo $event['eventId']; ?>" 
                                            class="btn btn-sm btn-warning"><i class="ri-close-line"></i></a>
                                     <?php endif; ?>
+
+<a href="events.php?action=predict&id=<?php echo $event['eventId']; ?>" 
+   class="btn btn-sm btn-warning">
+   <i class="ri-bar-chart-line"></i>
+</a>
                                     
                                     <?php if ($userRole === 'Admin'): ?>
                                         <a href="events.php?action=assign&id=<?php echo $event['eventId']; ?>" 

@@ -1,8 +1,8 @@
 <?php
 require_once '../business_logic/eventLogic.php';
 require_once '../business_logic/resultsLogic.php';
-require_once '../business_logic/LeaderboardLogic.php';
-require_once '../business_logic/StatisticsLogic.php';
+require_once '../business_logic/LeaderboardFacade.php';
+require_once '../business_logic/StatisticsFacade.php';
 
 // Check if session is already started
 if (session_status() === PHP_SESSION_NONE) {
@@ -45,13 +45,14 @@ $eventData = new EventData();
 $categories = $eventData->getCategories();
 $skills = $eventData->getAllSkills();
 
-$leaderboardLogic = new LeaderboardLogic();
-$podiumVolunteers = $leaderboardLogic->getPodiumData();
+$leaderboardFacade = new LeaderboardFacade();
+$podiumVolunteers = $leaderboardFacade->getPodiumLeaderboard();
 
-$statisticsLogic = new StatisticsLogic();
-$simpleStats = $statisticsLogic->getSimpleStats();
-$detailedStats = $statisticsLogic->getDetailedStats();
-$allStats = $statisticsLogic->getAllStatistics();
+$statisticsFacade = new StatisticsFacade();
+$stats = $statisticsFacade->getDashboardStats();
+$simpleStats = $stats['simple'];
+$detailedStats = $stats['detailed'];
+$allStats = $stats['all'];
 ?>
 
 
