@@ -1,5 +1,5 @@
 <?php
-// resultsLogic.php ---> business_logic layer (UPDATED WITH MULTIPLE IMAGES)
+
 require_once '../data_access/resultsData.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -17,7 +17,7 @@ class ResultsLogic {
     public function uploadResultImages($resultTitle) {
         $uploadedImages = [];
         
-        // Handle main image (resultImage)
+        // Handle main image 
         if (isset($_FILES['resultImage']) && $_FILES['resultImage']['error'] == UPLOAD_ERR_OK) {
             $mainImage = $this->uploadSingleImage($_FILES['resultImage'], $resultTitle, 'main');
             if ($mainImage) {
@@ -25,7 +25,7 @@ class ResultsLogic {
             }
         }
         
-        // Handle additional images (resultImage2 to resultImage5)
+        // Handle additional images 
         for ($i = 2; $i <= 5; $i++) {
             $fieldName = 'resultImage' . $i;
             if (isset($_FILES[$fieldName]) && $_FILES[$fieldName]['error'] == UPLOAD_ERR_OK) {
@@ -39,7 +39,7 @@ class ResultsLogic {
         return $uploadedImages;
     }
     
-    // Helper function to upload a single image
+   
     private function uploadSingleImage($file, $resultTitle, $imageNumber) {
         if ($file['error'] !== UPLOAD_ERR_OK) {
             return false;
@@ -52,7 +52,7 @@ class ResultsLogic {
             return false;
         }
 
-        if ($file['size'] > 5 * 1024 * 1024) { // 5MB max
+        if ($file['size'] > 5 * 1024 * 1024) { 
             return false;
         }
 
@@ -74,7 +74,7 @@ class ResultsLogic {
         return false;
     }
     
-    // Delete old images when updating
+    
     private function deleteOldImages($resultId, $keepImages = []) {
         $result = $this->resultsData->getResultById($resultId);
         if (!$result) {
@@ -86,7 +86,7 @@ class ResultsLogic {
         foreach ($imageFields as $field) {
             $oldImage = $result[$field] ?? null;
             
-            // Check if this image should be kept
+          
             $shouldKeep = false;
             foreach ($keepImages as $newField => $newImage) {
                 if ($field === $newField) {
@@ -95,7 +95,7 @@ class ResultsLogic {
                 }
             }
             
-            // Delete old image if it exists and not being kept
+           
             if ($oldImage && !$shouldKeep && file_exists('../' . $oldImage)) {
                 unlink('../' . $oldImage);
             }
@@ -125,7 +125,7 @@ class ResultsLogic {
         // Upload multiple images
         $uploadedImages = $this->uploadResultImages($_POST['resultTitle']);
         if (empty($uploadedImages)) {
-            // No images uploaded, but that's okay
+            
             $uploadedImages = [];
         }
 
@@ -146,7 +146,7 @@ class ResultsLogic {
             'addedBy' => $_SESSION['userId']
         ];
 
-        // Add uploaded images to data
+        
         foreach ($uploadedImages as $field => $imagePath) {
             $resultData[$field] = $imagePath;
         }
@@ -185,25 +185,25 @@ class ResultsLogic {
         // Upload new images
         $uploadedImages = $this->uploadResultImages($_POST['resultTitle']);
         
-        // Get existing images that should be kept
+        
         $keepImages = [];
         for ($i = 1; $i <= 5; $i++) {
             $fieldName = $i == 1 ? 'resultImage' : 'resultImage' . $i;
             $keepField = 'keep_' . $fieldName;
             
-            // If user checked "keep" checkbox for this image
+            
             if (isset($_POST[$keepField]) && $_POST[$keepField] == '1' && !empty($result[$fieldName])) {
                 $keepImages[$fieldName] = $result[$fieldName];
             }
         }
 
-        // Delete old images that are not being kept
+        
         $this->deleteOldImages($resultId, array_merge($keepImages, $uploadedImages));
 
-        // Determine organizer ID for update
+       
         $organizerId = $this->determineOrganizerId();
         if (!$organizerId) {
-            $organizerId = $result['organizerId']; // Keep existing organizer
+            $organizerId = $result['organizerId']; 
         }
 
         $resultData = [
@@ -215,7 +215,7 @@ class ResultsLogic {
             'skillId' => $_POST['skillId'] ?? null
         ];
 
-        // Merge kept images and new uploaded images
+        
         $allImages = array_merge($keepImages, $uploadedImages);
         foreach ($allImages as $field => $imagePath) {
             $resultData[$field] = $imagePath;
@@ -239,28 +239,28 @@ class ResultsLogic {
         return ['success' => $success, 'message' => $success ? 'Result updated successfully' : 'Update failed'];
     }
     
-    // Determine organizer ID based on user role
+    
     private function determineOrganizerId() {
         $role = $_SESSION['role'] ?? null;
         
-        // If admin and organizer is specified, use that
+        
         if ($role === 'Admin' && !empty($_POST['organizerId'])) {
             return $_POST['organizerId'];
         }
         
-        // If user is an organizer, use their own ID
+        
         if ($role === 'Organizer') {
             return $_SESSION['userId'];
         }
         
-        // If user is a coordinator and organizer is specified
+        
         if ($role === 'Coordinator' && !empty($_POST['organizerId'])) {
             return $_POST['organizerId'];
         }
         
-        // For coordinator without organizer specified, check if they're also an organizer
+        
         if ($role === 'Coordinator') {
-            // Check if this coordinator is also registered as an organizer
+            
             $userInfo = $this->getUserById($_SESSION['userId']);
             if ($userInfo && $userInfo['role'] === 'Organizer') {
                 return $_SESSION['userId'];
@@ -270,12 +270,12 @@ class ResultsLogic {
         return null;
     }
     
-    // Rest of the methods remain the same, just updating the getResultById method
+   
     public function getResultById($resultId) {
         $result = $this->resultsData->getResultById($resultId);
         
         if ($result) {
-            // Get all images as an array
+           
             $images = [];
             for ($i = 1; $i <= 5; $i++) {
                 $fieldName = $i == 1 ? 'resultImage' : 'resultImage' . $i;
@@ -313,7 +313,7 @@ class ResultsLogic {
         return $stmt->get_result()->fetch_assoc();
     }
     
-    // Get all organizers for dropdown
+    
     public function getAllOrganizers() {
         try {
             $organizers = $this->resultsData->getAllOrganizers();
@@ -349,7 +349,7 @@ class ResultsLogic {
         }
     }
     
-    // Get events with organizers for dropdown
+    // Get events with organizers
     public function getEventsWithOrganizers() {
         try {
             $events = $this->resultsData->getEventsWithOrganizers();
@@ -381,10 +381,10 @@ class ResultsLogic {
         $success = $this->resultsData->approveResult($resultId, $_SESSION['userId'], $notes);
         
         if ($success) {
-            // Send notification to the user who added the result
+            
             $this->sendResultApprovalEmail($result['addedById'], $resultId, 'approved', $notes);
             
-            // Also notify the organizer if different from submitter
+            
             if ($result['organizerId'] && $result['organizerId'] != $result['addedById']) {
                 $this->sendResultApprovalEmail($result['organizerId'], $resultId, 'approved', $notes, 'organizer');
             }
@@ -407,10 +407,10 @@ class ResultsLogic {
         $success = $this->resultsData->rejectResult($resultId, $_SESSION['userId'], $notes);
         
         if ($success) {
-            // Send notification to the user who added the result
+            
             $this->sendResultApprovalEmail($result['addedById'], $resultId, 'rejected', $notes);
             
-            // Also notify the organizer if different from submitter
+            
             if ($result['organizerId'] && $result['organizerId'] != $result['addedById']) {
                 $this->sendResultApprovalEmail($result['organizerId'], $resultId, 'rejected', $notes, 'organizer');
             }
@@ -664,6 +664,6 @@ class ResultsLogic {
     }
 }
 
-// Create a global instance for backward compatibility
+
 $resultsLogic = new ResultsLogic();
 ?>

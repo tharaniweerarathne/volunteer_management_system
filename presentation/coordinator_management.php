@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// check if user is logged in
+
 if (!isset($_SESSION['name'])) {
     echo "Not logged in!";
     exit();
@@ -623,7 +623,7 @@ $coordinators = $logic->getAllCoordinators();
 
 
 
-    // Auto-refresh notification count every 30 seconds
+    // Auto-refresh notification
         setInterval(function() {
             fetch('get_unread_count.php')
                 .then(response => response.json())
@@ -633,24 +633,24 @@ $coordinators = $logic->getAllCoordinators();
                     }
                 })
                 .catch(error => console.error('Error fetching unread count:', error));
-        }, 30000); // 30 seconds
+        }, 30000);
         
         function updateNotificationBadge(count) {
             console.log('Updating badge count:', count);
             
-            // Update TOP HEADER notification badge (only first dropdown)
+            
             let topNotificationBadge = document.querySelector('.header-actions .dropdown:first-child .notification-badge');
             let topNotificationButton = document.querySelector('.header-actions .dropdown:first-child .btn');
             
-            // Update DROPDOWN MENU badge
+            
             let dropdownBadge = document.querySelector('.dropdown-menu .badge');
             
-            // Update SIDEBAR badge
+            
             let sidebarBadge = document.querySelector('.message-badge');
             let sidebarLink = document.querySelector('.nav-item a[href*="messages"]');
             
             if (count > 0) {
-                // Update or create TOP HEADER badge
+                
                 if (topNotificationBadge) {
                     topNotificationBadge.textContent = count;
                 } else if (topNotificationButton) {
@@ -660,11 +660,11 @@ $coordinators = $logic->getAllCoordinators();
                     topNotificationButton.appendChild(newBadge);
                 }
                 
-                // Update DROPDOWN MENU badge
+                
                 if (dropdownBadge) {
                     dropdownBadge.textContent = count + ' new';
                 } else {
-                    // Find the Messages dropdown item and add badge
+                  
                     const messagesDropdownItem = document.querySelector('.dropdown-item[href="inbox.php"]');
                     if (messagesDropdownItem) {
                         const newBadge = document.createElement('span');
@@ -674,7 +674,7 @@ $coordinators = $logic->getAllCoordinators();
                     }
                 }
                 
-                // Update SIDEBAR badge
+                
                 if (sidebarBadge) {
                     sidebarBadge.textContent = count;
                 } else if (sidebarLink) {
@@ -684,19 +684,17 @@ $coordinators = $logic->getAllCoordinators();
                     sidebarLink.appendChild(newBadge);
                 }
             } else {
-                // Remove badges if count is 0
-                
-                // Remove TOP HEADER badge
+
                 if (topNotificationBadge) {
                     topNotificationBadge.remove();
                 }
                 
-                // Remove DROPDOWN MENU badge
+               
                 if (dropdownBadge) {
                     dropdownBadge.remove();
                 }
                 
-                // Remove SIDEBAR badge
+          
                 if (sidebarBadge) {
                     sidebarBadge.remove();
                 }

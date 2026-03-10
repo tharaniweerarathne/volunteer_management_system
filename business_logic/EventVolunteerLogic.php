@@ -8,31 +8,31 @@ class EventVolunteerLogic {
         $this->eventVolunteerData = new EventVolunteerData();
     }
     
-    // Check if user can view volunteers (Admin or assigned Coordinator)
+
 // Check if user can view volunteers
 public function canViewVolunteers($eventId, $userId, $userRole) {
     if ($userRole === 'Admin') {
         return true;
     }
     
-    // Allow ALL coordinators and organizers to see ALL events
+    // Allow ALL coordinators and organizers 
     if ($userRole === 'Organizer' || $userRole === 'Coordinator') {
         return true;
     }
     
     return false;
 }
-    // Get volunteers for event
+   
     public function getVolunteers($eventId) {
         return $this->eventVolunteerData->getVolunteersByEvent($eventId);
     }
     
-    // Get event details
+    
     public function getEvent($eventId) {
         return $this->eventVolunteerData->getEventDetails($eventId);
     }
     
-    // Get event statistics
+  
     public function getStatistics($eventId) {
         return $this->eventVolunteerData->getEventStatistics($eventId);
     }
@@ -44,13 +44,13 @@ public function canViewVolunteers($eventId, $userId, $userRole) {
     
 
 
-    // Add this method to your EventVolunteerLogic class:
+   
 public function getVolunteersForExport($eventId) {
     $volunteersData = $this->eventVolunteerData->exportVolunteersToCSV($eventId);
     $formatted = [];
     
     foreach ($volunteersData as $volunteer) {
-        // Format date properly for CSV (YYYY-MM-DD format is Excel-friendly)
+        
         $registrationDate = date('Y-m-d', strtotime($volunteer['registrationDate']));
         
         $formatted[] = [
@@ -59,7 +59,7 @@ public function getVolunteersForExport($eventId) {
             'phone' => $volunteer['telephoneNo'] ?? 'N/A',
             'gender' => $volunteer['gender'] ?? 'Not specified',
             'location' => $volunteer['location'] ?? 'Not specified',
-            'registrationDate' => $registrationDate, // Formatted date
+            'registrationDate' => $registrationDate, 
             'skills' => $volunteer['skills'] ?? 'No skills'
         ];
     }
@@ -68,7 +68,7 @@ public function getVolunteersForExport($eventId) {
 }
 
 
-// Add this method to your EventVolunteerLogic class:
+
 public function searchVolunteers($eventId, $searchParams = []) {
     $volunteers = $this->eventVolunteerData->searchVolunteersByEvent($eventId, $searchParams);
     
@@ -90,13 +90,13 @@ public function searchVolunteers($eventId, $searchParams = []) {
     return $formatted;
 }
 
-// Also update the getFormattedVolunteers method to handle search:
+
 public function getFormattedVolunteers($eventId, $searchParams = []) {
     if (!empty($searchParams)) {
         return $this->searchVolunteers($eventId, $searchParams);
     }
     
-    // Original code for getting all volunteers
+    
     $volunteers = $this->getVolunteers($eventId);
     $formatted = [];
     

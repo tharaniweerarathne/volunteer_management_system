@@ -1,8 +1,8 @@
 <?php
-// organizer_requests.php --> presentation folder
+
 session_start();
 
-// Check if user is logged in and is admin
+
 if (!isset($_SESSION['name']) || $_SESSION['role'] !== 'Admin') {
     header("Location: login.php");
     exit();
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $messageType = $result['success'] ? 'success' : 'danger';
     }
     
-    // ADD THIS DELETE HANDLER
+    
     elseif ($action === 'delete') {
         $result = $organizerLogic->deleteOrganizerRequest($_POST['requestId']);
         $message = $result['message'];
@@ -56,10 +56,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get filter from URL
+
 $filterStatus = $_GET['status'] ?? null;
 
-// Get all requests
+
 $requests = $organizerLogic->getAllOrganizerRequests($filterStatus);
 $stats = $organizerLogic->getRequestStatistics();
 ?>
@@ -291,7 +291,7 @@ $stats = $organizerLogic->getRequestStatistics();
     </div>
 </div>
 
-            <!-- Filters -->
+            
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="row align-items-center">
@@ -319,7 +319,7 @@ $stats = $organizerLogic->getRequestStatistics();
             </div>
 
 
-            <!-- Requests List -->
+           
             <div class="card">
                 <div class="card-header">
                     <h4 class="mb-0"><i class="ri-list-check"></i> Organizer Requests</h4>
@@ -384,7 +384,7 @@ $stats = $organizerLogic->getRequestStatistics();
                                                         <i class="ri-close-line"></i> Reject
                                                     </button>
                                                 <?php endif; ?>
-                                                <!-- ADD DELETE BUTTON HERE -->
+                                                
                                                 <button class="btn btn-sm btn-dark" onclick="deleteRequest(<?= $request['requestId'] ?>, '<?= htmlspecialchars($request['userName']) ?>')">
                                                     <i class="ri-delete-bin-line"></i> Delete
                                                 </button>
@@ -400,7 +400,7 @@ $stats = $organizerLogic->getRequestStatistics();
         </div>
     </div>
 
-    <!-- View Request Modal -->
+   
     <div class="modal fade" id="viewModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -409,7 +409,7 @@ $stats = $organizerLogic->getRequestStatistics();
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body" id="viewModalContent">
-                    <!-- Content will be loaded dynamically -->
+                    
                 </div>
             </div>
         </div>
@@ -469,7 +469,7 @@ $stats = $organizerLogic->getRequestStatistics();
         </div>
     </div>
 
-    <!-- ADD THIS DELETE MODAL -->
+    
     <!-- Delete Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1">
         <div class="modal-dialog">
@@ -584,7 +584,7 @@ $stats = $organizerLogic->getRequestStatistics();
             });
         }
 
-        // Auto-hide alerts
+        
         setTimeout(() => {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(alert => {

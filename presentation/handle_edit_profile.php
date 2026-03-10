@@ -2,7 +2,7 @@
 
 session_start();
 
-// checking if user is logged in
+
 if (!isset($_SESSION['userId']) || !in_array($_SESSION['role'], ['Volunteer', 'Admin', 'Coordinator', 'Organizer'])) {
     echo json_encode(["success" => false, "message" => "Unauthorized access"]);
     exit;

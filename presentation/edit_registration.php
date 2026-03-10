@@ -1,5 +1,5 @@
 <?php
-// presentation/edit_registration.php
+
 
 error_reporting(E_ALL & ~E_NOTICE);
 require_once '../business_logic/eventLogic.php';
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_event'])) {
                     $newEventId
                 );
                 
-                // ✅ SEND INTERNAL MESSAGE FOR EVENT CHANGE
+                
                 $messageSent = $eventLogic->notifyVolunteerEventChange(
                     $_SESSION['userId'],
                     $registration['eventId'],
@@ -139,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_event'])) {
                 <p><i class="bi bi-geo-alt"></i> <?php echo htmlspecialchars($registration['location']); ?></p>
             </div>
             
-            <!-- Available Events Form -->
+            
             <form method="POST">
                 <div class="mb-3">
                     <label class="form-label">Select New Event:</label>

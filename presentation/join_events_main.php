@@ -278,7 +278,7 @@ $skills = $eventData->getAllSkills();
                         </div>
                         
                         <?php
-                        // Check if user is logged in
+                        
                         $joinUrl = isset($_SESSION['userId']) ? 'event_details.php?id=' . $event['eventId'] : 'sign_in.php';
                         ?>
                         
@@ -432,7 +432,7 @@ $skills = $eventData->getAllSkills();
             }
         });
         
-        // Auto-submit filters when changed (optional)
+        
         document.getElementById('filterForm').addEventListener('change', function() {
             this.submit();
         });

@@ -2,7 +2,7 @@
 
 session_start();
 
-// checking if user is logged in as Coordinator
+
 if (!isset($_SESSION['userId']) || $_SESSION['role'] !== 'Coordinator') {
     header('Location: sign_in.php');
     exit;

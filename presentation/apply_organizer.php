@@ -1,8 +1,8 @@
 <?php
-// apply_organizer.php --> presentation folder
+
 session_start();
 
-// Check if user is logged in
+
 if (!isset($_SESSION['name'])) {
     header("Location: login.php");
     exit();
@@ -12,7 +12,7 @@ $userId = $_SESSION['userId'];
 $name = $_SESSION['name'];
 $role = $_SESSION['role'] ?? '';
 
-// Only volunteers can access this page
+
 if ($role !== 'Volunteer') {
     header("Location: dashboard.php");
     exit();
@@ -49,12 +49,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $messageType = $result['success'] ? 'success' : 'danger';
     
     if ($result['success']) {
-        // Refresh can apply status
+        
         $canApplyResult = $organizerLogic->canUserApply($userId, $role);
     }
 }
 
-// Get user's previous requests
+
 $userRequests = $organizerLogic->getUserOrganizerRequests($userId);
 ?>
 
@@ -64,7 +64,7 @@ $userRequests = $organizerLogic->getUserOrganizerRequests($userId);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apply to Become Organizer</title>
-    <link rel="stylesheet" href="../assets/css/a7.css">
+    <link rel="stylesheet" href="../assets/css/a9.css">
     <link rel="icon" type="image/png" href="../assets/images/title.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
@@ -333,7 +333,7 @@ $userRequests = $organizerLogic->getUserOrganizerRequests($userId);
             }
         });
 
-        // Auto-hide alerts after 5 seconds
+        
         setTimeout(() => {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(alert => {

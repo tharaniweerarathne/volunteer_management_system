@@ -2,7 +2,7 @@
 session_start();
 date_default_timezone_set('Asia/Colombo');
 require_once '../business_logic/EventVolunteerLogic.php';
-require_once '../data_access/db.php'; // Add database connection
+require_once '../data_access/db.php'; 
 
 if (!isset($_SESSION['userId'])) {
     header('Location: login.php');
@@ -48,17 +48,16 @@ $searchParams = [
     'search_attendance' => $_GET['search_attendance'] ?? ''
 ];
 
-// get volunteers WITH search filters
+
 $volunteers = $eventVolunteerLogic->getFormattedVolunteers($eventId, $searchParams);
 $stats = $eventVolunteerLogic->getStatistics($eventId);
 
-// ============ FIX ATTENDANCE DATA ============
-// Get attendance data for today directly from database
+
 $today = date('Y-m-d');
 $attendanceData = [];
 
 try {
-    // Use the global connection from db.php
+    
     global $conn;
     
     if ($conn) {
@@ -73,7 +72,7 @@ try {
             $attendanceData[$row['userId']] = $row['status'];
         }
         
-        // Also get counts for stats
+       
         $presentCount = 0;
         $absentCount = 0;
         foreach ($attendanceData as $status) {
@@ -81,7 +80,7 @@ try {
             if ($status == 'Absent') $absentCount++;
         }
         
-        // Add to stats array
+        
         $stats['present_count'] = $presentCount;
         $stats['absent_count'] = $absentCount;
     }
@@ -91,7 +90,7 @@ try {
     $stats['absent_count'] = 0;
 }
 
-// Now merge attendance data with volunteers
+
 foreach ($volunteers as &$volunteer) {
     $userId = $volunteer['userId'] ?? $volunteer['id'] ?? 0;
     if (isset($attendanceData[$userId])) {
@@ -100,29 +99,27 @@ foreach ($volunteers as &$volunteer) {
         $volunteer['attendance_status'] = 'Not Marked';
     }
 }
-unset($volunteer); // Break the reference
+unset($volunteer); 
 
-// If attendance filter is applied, filter the volunteers
+
 if (!empty($searchParams['search_attendance'])) {
     $volunteers = array_filter($volunteers, function($v) use ($searchParams) {
         return $v['attendance_status'] === $searchParams['search_attendance'];
     });
-    $volunteers = array_values($volunteers); // Re-index array
+    $volunteers = array_values($volunteers); 
 }
-// ============ END ATTENDANCE FIX ============
 
-// Check if any search filters are applied
 $isSearchApplied = !empty(array_filter($searchParams, function($value) {
     return !empty($value);
 }));
 
-// Handle export to CSV - FIXED VERSION
+
 if (isset($_GET['export']) && $_GET['export'] == 'csv') {
-    // Get volunteers data for export
+    
     $volunteersData = $eventVolunteerLogic->searchVolunteers($eventId, $searchParams);
     
     if (empty($volunteersData)) {
-        // If no volunteers, redirect back
+        
         header('Location: view_volunteers.php?eventId=' . $eventId . '&' . http_build_query($searchParams));
         exit();
     }
@@ -130,13 +127,13 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
     // Format the data for CSV
     $formattedData = [];
     foreach ($volunteersData as $volunteer) {
-        // Format registration date
+        
         $registrationDate = '';
         if (!empty($volunteer['registrationDate'])) {
             $registrationDate = date('Y-m-d', strtotime($volunteer['registrationDate']));
         }
         
-        // Get user ID safely - check multiple possible keys
+        
         $userId = 0;
         if (isset($volunteer['userId'])) {
             $userId = $volunteer['userId'];
@@ -152,7 +149,7 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
             $attendanceStatus = $attendanceData[$userId];
         }
         
-        // Handle skills - could be array or string
+        // Handle skills 
         $skills = 'No skills';
         if (!empty($volunteer['skills'])) {
             if (is_array($volunteer['skills'])) {
@@ -162,7 +159,7 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
             }
         }
         
-        // Get phone number safely
+       
         $phone = 'N/A';
         if (!empty($volunteer['phone'])) {
             $phone = $volunteer['phone'];
@@ -172,7 +169,7 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
             $phone = $volunteer['telephone'];
         }
         
-        // Get location safely
+        
         $location = 'Not specified';
         if (!empty($volunteer['location'])) {
             $location = $volunteer['location'];
@@ -192,17 +189,17 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
         ];
     }
     
-    // Add search info to filename if any search is applied
+    
     $searchInfo = '';
     if ($isSearchApplied) {
         $searchInfo = '_filtered_' . date('Y-m-d_H-i');
     }
     
-    // Sanitize filename
+    
     $safeEventName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $event['eventName']);
     $filename = "volunteers_" . $safeEventName . $searchInfo . "_" . date('Y-m-d_H-i-s') . ".csv";
     
-    // Clear any output buffers that might contain error messages
+    
     while (ob_get_level()) {
         ob_end_clean();
     }
@@ -216,14 +213,14 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
          
         $output = fopen('php://output', 'w'); 
          
-        // Add BOM for Excel UTF-8 support
+        
         fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF)); 
          
         if (!empty($formattedData)) { 
-            // Write headers
+            
             fputcsv($output, array_keys($formattedData[0])); 
             
-            // Write data rows
+            
             foreach ($formattedData as $row) { 
                 fputcsv($output, $row); 
             } 
@@ -330,7 +327,7 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
                 padding: 4px !important;
             }
         }
-        /* Fix for DataTables warning */
+        
         .dataTables_wrapper .dataTables_processing {
             display: none !important;
         }
@@ -387,7 +384,7 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
                         <?php endif; ?>
                     </div>
                     <div class="col-md-4">
-                        <!-- Statistics Cards in horizontal layout -->
+                        <!-- Statistics Cards  -->
                         <div class="row g-2">
                             <div class="col-6">
                                 <div class="stat-card p-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
@@ -569,7 +566,7 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
             </div>
         <?php endif; ?>
 
-        <!-- Print Header (only shows when printing) -->
+        <!-- Print Header -->
         <div class="print-only mb-4">
             <h1>Volunteer List - <?php echo htmlspecialchars($event['eventName']); ?></h1>
             <p>Event Date: <?php echo date('F j, Y', strtotime($event['startDate'])); ?></p>
@@ -716,7 +713,7 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
-                                    <!-- When no data, create a row with the correct number of columns -->
+                                    
                                     <tr class="no-data-row">
                                         <td colspan="11" class="text-center py-5">
                                             <div class="alert alert-info mb-0">
@@ -756,7 +753,7 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
             </div>
         </div>
 
-        <!-- Card View (Hidden by default) -->
+        <!-- Card View -->
         <div id="cardView" class="row mb-4" style="display: none;">
             <?php if (count($volunteers) > 0): ?>
                 <?php foreach ($volunteers as $volunteer): ?>
@@ -862,7 +859,7 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
             <?php endif; ?>
         </div>
 
-        <!-- Additional Information -->
+        
         <?php if (count($volunteers) > 0): ?>
             <div class="row mt-4 no-print">
                 <div class="col-md-6">
@@ -939,12 +936,12 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Check if there are any volunteers
+            
             var hasVolunteers = <?php echo count($volunteers) > 0 ? 'true' : 'false'; ?>;
             
             if (hasVolunteers) {
                 try {
-                    // Initialize DataTable only when there are volunteers
+                    
                     var table = $('#volunteersTable').DataTable({
                         "pageLength": 25,
                         "order": [[0, 'asc']],
@@ -965,7 +962,7 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
                         },
                         <?php if ($isSearchApplied): ?>
                         "initComplete": function() {
-                            // Show search info if filters are applied
+                            
                             $('.dataTables_info').append(
                                 '<div class="mt-2 text-warning"><small><i class="ri-filter-line"></i> Search filters are applied</small></div>'
                             );
@@ -973,13 +970,13 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
                         <?php endif; ?>
                         "columnDefs": [
                             {
-                                "targets": [10], // Actions column (0-based index)
+                                "targets": [10], 
                                 "orderable": false,
                                 "searchable": false,
                                 "className": "no-print"
                             },
                             {
-                                "targets": [1], // Photo column
+                                "targets": [1], 
                                 "orderable": false,
                                 "searchable": false
                             }
@@ -999,7 +996,7 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
                 
             }
 
-            // Toggle between table and card view
+            
             $('#toggleView').click(function() {
                 const tableView = $('#tableView');
                 const cardView = $('#cardView');
@@ -1029,7 +1026,7 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
                 });
             }, 5000);
             
-            // Print optimization
+            
             window.addEventListener('beforeprint', function() {
                 
                 $('#toggleView').hide();
@@ -1045,7 +1042,7 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
             });
             
             window.addEventListener('afterprint', function() {
-                // Show the toggle view button 
+                
                 $('#toggleView').show();
                 
               

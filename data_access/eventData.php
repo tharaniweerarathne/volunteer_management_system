@@ -297,7 +297,7 @@ class eventData {
         return $conflicts;
     }
     
-    // Get all skills
+    
     public function getAllSkills() {
         global $conn;
         
@@ -306,7 +306,7 @@ class eventData {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
     
-    // Get all coordinators
+    
     public function getAllCoordinators() {
         global $conn;
         
@@ -315,7 +315,7 @@ class eventData {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
     
-    // Get all organizers
+    
     public function getAllOrganizers() {
         global $conn;
         
@@ -324,7 +324,7 @@ class eventData {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
     
-    // Get events by coordinator
+    
     public function getEventsByCoordinator($coordinatorId) {
         global $conn;
         
@@ -378,7 +378,7 @@ class eventData {
         return $categories;
     }
     
-    // Get upcoming events for public
+    
     public function getUpcomingEvents($filters = []) {
         global $conn;
         
@@ -440,7 +440,7 @@ class eventData {
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
     
-    // Get user role
+    
     public function getUserRole($userId) {
         global $conn;
         
@@ -453,13 +453,13 @@ class eventData {
         return $result ? $result['role'] : null;
     }
     
-    // Check if user can edit event
+   
     public function canUserEditEvent($eventId, $userId) {
         $event = $this->getEventById($eventId);
         if (!$event) return false;
         
         $userRole = $this->getUserRole($userId);
-        // Admin can edit all, Organizer can edit only their own
+        
         return $userRole == 'Admin' || $event['createdBy'] == $userId;
     }
     
@@ -469,11 +469,11 @@ class eventData {
         if (!$event) return false;
         
         $userRole = $this->getUserRole($userId);
-        // Admin can cancel all, Organizer can cancel only their own
+        
         return $userRole == 'Admin' || ($userRole == 'Organizer' && $event['createdBy'] == $userId);
     }
     
-    // Get user by ID
+    
     public function getUserById($userId) {
         global $conn;
         
@@ -484,7 +484,7 @@ class eventData {
         return $stmt->get_result()->fetch_assoc();
     }
     
-    // Get all participants of an event (volunteers + coordinators)
+    // Get all participants of an event 
     public function getEventParticipants($eventId) {
         global $conn;
         

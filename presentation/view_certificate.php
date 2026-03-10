@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Check if user is logged in
+
 if (!isset($_SESSION['userId'])) {
     header('Location: login.php');
     exit();
@@ -17,7 +17,7 @@ $certificateData = new CertificateData();
 $certificateId = $_GET['id'];
 $certificate = $certificateData->getCertificate($certificateId);
 
-// Verify certificate belongs to this volunteer
+
 if (!$certificate || $certificate['userId'] != $_SESSION['userId']) {
     header('Location: my_certificates.php');
     exit();
@@ -115,7 +115,7 @@ if (!$certificate || $certificate['userId'] != $_SESSION['userId']) {
     </nav>
     
     <div class="container">
-        <!-- Action Buttons -->
+        
         <div class="action-buttons">
             <a href="my_certificates.php" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left"></i> Back to Certificates
@@ -200,7 +200,7 @@ if (!$certificate || $certificate['userId'] != $_SESSION['userId']) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Auto-print option
+        
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('print') === '1') {
             window.print();

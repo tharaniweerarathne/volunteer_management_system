@@ -2,12 +2,12 @@
 require_once '../business_logic/eventLogic.php';
 require_once '../business_logic/resultsLogic.php';
 
-// Check if session is already started
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Create instances
+
 $eventLogic = new EventLogic();
 $resultsLogic = new ResultsLogic();
 
@@ -20,8 +20,8 @@ $filters = [
     'date' => $_GET['date'] ?? ''
 ];
 
-// Get APPROVED event results (for past events section)
-$resultsData = $resultsLogic->getPublicResults(20, $filters); // Get more results for full page
+// Get approved events
+$resultsData = $resultsLogic->getPublicResults(20, $filters); 
 if ($resultsData['success']) {
     $results = $resultsData['results'];
 } else {
@@ -29,7 +29,7 @@ if ($resultsData['success']) {
     $resultsError = $resultsData['message'] ?? 'Error loading event results';
 }
 
-// Get categories and skills for filter dropdowns
+// Get categories and skills 
 $eventData = new EventData();
 $categories = $eventData->getCategories();
 $skills = $eventData->getAllSkills();
@@ -318,17 +318,16 @@ $skills = $eventData->getAllSkills();
         window.location.href = window.location.pathname;
     }
 
-    // Handle Enter key in search fields
+    
     function handleKeyPress(e) {
         if (e.key === 'Enter') {
             searchEvents();
         }
     }
 
-    // Auto-submit filters when changed (optional)
+   
     document.getElementById('filterForm')?.addEventListener('change', function() {
-        // Uncomment this if you want auto-submit on filter change
-        // this.submit();
+
     });
 
     // Scroll animation observer

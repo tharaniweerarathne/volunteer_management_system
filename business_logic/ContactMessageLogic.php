@@ -35,12 +35,12 @@ class ContactMessageLogic {
         return ["success" => false, "message" => "Failed to send message. Please try again."];
     }
 
-    // Get all messages
+    
     public function getAllMessages() {
         return $this->contactMessageData->getAllMessages();
     }
 
-    // Get single message
+    
     public function getMessageById($messageId) {
         return $this->contactMessageData->getMessageById($messageId);
     }
@@ -67,7 +67,7 @@ class ContactMessageLogic {
         );
 
         if ($emailResult['success']) {
-            // Update database
+           
             if ($this->contactMessageData->replyToMessage($messageId, $repliedBy, $replyMessage)) {
                 return ["success" => true, "message" => "Reply sent successfully!"];
             } else {

@@ -1,5 +1,5 @@
 <?php
-// presentation/view_message.php
+
 
 require_once __DIR__ . "/../data_access/db.php";
 require_once __DIR__ . "/../business_logic/MessageLogic.php";
@@ -193,7 +193,7 @@ a.button.delete:hover {
         
 <div class="message-body">
     <?php 
-    // Allow only safe HTML tags
+    
     $allowed_tags = '<p><br><div><span><strong><em><b><i><u><h1><h2><h3><h4><h5><h6><ul><ol><li><table><tr><td><th>';
     echo strip_tags($message['message'], $allowed_tags);
     ?>

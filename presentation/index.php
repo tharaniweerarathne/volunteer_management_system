@@ -4,12 +4,12 @@ require_once '../business_logic/resultsLogic.php';
 require_once '../business_logic/LeaderboardFacade.php';
 require_once '../business_logic/StatisticsFacade.php';
 
-// Check if session is already started
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Create instances
+
 $eventLogic = new EventLogic();
 $resultsLogic = new ResultsLogic();
 
@@ -22,7 +22,7 @@ $filters = [
     'date' => $_GET['date'] ?? ''
 ];
 
-// Get UPCOMING EVENTS (for events section)
+// Get upcoming events
 $eventsData = $eventLogic->getUpcomingEvents($filters);
 if ($eventsData['success']) {
     $events = $eventsData['events'];
@@ -31,7 +31,7 @@ if ($eventsData['success']) {
     $eventsError = $eventsData['message'] ?? 'Error loading events';
 }
 
-// Get APPROVED event results (for past events section)
+// Get approved events
 $resultsData = $resultsLogic->getPublicResults(6, $filters);
 if ($resultsData['success']) {
     $results = $resultsData['results'];
@@ -253,7 +253,6 @@ $allStats = $stats['all'];
         </div>
 
 
-             <!--test-->
 <!-- Events Grid -->
 <div class="row">
     <?php if (empty($events)): ?>
@@ -311,7 +310,7 @@ $allStats = $stats['all'];
                             ?>
                         </p>
                         
-                        <!-- NEW: Organizer Info Section -->
+                        
                         <div class="joinEventsOrganizerInfo">
                             <div class="joinEventsCardDetail">
                                 <i class="ri-user-3-line"></i>
@@ -376,7 +375,7 @@ $allStats = $stats['all'];
                         </div>
                         
                         <?php
-                        // Check if user is logged in
+                        
                         $joinUrl = isset($_SESSION['userId']) ? 'event_details.php?id=' . $event['eventId'] : 'sign_in.php';
                         ?>
                         
@@ -503,7 +502,7 @@ $allStats = $stats['all'];
                                                         <?php if (!empty($result['resultImage'])): ?>
                                                             <?php 
                                                             $resultImage = $result['resultImage'];
-                                                            // Fix path if needed
+                                                            
                                                             if (!str_starts_with($resultImage, '../') && !str_starts_with($resultImage, 'http')) {
                                                                 $resultImage = '../' . $resultImage;
                                                             }
@@ -607,7 +606,7 @@ $allStats = $stats['all'];
                 <?php endif; ?>
             </div>
             
-            <!-- Carousel Indicators -->
+            
             <?php if (count($chunkedResults) > 1): ?>
                 <div class="carousel-indicators position-static mt-4">
                     <?php for ($i = 0; $i < count($chunkedResults); $i++): ?>
@@ -618,7 +617,7 @@ $allStats = $stats['all'];
                 </div>
             <?php endif; ?>
             
-            <!-- More Events Button -->
+           
             <div class="text-center mt-5">
                 <button class="joinEventsMoreBtn" onclick="window.open('past_events.php', '_blank')">
                     View All Past Events
@@ -636,7 +635,7 @@ $allStats = $stats['all'];
             <p>Have a question or want to work together? Drop us a message!</p>
         </div>
         
-            <!-- Success/Error Message Display -->
+            
             <?php
             if (isset($_SESSION['contact_result'])):
             ?>
@@ -834,7 +833,7 @@ $allStats = $stats['all'];
 
 
 
-// Email validations (keep your existing code)
+// Email validations 
 const emailInput = document.getElementById('email');
 const emailHints = document.getElementById('emailHints');
 

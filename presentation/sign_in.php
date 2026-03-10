@@ -21,7 +21,7 @@ unset($_SESSION['old_email'], $_SESSION['old_password'], $_SESSION['login_error'
 <body>
     <div class="container-fluid">
         <div class="row">
-            <!-- left Section - login form -->
+            <!--login form -->
             <div class="col-lg-7 left-section">
                 <div class="form-container">
                     <h2>Sign In</h2>

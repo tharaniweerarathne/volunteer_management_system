@@ -4,7 +4,7 @@ require_once __DIR__ . '/../data_access/db.php';
 require_once __DIR__ . '/../business_logic/ContactMessageLogic.php';
 require_once __DIR__ . "/../business_logic/MessageLogic.php";
 
-// checking if user is logged in and is admin or coordinator
+
 if (!isset($_SESSION['userId']) || !in_array($_SESSION['role'], ['Admin', 'Coordinator'])) {
     header('Location: login.php');
     exit();

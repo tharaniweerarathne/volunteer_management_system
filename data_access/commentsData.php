@@ -1,5 +1,5 @@
 <?php
-// data_access/commentsData.php
+
 require_once 'db.php';
 
 class CommentsData {
@@ -13,7 +13,7 @@ class CommentsData {
     public function getCommentsByResultId($resultId, $includeDeleted = false) {
         global $conn;
         
-        // Removed u.profileImage from SELECT
+        
         $sql = "SELECT c.*, u.name as userName, u.role as userRole,
                 u.userId as commenterId,
                 (SELECT COUNT(*) FROM result_comments rc WHERE rc.parentCommentId = c.commentId AND rc.isDeleted = 0) as replyCount
@@ -43,7 +43,7 @@ class CommentsData {
     private function getCommentReplies($commentId, $includeDeleted = false) {
         global $conn;
         
-        // Removed u.profileImage from SELECT
+       
         $sql = "SELECT c.*, u.name as userName, u.role as userRole,
                 u.userId as commenterId
                 FROM result_comments c
@@ -74,7 +74,7 @@ class CommentsData {
         if ($stmt->execute()) {
             $commentId = $conn->insert_id;
             
-            // Removed u.profileImage from SELECT
+            
             $sql = "SELECT c.*, u.name as userName, u.role as userRole, 
                     u.userId as commenterId
                     FROM result_comments c
@@ -94,7 +94,7 @@ class CommentsData {
     public function deleteComment($commentId, $userId) {
         global $conn;
         
-        // Check if user owns the comment or is admin/organizer
+        
         $comment = $this->getCommentById($commentId);
         
         if (!$comment) {
@@ -103,7 +103,7 @@ class CommentsData {
         
         $userRole = $this->getUserRole($userId);
         
-        // Allow deletion if: user owns comment OR user is admin/organizer
+        
         if ($comment['userId'] != $userId && !in_array($userRole, ['Admin', 'Organizer'])) {
             return ['success' => false, 'message' => 'Permission denied'];
         }

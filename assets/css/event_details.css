@@ -291,7 +291,7 @@ body {
     border-radius: 6px;
 }
 
-/* Links */
+
 a {
     color: var(--primary-orange);
     text-decoration: none;
@@ -304,13 +304,13 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Text Muted */
+
 .text-muted {
     color: var(--text-light) !important;
     font-size: 0.95rem;
 }
 
-/* Headings */
+
 h5 {
     color: var(--text-dark) !important;
     font-weight: 700;

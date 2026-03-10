@@ -35,7 +35,7 @@ if ($selectedEventId) {
     }
 }
 
-// Handle single certificate issuance
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['issue_single'])) {
     $eventId = $_POST['eventId'];
     $userId = $_POST['userId'];
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['issue_single'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['issue_bulk'])) {
     $eventId = $_POST['eventId'];
     
-    // If there's a search, only issue to filtered volunteers
+   
     if (!empty($searchTerm)) {
         $results = [
             'total' => count($eligibleVolunteers),
@@ -530,20 +530,20 @@ function highlightSearchText($text, $search) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Auto-focus search input
+        
         <?php if ($selectedEventId): ?>
             document.getElementById('searchInput').focus();
         <?php endif; ?>
         
-        // Initialize tooltips
+        
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
         
-        // Keyboard shortcuts
+        
         document.addEventListener('keydown', function(e) {
-            // Ctrl+F to focus search
+            
             if (e.ctrlKey && e.key === 'f') {
                 e.preventDefault();
                 const searchInput = document.getElementById('searchInput');
@@ -553,7 +553,7 @@ function highlightSearchText($text, $search) {
                 }
             }
             
-            // ESC to clear search if search input has value
+            
             if (e.key === 'Escape') {
                 const searchInput = document.getElementById('searchInput');
                 if (searchInput && searchInput.value) {
@@ -561,7 +561,7 @@ function highlightSearchText($text, $search) {
                 }
             }
             
-            // Alt+S to focus search (alternative shortcut)
+          
             if (e.altKey && e.key === 's') {
                 e.preventDefault();
                 const searchInput = document.getElementById('searchInput');
@@ -572,25 +572,24 @@ function highlightSearchText($text, $search) {
             }
         });
         
-        // Auto-submit search on Enter in search field
+        
         document.getElementById('searchInput')?.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 this.form.submit();
             }
         });
         
-        // Confirm before leaving page if there are unsaved changes
+       
         window.addEventListener('beforeunload', function (e) {
-            // You can add logic here to check if there are unsaved changes
-            // For now, we'll just return null (no warning)
+         
             return null;
         });
         
-        // Smooth scroll to volunteers section when clicking on event card
+        
         document.querySelectorAll('.event-card a[href*="eventId"]').forEach(link => {
             link.addEventListener('click', function(e) {
                 if (this.getAttribute('href').includes('eventId')) {
-                    // Allow default navigation
+                   
                 }
             });
         });

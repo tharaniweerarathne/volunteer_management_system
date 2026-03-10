@@ -4,7 +4,7 @@ require_once 'db.php';
 
 class StatisticsData {
     
-    // Get total volunteers count
+    
     public function getTotalVolunteers() {
         global $conn;
         
@@ -15,7 +15,7 @@ class StatisticsData {
         return $row['total'];
     }
     
-    // Get active volunteers 
+    
     public function getActiveVolunteers() {
         global $conn;
         
@@ -29,11 +29,11 @@ class StatisticsData {
         return $row['total'];
     }
     
-    // Get completed events count
+    
     public function getCompletedEvents() {
         global $conn;
         
-        // Events that have passed 
+        
         $sql = "SELECT COUNT(*) as total 
                 FROM events 
                 WHERE status = 'Active' AND endDate < CURDATE()";
@@ -44,7 +44,7 @@ class StatisticsData {
         return $row['total'];
     }
     
-    // Get upcoming events count
+   
     public function getUpcomingEvents() {
         global $conn;
         
@@ -58,7 +58,7 @@ class StatisticsData {
         return $row['total'];
     }
     
-    // Get total events count
+    
     public function getTotalEvents() {
         global $conn;
         
@@ -69,7 +69,7 @@ class StatisticsData {
         return $row['total'];
     }
     
-    // Get unique locations
+   
     public function getUniqueLocations() {
         global $conn;
         
@@ -80,7 +80,7 @@ class StatisticsData {
         return $row['total'];
     }
     
-    // Get total volunteer hours 
+  
     public function getTotalVolunteerHours() {
         global $conn;
         
@@ -95,7 +95,7 @@ class StatisticsData {
         return round($row['total_hours'] ?? 0);
     }
     
-    // Get events by category
+   
     public function getEventsByCategory() {
         global $conn;
         

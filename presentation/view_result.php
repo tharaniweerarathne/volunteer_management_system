@@ -1,12 +1,12 @@
 <?php
-// view_result.php
+
 session_start();
 
 require_once __DIR__ . "/../data_access/db.php";
 require_once __DIR__ . "/../business_logic/resultsLogic.php";
 require_once __DIR__ . "/../business_logic/commentsLogic.php";
 
-// Get result ID from URL parameter
+
 $resultId = isset($_GET['resultId']) ? intval($_GET['resultId']) : 0;
 
 if ($resultId <= 0) {
@@ -49,7 +49,7 @@ $commentCount = $commentsLogic->getCommentCount($resultId);
 $reactionCounts = $commentsLogic->getReactionCounts($resultId);
 $userReaction = $isLoggedIn ? $commentsLogic->getUserReaction($resultId, $currentUserId) : null;
 
-// Get all images for the result (main + additional images)
+// Get all images for the result 
 $resultImages = [];
 for ($i = 1; $i <= 5; $i++) {
     $fieldName = $i == 1 ? 'resultImage' : 'resultImage' . $i;
@@ -1543,10 +1543,7 @@ unset($_SESSION['message']);
             });
         });
         
-        // Rest of your JavaScript functions (scrollToComments, shareResult, reactToResult, etc.)
-        // ... [Keep all the other JavaScript functions from before]
-        
-        // Scroll to comments
+
         function scrollToComments() {
             const commentSection = document.querySelector('.comment-section');
             if (commentSection) {
@@ -1623,7 +1620,7 @@ unset($_SESSION['message']);
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Update UI
+                    
                     const likeBtn = document.getElementById('likeBtn');
                     const dislikeBtn = document.getElementById('dislikeBtn');
                     const likeCount = document.getElementById('likeCount');
@@ -1631,13 +1628,13 @@ unset($_SESSION['message']);
                     const totalLikes = document.getElementById('totalLikes');
                     const totalDislikes = document.getElementById('totalDislikes');
                     
-                    // Update counts
+                    
                     likeCount.textContent = data.counts.likes || 0;
                     dislikeCount.textContent = data.counts.dislikes || 0;
                     totalLikes.textContent = data.counts.likes || 0;
                     totalDislikes.textContent = data.counts.dislikes || 0;
                     
-                    // Update button states
+                    
                     likeBtn.classList.remove('active-like');
                     dislikeBtn.classList.remove('active-dislike');
                     
@@ -1647,7 +1644,7 @@ unset($_SESSION['message']);
                         dislikeBtn.classList.add('active-dislike');
                     }
                     
-                    // Show toast
+                    
                     showToast(`Reaction ${data.action} successfully`, 'success');
                 }
             })
@@ -1717,7 +1714,7 @@ unset($_SESSION['message']);
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Remove from UI
+                    
                     const commentElement = document.getElementById('comment-' + commentId);
                     const replyElement = document.getElementById('reply-' + commentId);
                     
@@ -1737,7 +1734,7 @@ unset($_SESSION['message']);
                         setTimeout(() => {
                             replyElement.remove();
                             
-                            // Update parent comment reply count
+                            
                             const parentComment = replyElement.closest('.comment-card');
                             if (parentComment) {
                                 const replyCountSpan = parentComment.querySelector('#replyCount-' + parentComment.id.split('-')[1]);
@@ -1745,7 +1742,7 @@ unset($_SESSION['message']);
                                     const currentCount = parseInt(replyCountSpan.textContent);
                                     replyCountSpan.textContent = currentCount - 1;
                                     
-                                    // Update button text
+                                    
                                     const toggleBtn = parentComment.querySelector('.comment-action-btn:last-child');
                                     if (toggleBtn) {
                                         const newCount = currentCount - 1;
@@ -1766,9 +1763,9 @@ unset($_SESSION['message']);
             });
         }
         
-        // Update comment counts
+        
         function updateCommentCounts(change) {
-            // Update comment count badge
+           
             const commentCountBadge = document.querySelector('.comment-section h2 .badge');
             if (commentCountBadge) {
                 const currentCount = parseInt(commentCountBadge.textContent);
@@ -1782,7 +1779,7 @@ unset($_SESSION['message']);
                 statsNumber.textContent = Math.max(0, currentCount + change);
             }
             
-            // Update floating button badge
+            
             const floatingBadge = document.querySelector('.comment-btn .badge');
             if (floatingBadge) {
                 const currentCount = parseInt(floatingBadge.textContent);
@@ -1864,7 +1861,7 @@ unset($_SESSION['message']);
             }, 5000);
         }
         
-        // Auto-hide alerts
+        
         setTimeout(() => {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(alert => {

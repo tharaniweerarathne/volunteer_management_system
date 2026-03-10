@@ -1,7 +1,5 @@
 <?php
-// results_management.php ---> presentation folder
 
-// Check if session is not already started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -25,7 +23,7 @@ if (!in_array($role, ['Admin', 'Organizer', 'Coordinator'])) {
 require_once __DIR__ . "/../data_access/db.php";
 require_once __DIR__ . "/../business_logic/resultsLogic.php";
 require_once __DIR__ . "/../business_logic/MessageLogic.php";
-require_once __DIR__ . "/../data_access/eventData.php"; // For skills/categories
+require_once __DIR__ . "/../data_access/eventData.php"; 
 
 $resultsLogic = new ResultsLogic();
 $messageLogic = new MessageLogic($conn);
@@ -97,14 +95,14 @@ $events = $resultsLogic->getEventsForDropdown();
 $skills = $eventData->getAllSkills();
 $categories = $eventData->getCategories();
 
-// Get organizers for dropdown (only for admin)
+// Get organizers 
 $organizers = [];
 if ($role === 'Admin') {
     $organizersResult = $resultsLogic->getAllOrganizers();
     $organizers = $organizersResult['success'] ? $organizersResult['organizers'] : [];
 }
 
-// Get events for dropdown (for all users)
+// Get events 
 $eventsForDropdown = $events['events'] ?? [];
 ?>
 
@@ -638,7 +636,7 @@ $eventsForDropdown = $events['events'] ?? [];
                             <div id="mainImagePreview" class="image-preview-container mt-2"></div>
                         </div>
                         
-                        <!-- Additional Images Upload -->
+                        
                         <div class="additional-images-section">
                             <h6><i class="ri-image-line"></i> Additional Images (Optional)</h6>
                             <p class="text-muted">You can upload up to 4 additional images.</p>
@@ -655,7 +653,7 @@ $eventsForDropdown = $events['events'] ?? [];
                             </div>
                         </div>
                         
-                        <!-- Existing Images Section (for edit mode) -->
+                        <!-- Existing Images Section -->
                         <div id="existingImagesSection" style="display: none;">
                             <div class="additional-images-section">
                                 <h6><i class="ri-image-line"></i> Existing Images</h6>
@@ -682,7 +680,7 @@ $eventsForDropdown = $events['events'] ?? [];
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body" id="viewModalContent">
-                    <!-- Content loaded dynamically -->
+                    
                 </div>
             </div>
         </div>
@@ -769,16 +767,16 @@ $eventsForDropdown = $events['events'] ?? [];
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/dashboards.js"></script>
     <script>
-        // Function to update organizer based on selected event
+       
         function updateOrganizer() {
             const eventSelect = document.getElementById('eventSelect');
             const selectedOption = eventSelect.options[eventSelect.selectedIndex];
             const organizerId = selectedOption.getAttribute('data-organizer');
             
-            // Only update if organizer select exists (admin only)
+            
             const organizerSelect = document.getElementById('organizerSelect');
             if (organizerSelect && organizerId) {
-                // Try to select the event's organizer
+                
                 for (let i = 0; i < organizerSelect.options.length; i++) {
                     if (organizerSelect.options[i].value == organizerId) {
                         organizerSelect.selectedIndex = i;
@@ -833,7 +831,7 @@ $eventsForDropdown = $events['events'] ?? [];
             document.getElementById('existingImagesSection').style.display = 'none';
             document.getElementById('resultDate').value = '<?= date("Y-m-d") ?>';
             
-            // Set default organizer for non-admin users
+            
             <?php if ($role !== 'Admin'): ?>
                 document.getElementById('organizerId').value = '<?= $userId ?>';
             <?php endif; ?>
@@ -858,7 +856,7 @@ $eventsForDropdown = $events['events'] ?? [];
                         document.getElementById('skillSelect').value = result.skillId || '';
                         document.getElementById('description').value = result.description;
                         
-                        // Set organizer (for admin only)
+                        // Set organizer 
                         <?php if ($role === 'Admin'): ?>
                             const organizerSelect = document.getElementById('organizerSelect');
                             if (organizerSelect) {
@@ -882,7 +880,7 @@ $eventsForDropdown = $events['events'] ?? [];
                         if (result.allImages && result.allImages.length > 0) {
                             existingImagesSection.style.display = 'block';
                             
-                            // Display existing images with keep checkboxes
+                            
                             result.allImages.forEach((imagePath, index) => {
                                 const div = document.createElement('div');
                                 div.className = 'image-preview';
@@ -1004,7 +1002,7 @@ $eventsForDropdown = $events['events'] ?? [];
             new bootstrap.Modal(document.getElementById('deleteModal')).show();
         }
 
-        // Auto-hide alerts
+        
         setTimeout(() => {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(alert => {

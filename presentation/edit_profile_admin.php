@@ -2,7 +2,7 @@
 
 session_start();
 
-// checking if user is logged in as Admin
+
 if (!isset($_SESSION['userId']) || $_SESSION['role'] !== 'Admin') {
     header('Location: sign_in.php');
     exit;

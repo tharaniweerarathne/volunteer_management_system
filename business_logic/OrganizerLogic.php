@@ -1,5 +1,5 @@
 <?php
-// OrganizerLogic.php --> business_logic folder
+
 
 require_once __DIR__ . "/../data_access/OrganizerData.php";
 require_once __DIR__ . "/../vendor/autoload.php";
@@ -16,12 +16,12 @@ class OrganizerLogic {
         $this->organizerData = new OrganizerData($conn);
     }
     
-    // Send email using PHPMailer (similar to RegistrationLogic)
+    // Send email using PHPMailer
     private function sendEmail($toEmail, $toName, $subject, $body) {
         $mail = new PHPMailer(true);
         
         try {
-            // SMTP Configuration - using same settings as RegistrationLogic
+            // SMTP Configuration 
             $mail->isSMTP();
             $mail->Host       = 'smtp.gmail.com'; 
             $mail->SMTPAuth   = true;
@@ -30,11 +30,11 @@ class OrganizerLogic {
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port       = 587;
             
-            // Sender and recipient
+          
             $mail->setFrom('infocontact256@gmail.com', 'Unity Volunteers Trust');
             $mail->addAddress($toEmail, $toName);
             
-            // Content
+         
             $mail->isHTML(true);
             $mail->Subject = $subject;
             $mail->Body    = $body;
@@ -266,7 +266,7 @@ class OrganizerLogic {
             
             if (!$emailSent) {
                 error_log("Approval email failed to send for request ID: $requestId");
-                // Still return success but with modified message
+                
                 return ["success" => true, "message" => "Organizer request approved! User role updated, but email notification failed to send."];
             }
         }
@@ -284,11 +284,11 @@ class OrganizerLogic {
             return ["success" => false, "message" => "Failed to reject request."];
         }
         
-        // Get reviewer name
+        
         $reviewerInfo = $this->getUserInfoById($reviewerId);
         $reviewerName = $reviewerInfo ? $reviewerInfo['name'] : '';
         
-        // Get user ID from request
+        
         $request = $this->organizerData->getOrganizerRequestById($requestId);
         if ($request) {
             // Send rejection email to the volunteer
@@ -296,7 +296,7 @@ class OrganizerLogic {
             
             if (!$emailSent) {
                 error_log("Rejection email failed to send for request ID: $requestId");
-                // Still return success but with modified message
+                
                 return ["success" => true, "message" => "Organizer request rejected, but email notification failed to send."];
             }
         }
@@ -323,9 +323,9 @@ class OrganizerLogic {
         return $this->organizerData->getRequestStatistics();
     }
     
-    // Check if user can apply
+    
     public function canUserApply($userId, $userRole) {
-        // Only volunteers can apply
+       
         if ($userRole !== 'Volunteer') {
             return ["canApply" => false, "message" => "Only volunteers can apply to become organizers."];
         }
@@ -344,7 +344,7 @@ class OrganizerLogic {
         return ["canApply" => true, "message" => "You can apply to become an organizer."];
     }
     
-    // Delete organizer request
+   
     public function deleteOrganizerRequest($requestId) {
         if (!$this->organizerData->deleteOrganizerRequest($requestId)) {
             return ["success" => false, "message" => "Failed to delete request."];

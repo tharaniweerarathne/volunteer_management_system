@@ -1,4 +1,4 @@
-/* Modern Orange Theme Styles - My Events Page */
+
 :root {
     --primary-orange: #ff6b35;
     --secondary-orange: #ff8c42;
@@ -31,7 +31,7 @@ body {
     min-height: 100vh;
 }
 
-/* Navbar Styling */
+
 .navbar {
     box-shadow: var(--shadow-lg);
     padding: 1rem 0;
@@ -80,12 +80,12 @@ body {
     color: var(--primary-orange) !important;
 }
 
-/* Container */
+
 .container {
     max-width: 1200px;
 }
 
-/* Page Title */
+
 h1 {
     font-size: 2.5rem!important;
     font-weight: 800 !important;
@@ -109,7 +109,7 @@ h1::after {
     border-radius: 2px;
 }
 
-/* Alerts */
+
 .alert {
     border: none;
     border-radius: var(--border-radius);
@@ -161,7 +161,7 @@ h1::after {
     text-decoration: underline;
 }
 
-/* Event Cards */
+
 .event-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease!important;
     border: none;
@@ -234,7 +234,7 @@ h1::after {
     padding: 1rem 1.5rem;
 }
 
-/* Badges */
+
 .badge-status {
     font-size: 0.75rem!important;
     padding: 0.4rem 0.8rem !important;
@@ -261,7 +261,7 @@ h1::after {
     background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%) !important;
 }
 
-/* Buttons */
+
 .btn {
     border-radius: 8px;
     padding: 0.5rem 1rem;
@@ -332,7 +332,7 @@ h1::after {
     margin-bottom: 0.25rem!important;
 }
 
-/* Modal */
+
 .modal-content {
     border: none;
     border-radius: var(--border-radius);
@@ -395,7 +395,7 @@ h1::after {
     background: #f8f9fa;
 }
 
-/* Summary Stats Card */
+
 .card {
     border: none;
     border-radius: var(--border-radius);
@@ -432,7 +432,7 @@ h1::after {
     font-size: 0.875rem;
 }
 
-/* Grid Layout */
+
 .row {
     margin: 0 -0.75rem;
 }
@@ -441,7 +441,7 @@ h1::after {
     padding: 0 0.75rem;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
     h1 {
         font-size: 2rem;
@@ -470,7 +470,7 @@ h1::after {
     }
 }
 
-/* Animation for Cards */
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -495,13 +495,13 @@ h1::after {
 .event-card:nth-child(6) { animation-delay: 0.6s; }
 
 
-/* Hover Effects */
+
 small {
     display: block;
     line-height: 1.8;
 }
 
-/* Empty State Styling */
+
 .alert-info a {
     transition: var(--transition);
 }

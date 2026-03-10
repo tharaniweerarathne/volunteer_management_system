@@ -1,5 +1,5 @@
 <?php
-// presentation/delete_message.php
+
 
 require_once __DIR__ . "/../data_access/db.php";
 require_once __DIR__ . "/../business_logic/MessageLogic.php";

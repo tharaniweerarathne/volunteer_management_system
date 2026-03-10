@@ -108,7 +108,7 @@ public function getEventDetails($eventId) {
     }
 
 
-    // Add this method to your EventVolunteerData class:
+    
 public function searchVolunteersByEvent($eventId, $searchParams = []) {
     global $conn;
     
@@ -124,7 +124,7 @@ public function searchVolunteersByEvent($eventId, $searchParams = []) {
     $params = [$eventId];
     $types = "i";
     
-    // Add search conditions
+    
     if (!empty($searchParams['search_name'])) {
         $sql .= " AND u.name LIKE ?";
         $params[] = '%' . $searchParams['search_name'] . '%';
@@ -158,7 +158,7 @@ public function searchVolunteersByEvent($eventId, $searchParams = []) {
         $types .= "s";
     }
     
-    // Add specific date search if provided
+   
     if (!empty($searchParams['search_specific_date'])) {
         $sql .= " AND DATE(er.registrationDate) = ?";
         $params[] = $searchParams['search_specific_date'];

@@ -1,5 +1,5 @@
 <?php
-// business_logic/commentsLogic.php
+
 require_once '../data_access/commentsData.php';
 
 class CommentsLogic {

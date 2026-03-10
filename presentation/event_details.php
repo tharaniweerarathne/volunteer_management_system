@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['join_event'])) {
                     </div>';
     }
 else {
-    // Try to register
+    
     $result = $registrationData->insertRegistration($eventId, $_SESSION['userId']);
     
 if ($result['success']) {

@@ -1,12 +1,12 @@
 <?php
 require_once '../business_logic/eventLogic.php';
 
-// Start session if not started
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Check login
+
 if (!isset($_SESSION['userId'])) {
     header('Location: login.php');
     exit();
@@ -14,7 +14,7 @@ if (!isset($_SESSION['userId'])) {
 
 $userId = $_SESSION['userId'];
 
-// Create instances of EventData and EventLogic
+
 $eventData = new EventData();
 $eventLogic = new EventLogic();
 
@@ -28,14 +28,14 @@ if (!$eventId) {
     exit();
 }
 
-// Get event data using OOP
+
 $event = $eventData->getEventById($eventId);
 if (!$event) {
     header('Location: events.php');
     exit();
 }
 
-// Get assigned coordinators using OOP
+
 $coordinators = $eventData->getAllCoordinators();
 $assignedCoordinators = [];
 if (!empty($event['coordinatorIds'])) {
@@ -45,7 +45,7 @@ if (!empty($event['coordinatorIds'])) {
     });
 }
 
-// Get skill name using OOP
+
 $skills = $eventData->getAllSkills();
 $skillName = 'No specific skill required';
 foreach ($skills as $skill) {

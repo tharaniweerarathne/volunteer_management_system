@@ -1,22 +1,20 @@
 <?php
-// presentation/my_events.php
 
-// Suppress the session notice temporarily
 error_reporting(E_ALL & ~E_NOTICE);
 
-// Include eventLogic.php FIRST (it has session_start())
+
 require_once '../business_logic/eventLogic.php';
 
-// Turn error reporting back if needed
+
 error_reporting(E_ALL);
 
-// Check if user is logged in
+
 if (!isset($_SESSION['userId'])) {
     header('Location: sign_in.php');
     exit();
 }
 
-// Include other files
+
 require_once '../data_access/eventRegistrationData.php';
 
 $registrationData = new EventRegistrationData();
@@ -41,7 +39,7 @@ if ($success) {
     // Send cancellation email to volunteer
     $emailSent = $eventLogic->sendCancellationEmail($_SESSION['userId'], $registration['eventId'], $reason);
     
-    // ✅ SEND INTERNAL MESSAGE FOR CANCELLATION
+    
     $messageSent = $eventLogic->notifyVolunteer($_SESSION['userId'], $registration['eventId'], 'cancel', $reason);
     
     $successMsg = 'Registration cancelled successfully! ';
@@ -54,7 +52,7 @@ if ($success) {
         $successMsg .= 'Check your inbox for cancellation details.';
     }
     
-    // Refresh events
+    
     $events = $registrationData->getVolunteerEvents($_SESSION['userId']);
 }
     }
@@ -160,7 +158,7 @@ if ($success) {
                                 </small>
                             </p>
 
-                                        <!-- Organizer and Coordinators -->
+                                        
             <p class="card-text mt-2">
                 <small>
                     <i class="bi bi-person-badge"></i> 
@@ -187,7 +185,7 @@ if ($success) {
 <div class="card-footer bg-transparent border-top-0">
     <?php if ($event['status'] === 'cancelled'): ?>
         <?php 
-        // Check if event is still available for joining
+        
         $eventDetails = $registrationData->getEventDetails($event['eventId']);
         $canRejoin = $eventDetails['availableSlots'] > 0;
         ?>

@@ -1,5 +1,5 @@
 <?php
-// get_unread_count.php - Place this in your presentation folder
+
 session_start();
 
 if (!isset($_SESSION['userId'])) {

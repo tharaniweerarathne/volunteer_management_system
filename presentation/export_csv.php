@@ -3,7 +3,7 @@
 require_once __DIR__ . "/../data_access/db.php";
 require_once __DIR__ . "/../business_logic/CSVExportLogic.php";
 
-// check if export type is provided
+
 if (!isset($_GET['type'])) {
     die("Export type not specified.");
 }
@@ -11,7 +11,7 @@ if (!isset($_GET['type'])) {
 $exportType = $_GET['type'];
 $csvLogic = new CSVExportLogic($conn);
 
-// handling different export types
+
 switch ($exportType) {
     case 'volunteers':
         $csvLogic->exportVolunteersToCSV();
@@ -25,9 +25,9 @@ switch ($exportType) {
         $csvLogic->exportAllUsersToCSV();
         break;
 
-     // ⭐ NEW: Export filtered events
+
     case 'events_filtered':
-        // gather filters from GET
+        
         $filters = [
             'startDate' => $_GET['startDate'] ?? '',
             'endDate'   => $_GET['endDate'] ?? '',
@@ -40,15 +40,6 @@ switch ($exportType) {
     case 'organizers':
         $csvLogic->exportOrganizersToCSV();
         break;
-    
-    // Add more export types here as needed
-    // case 'registrations':
-    //     $csvLogic->exportRegistrationsToCSV();
-    //     break;
-    
-    // case 'donations':
-    //     $csvLogic->exportDonationsToCSV();
-    //     break;
         
     default:
         die("Invalid export type.");
