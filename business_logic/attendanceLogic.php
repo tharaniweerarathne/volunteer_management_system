@@ -76,7 +76,7 @@ class AttendanceLogic {
         }
     }
     
-    // Get volunteers for event
+
 // Get volunteers for event
 public function getEventVolunteers($eventId, $search = '') {
     if (!$this->isCoordinator()) {
@@ -129,7 +129,7 @@ public function getEventVolunteers($eventId, $search = '') {
             );
             
             if ($success) {
-                // Send notifications to volunteers using your MessageData
+                
                 $this->sendAttendanceNotifications($eventId, $attendances, $date);
                 
                 return [
@@ -150,7 +150,7 @@ public function getEventVolunteers($eventId, $search = '') {
         }
     }
     
-    // Send attendance notifications using your MessageData
+    
     private function sendAttendanceNotifications($eventId, $attendances, $date) {
         // Get event details
         $eventSql = "SELECT eventName FROM events WHERE eventId = ?";
@@ -161,11 +161,11 @@ public function getEventVolunteers($eventId, $search = '') {
         
         if (!$event) return;
         
-        // Load your MessageData
+        
         require_once '../data_access/MessageData.php';
         $messageData = new MessageData($this->conn);
         
-        // Get admin ID for sender
+        
         $adminSql = "SELECT userId FROM users WHERE role = 'Admin' LIMIT 1";
         $adminResult = $this->conn->query($adminSql);
         $admin = $adminResult->fetch_assoc();
@@ -225,11 +225,11 @@ public function getEventVolunteers($eventId, $search = '') {
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port       = 587;
             
-            // Sender/Recipient
+            
             $mail->setFrom('noreply@volunteer.com', 'Unity Volunteers Trust');
             $mail->addAddress($user['email'], $user['name']);
             
-            // Content
+            
             $mail->isHTML(true);
             $mail->Subject = "Attendance Marked: {$event['eventName']}";
             
@@ -255,7 +255,7 @@ public function getEventVolunteers($eventId, $search = '') {
         }
     }
     
-    // Auto-mark absent for unmarked volunteers after event ends
+    
     public function autoMarkAbsent($eventId) {
         $date = date('Y-m-d');
         return $this->attendanceData->markAbsentForUnmarked($eventId, $date);

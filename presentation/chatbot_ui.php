@@ -31,7 +31,7 @@ if (!isset($_SESSION['userId'])) {
         <div class="chat-messages" id="chatMessages">
             <div class="message bot-message">
                 <div class="message-bubble">
-                    👋 Hello! I'm your AI assistant. I can help you find events, get recommendations, and predict attendance using machine learning!
+                    👋 Hello! I'm your AI assistant. I can help you find events, get recommendations using machine learning!
                 </div>
                 <div class="message-time">Just now</div>
             </div>

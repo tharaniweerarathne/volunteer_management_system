@@ -1,19 +1,19 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 
-// Include eventLogic.php FIRST
+
 require_once '../business_logic/eventLogic.php';
 
-// Turn error reporting back
+
 error_reporting(E_ALL);
 
-// Check if user is logged in
+
 if (!isset($_SESSION['userId'])) {
     header('Location: sign_in.php');
     exit();
 }
 
-// Include other files
+
 require_once '../data_access/eventRegistrationData.php';
 
 $eventId = $_GET['id'] ?? 0;
@@ -81,7 +81,7 @@ if ($result['success']) {
         // Send re-join email to volunteer
         $emailSent = $eventLogic->sendRejoinEmail($_SESSION['userId'], $eventId);
         
-        // ✅ SEND INTERNAL MESSAGE FOR REJOIN
+        
         $messageSent = $eventLogic->notifyVolunteer($_SESSION['userId'], $eventId, 'rejoin');
         
         $message = '<div class="alert alert-success">
@@ -91,7 +91,7 @@ if ($result['success']) {
         // Send regular registration email to volunteer
         $emailSent = $eventLogic->sendRegistrationEmail($_SESSION['userId'], $eventId);
         
-        // ✅ SEND INTERNAL MESSAGE FOR JOIN
+       
         $messageSent = $eventLogic->notifyVolunteer($_SESSION['userId'], $eventId, 'join');
         
         $message = '<div class="alert alert-success">
@@ -181,12 +181,12 @@ if ($result['success']) {
                     <?php endif; ?>
                     <li><strong>Required Skill:</strong> <?php echo htmlspecialchars($event['skillName'] ?? 'None'); ?></li>
                     
-                    <!-- Organizer Info -->
+                    
                     <li><strong>Organizer:</strong> 
                         <?php echo !empty($event['organizerName']) ? htmlspecialchars($event['organizerName']) : 'Not specified'; ?>
                     </li>
 
-                    <!-- Coordinators Info -->
+                    
                     <?php if (!empty($event['coordinators'])): ?>
                         <li><strong>Coordinators:</strong> 
                             <?php 

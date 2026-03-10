@@ -1,12 +1,12 @@
 <?php
 require_once '../business_logic/eventLogic.php';
 
-// Check if session is already started
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Create instance of EventLogic
+
 $eventLogic = new EventLogic();
 
 // Get filters from query parameters
@@ -18,7 +18,7 @@ $filters = [
     'date' => $_GET['date'] ?? ''
 ];
 
-// Get upcoming events using EventLogic
+
 $result = $eventLogic->getUpcomingEvents($filters);
 
 if ($result['success']) {
@@ -28,7 +28,7 @@ if ($result['success']) {
     $error = $result['message'] ?? 'Error loading events';
 }
 
-// Get categories and skills for filter dropdowns
+// Get categories and skills 
 $eventData = new EventData();
 $categories = $eventData->getCategories();
 $skills = $eventData->getAllSkills();
@@ -213,7 +213,7 @@ $skills = $eventData->getAllSkills();
                             ?>
                         </p>
                         
-                        <!-- NEW: Organizer Info Section -->
+                        <!-- Organizer Info Section -->
                         <div class="joinEventsOrganizerInfo">
                             <div class="joinEventsCardDetail">
                                 <i class="ri-user-3-line"></i>

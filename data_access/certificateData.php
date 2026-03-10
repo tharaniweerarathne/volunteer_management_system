@@ -9,7 +9,7 @@ class CertificateData {
         $this->conn = $conn;
     }
     
-    // Get volunteers eligible for certificate (Present and no certificate) WITH SEARCH
+    // Get volunteers eligible for certificate 
     public function getEligibleVolunteers($eventId, $search = '') {
         $sql = "SELECT DISTINCT u.userId, u.name, u.email, u.telephoneNo, a.attendanceDate
                 FROM attendance a
@@ -20,7 +20,7 @@ class CertificateData {
                 AND c.certificateId IS NULL
                 AND u.role = 'Volunteer'";
         
-        // Add search condition if provided
+        
         if (!empty($search)) {
             $sql .= " AND (LOWER(u.name) LIKE LOWER(?) OR 
                           LOWER(u.email) LIKE LOWER(?) OR 
@@ -42,7 +42,7 @@ class CertificateData {
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
     
-    // Get total eligible volunteers count (for search results comparison) - ADD THIS METHOD
+    // Get total eligible volunteers count 
     public function getTotalEligibleVolunteers($eventId) {
         $sql = "SELECT COUNT(DISTINCT u.userId) as totalCount
                 FROM attendance a
@@ -168,7 +168,7 @@ public function getCertificatesByVolunteer($userId) {
     return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
-    // Search certificates (for admin) - OPTIONAL
+    // Search certificates
     public function searchCertificates($searchTerm = '') {
         $sql = "SELECT c.*, u.name as volunteerName, e.eventName, 
                        e.startDate, iss.name as issuedByName
@@ -197,7 +197,6 @@ public function getCertificatesByVolunteer($userId) {
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
-    // Add this method inside CertificateData class
 public function getUserById($userId) {
     $sql = "SELECT userId, name, email, role FROM users WHERE userId = ?";
     $stmt = $this->conn->prepare($sql);

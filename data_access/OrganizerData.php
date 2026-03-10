@@ -1,5 +1,5 @@
 <?php
-// OrganizerData.php --> Place this in data_access folder
+
 
 class OrganizerData {
     private $conn;
@@ -28,7 +28,7 @@ class OrganizerData {
         return false;
     }
     
-    // Get all organizer requests (for admin)
+    // Get all organizer requests
     public function getAllOrganizerRequests($status = null) {
         $query = "SELECT 
                     or_req.requestId,
@@ -85,7 +85,7 @@ class OrganizerData {
         return $result->fetch_assoc();
     }
     
-    // Get user's organizer requests
+    
     public function getUserOrganizerRequests($userId) {
         $stmt = $this->conn->prepare("SELECT * FROM organizer_requests WHERE userId = ? ORDER BY requestDate DESC");
         $stmt->bind_param("i", $userId);
@@ -96,11 +96,11 @@ class OrganizerData {
     
     // Approve organizer request
     public function approveOrganizerRequest($requestId, $reviewerId, $reviewNotes = '') {
-        // Start transaction
+        
         $this->conn->begin_transaction();
         
         try {
-            // Get userId from request
+            
             $stmt = $this->conn->prepare("SELECT userId FROM organizer_requests WHERE requestId = ?");
             $stmt->bind_param("i", $requestId);
             $stmt->execute();
@@ -111,7 +111,7 @@ class OrganizerData {
                 throw new Exception("Request not found");
             }
             
-            // Update request status
+            
             $stmt = $this->conn->prepare("UPDATE organizer_requests SET requestStatus = 'Approved', reviewedBy = ?, reviewDate = NOW(), reviewNotes = ? WHERE requestId = ?");
             $stmt->bind_param("isi", $reviewerId, $reviewNotes, $requestId);
             $stmt->execute();
@@ -136,7 +136,7 @@ class OrganizerData {
         return $stmt->execute();
     }
     
-    // Get all organizers
+    
     public function getAllOrganizers() {
         $stmt = $this->conn->prepare("SELECT userId, name, email, telephoneNo, location, gender FROM users WHERE role = 'Organizer' ORDER BY name ASC");
         $stmt->execute();
@@ -163,7 +163,7 @@ class OrganizerData {
         return $result->fetch_assoc();
     }
     
-    // Get request statistics
+    
     public function getRequestStatistics() {
         $stmt = $this->conn->prepare("SELECT 
                     COUNT(*) as total,
@@ -176,9 +176,9 @@ class OrganizerData {
         return $result->fetch_assoc();
     }
     
-    // Delete organizer request
+   
 public function deleteOrganizerRequest($requestId) {
-    // 1. Get userId from organizer_requests
+    
     $stmt = $this->conn->prepare(
         "SELECT userId FROM organizer_requests WHERE requestId = ?"
     );
@@ -189,7 +189,7 @@ public function deleteOrganizerRequest($requestId) {
     if ($row = $result->fetch_assoc()) {
         $userId = $row['userId'];
 
-        // 2. Get email from users table
+        
         $stmtUser = $this->conn->prepare(
             "SELECT email FROM users WHERE userId = ?"
         );
@@ -200,14 +200,14 @@ public function deleteOrganizerRequest($requestId) {
         if ($userRow = $userResult->fetch_assoc()) {
             $email = $userRow['email'];
 
-            // 3. Delete organizer request
+            
             $stmtDel = $this->conn->prepare(
                 "DELETE FROM organizer_requests WHERE requestId = ?"
             );
             $stmtDel->bind_param("i", $requestId);
             $stmtDel->execute();
 
-            // 4. Delete user
+         
             $stmtDelUser = $this->conn->prepare(
                 "DELETE FROM users WHERE userId = ?"
             );

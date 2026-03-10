@@ -14,7 +14,7 @@ class eventLogic {
         $this->eventData = new EventData();
     }
     
-    // Get user role safely using OOP
+    // Get user role 
     public function getUserRoleSafe() {
         if (isset($_SESSION['role'])) {
             return $_SESSION['role'];
@@ -89,7 +89,7 @@ class eventLogic {
             return ['success' => false, 'message' => 'Invalid image file'];
         }
 
-        // NEW: Determine createdBy based on role (for Organizer support)
+         
         $createdBy = $_SESSION['userId'];
         if ($_SESSION['role'] === 'Admin' && isset($_POST['createdBy']) && !empty($_POST['createdBy'])) {
             $createdBy = $_POST['createdBy'];
@@ -108,7 +108,7 @@ class eventLogic {
             'maxVolunteers' => $_POST['maxVolunteers'] ?? 0,
             'requiredSkillId' => $_POST['requiredSkillId'] ?? null,
             'eventImage' => $imagePath,
-            'createdBy' => $createdBy  // UPDATED: Use determined createdBy
+            'createdBy' => $createdBy  
         ];
 
         $eventId = $this->eventData->createEvent($eventData);
@@ -217,7 +217,7 @@ class eventLogic {
         return ['success' => $success, 'message' => $success ? 'Event updated' : 'Update failed'];
     }
     
-    // NEW: Cancel event
+    // Cancel event
     public function handleCancelEvent($eventId, $reason = '') {
         $event = $this->eventData->getEventById($eventId);
         if (!$event) {
@@ -252,7 +252,7 @@ class eventLogic {
             return ['success' => false, 'message' => 'Permission denied'];
         }
 
-        // Delete image file if exists
+        
         if (!empty($event['eventImage']) && file_exists('../' . $event['eventImage'])) {
             unlink('../' . $event['eventImage']);
         }
@@ -393,7 +393,7 @@ class eventLogic {
         return $this->sendEmail($user['email'], $subject, $body);
     }
 
-    // Simple join event function
+    // Join event function
     public function joinEvent($eventId, $userId) {
         require_once __DIR__ . '/../data_access/eventRegistrationData.php';
         $registrationData = new EventRegistrationData();
@@ -493,7 +493,7 @@ class eventLogic {
         return $this->sendEmail($user['email'], $subject, $body);
     }
 
-    // NEW: Send event cancellation email (for cancelled events)
+    // Send event cancellation email (for cancelled events)
     public function sendEventCancellationEmail($userId, $event, $reason = '') {
         global $conn;
         
@@ -523,7 +523,7 @@ class eventLogic {
         <p>Best regards,<br>Unity Volunteers Trust</p>
         ";
         
-        // Also send internal message
+        // send internal message
         require_once __DIR__ . "/../data_access/MessageData.php";
         $messageData = new MessageData($conn);
         
@@ -542,7 +542,7 @@ class eventLogic {
         return $this->sendEmail($user['email'], $subject, $body);
     }
 
-    // Simple method for all volunteer notifications
+    // All volunteer notifications
     public function notifyVolunteer($volunteerId, $eventId, $action, $reason = null) {
         require_once __DIR__ . "/../data_access/eventRegistrationData.php";
         $registrationData = new EventRegistrationData();
@@ -654,7 +654,7 @@ class eventLogic {
 
     $attendanceCount = $this->eventData->getEventAttendanceCount($eventId);
 
-    // Parse the time to get hour AND minute
+    
     $startTime = strtotime($event['startTime']);
     
     $featureData = [
@@ -667,20 +667,20 @@ class eventLogic {
         "requiredSkillId" => intval($event['requiredSkillId'] ?? 0),
         "attendance_count" => intval($attendanceCount),
 
-        // Derived time features (matching your test file)
+        
         "month" => intval(date('m', strtotime($event['startDate']))),
         "day" => intval(date('d', strtotime($event['startDate']))),
         "year" => intval(date('Y', strtotime($event['startDate']))),
         "day_of_week" => intval(date('w', strtotime($event['startDate']))),
         "hour" => intval(date('H', $startTime)),
-        "minute" => intval(date('i', $startTime))  // ← ADD THIS LINE
+        "minute" => intval(date('i', $startTime))  
     ];
 
     try {
         $predictionService = new PredictionService();
         $result = $predictionService->predictParticipation($featureData);
 
-        // Debug logging
+        
         error_log("Prediction features: " . json_encode($featureData));
         error_log("Prediction result: " . json_encode($result));
 

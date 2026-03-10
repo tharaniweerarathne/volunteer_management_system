@@ -36,7 +36,6 @@ class CertificateLogic {
     }
     
     // Get eligible volunteers for certificate
-// Get eligible volunteers for certificate WITH SEARCH
 public function getEligibleVolunteers($eventId, $search = '') {
     if (!$this->isAdmin()) {
         return ['success' => false, 'message' => 'Access denied'];
@@ -46,7 +45,7 @@ public function getEligibleVolunteers($eventId, $search = '') {
         $volunteers = $this->certificateData->getEligibleVolunteers($eventId, $search);
         $event = $this->getEventDetails($eventId);
         
-        // Get total count without search for comparison
+        
         $totalCount = $this->certificateData->getTotalEligibleVolunteers($eventId);
         
         return [
@@ -118,7 +117,7 @@ public function getEligibleVolunteers($eventId, $search = '') {
             );
             
             if ($certificateId) {
-                // Send notifications using your MessageData
+                // Send notifications
                 $this->sendCertificateNotifications($userId, $certificateId);
                 
                 return [
@@ -129,7 +128,7 @@ public function getEligibleVolunteers($eventId, $search = '') {
                     'message' => 'Certificate issued successfully'
                 ];
             } else {
-                // Clean up generated file if database insert failed
+               
                 if (file_exists('../' . $result['filePath'])) {
                     unlink('../' . $result['filePath']);
                 }
@@ -178,7 +177,7 @@ $sql = "SELECT
         // Generate certificate number
         $certificateNumber = $this->certificateData->generateCertificateNumber($eventId, $userId);
         
-        // Generate HTML for PDF
+        
         $html = $this->generateCertificateHTML($data, $certificateNumber);
         
         // Configure Dompdf
@@ -192,7 +191,7 @@ $sql = "SELECT
         $dompdf->setPaper('A4', 'landscape');
         $dompdf->render();
         
-        // Create certificates directory if not exists
+        
         $directory = '../assets/certificates/';
         if (!file_exists($directory)) {
             mkdir($directory, 0777, true);
@@ -316,20 +315,20 @@ $sql = "SELECT
         </html>';
     }
     
-    // Send certificate notifications using your MessageData
+    // Send certificate notifications 
     private function sendCertificateNotifications($userId, $certificateId) {
         // Get certificate details
         $certificate = $this->certificateData->getCertificate($certificateId);
         
         if (!$certificate) return;
         
-        // Load your MessageData
+        
         require_once '../data_access/MessageData.php';
         $messageData = new MessageData($this->conn);
         
         // Send internal message
         $messageData->sendMessage(
-            $_SESSION['userId'], // Admin as sender
+            $_SESSION['userId'], 
             $userId,
             'Certificate Issued - ' . $certificate['certificateNumber'],
             "A certificate has been issued for your participation in '{$certificate['eventName']}'. Certificate Number: {$certificate['certificateNumber']}"
@@ -362,11 +361,11 @@ $sql = "SELECT
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port       = 587;
             
-            // Sender/Recipient
+            
             $mail->setFrom('noreply@volunteer.com', 'Unity Volunteers Trust');
             $mail->addAddress($user['email']);
             
-            // Content
+            
             $mail->isHTML(true);
             $mail->Subject = "Certificate Issued: " . $certificate['eventName'];
             
@@ -395,7 +394,7 @@ $sql = "SELECT
         }
     }
     
-    // Bulk issue certificates for all eligible volunteers in an event
+    // Issue certificates for all eligible volunteers in an event
     public function bulkIssueCertificates($eventId) {
         if (!$this->isAdmin()) {
             return ['success' => false, 'message' => 'Access denied'];

@@ -1,11 +1,11 @@
 <?php
-// data_access/eventRegistrationData.php
+
 require_once 'db.php';
 
 class EventRegistrationData {
     
     // Check if volunteer already joined
-// Check if volunteer already joined (only active registrations)
+
 public function isAlreadyJoined($eventId, $userId) {
     global $conn;
     
@@ -19,7 +19,7 @@ public function isAlreadyJoined($eventId, $userId) {
     return $stmt->get_result()->num_rows > 0;
 }
     
-    // Check time conflict for volunteer
+    
     public function checkTimeConflict($userId, $newEventId) {
         global $conn;
         
@@ -54,7 +54,7 @@ public function isAlreadyJoined($eventId, $userId) {
             $existingStart = $existingEvent['startDate'] . ' ' . $existingEvent['startTime'];
             $existingEnd = $existingEvent['endDate'] . ' ' . $existingEvent['endTime'];
             
-            // Check for time overlap: new_start < existing_end AND new_end > existing_start
+            // Check for time overlap
             if (strtotime($newStart) < strtotime($existingEnd) && 
                 strtotime($newEnd) > strtotime($existingStart)) {
                 
@@ -71,9 +71,8 @@ public function isAlreadyJoined($eventId, $userId) {
         return $conflicts;
     }
     
-    // Insert registration
-// Insert or RE-activate registration
-// Insert or RE-activate registration
+
+
 public function insertRegistration($eventId, $userId, $isRejoining = false) {
     global $conn;
     
@@ -100,7 +99,7 @@ public function insertRegistration($eventId, $userId, $isRejoining = false) {
         $stmt->bind_param("i", $cancelledRegistration['registrationId']);
         
         if ($stmt->execute()) {
-            // Also increment joined count
+           
             $this->incrementJoinedCount($eventId);
             $isRejoin = true;
             $registrationId = $cancelledRegistration['registrationId'];
@@ -124,7 +123,7 @@ public function insertRegistration($eventId, $userId, $isRejoining = false) {
     }
 }
     
-    // Update event joined_count +1
+    
     public function incrementJoinedCount($eventId) {
         global $conn;
         
@@ -146,7 +145,7 @@ public function insertRegistration($eventId, $userId, $isRejoining = false) {
         return $stmt->execute();
     }
     
-    // Get volunteer's joined events
+   
 public function getVolunteerEvents($userId) {
     global $conn;
 
@@ -173,11 +172,11 @@ public function getVolunteerEvents($userId) {
 }
 
     
-    // Cancel registration (soft delete)
+    // Cancel registration 
     public function cancelRegistration($registrationId, $reason = null) {
         global $conn;
         
-        // Get eventId before cancellation
+        
         $getSql = "SELECT eventId FROM event_registrations WHERE registrationId = ?";
         $getStmt = $conn->prepare($getSql);
         $getStmt->bind_param("i", $registrationId);
@@ -188,7 +187,7 @@ public function getVolunteerEvents($userId) {
         
         $eventId = $result['eventId'];
         
-        // Soft delete
+        
         $sql = "UPDATE event_registrations 
                 SET status = 'cancelled', cancellationReason = ?
                 WHERE registrationId = ?";
@@ -198,14 +197,14 @@ public function getVolunteerEvents($userId) {
         $success = $stmt->execute();
         
         if ($success) {
-            // Decrement joined count
+            
             $this->decrementJoinedCount($eventId);
         }
         
         return $success;
     }
     
-    // Decrement joined count
+    
     private function decrementJoinedCount($eventId) {
         global $conn;
         
@@ -263,11 +262,11 @@ public function getEventDetails($eventId) {
     }
 
 
-    // Edit registration (change to another event)
+    // Edit registration 
 public function updateRegistration($registrationId, $newEventId, $userId) {
     global $conn;
     
-    // Get old event ID
+    
     $oldEventSql = "SELECT eventId FROM event_registrations WHERE registrationId = ?";
     $oldEventStmt = $conn->prepare($oldEventSql);
     $oldEventStmt->bind_param("i", $registrationId);
@@ -278,11 +277,11 @@ public function updateRegistration($registrationId, $newEventId, $userId) {
     
     $oldEventId = $oldEventResult['eventId'];
     
-    // Begin transaction
+    
     $conn->begin_transaction();
     
     try {
-        // 1. Remove from old event (cancel registration)
+        
         $cancelSql = "UPDATE event_registrations 
                      SET status = 'cancelled', 
                          cancellationReason = 'Changed to another event'
@@ -294,12 +293,12 @@ public function updateRegistration($registrationId, $newEventId, $userId) {
             throw new Exception("Failed to cancel old registration");
         }
         
-        // 2. Decrement old event count
+        
         if (!$this->decrementJoinedCount($oldEventId)) {
             throw new Exception("Failed to decrement old event count");
         }
         
-        // 3. Create new registration
+       
         $newSql = "INSERT INTO event_registrations (eventId, userId, status) 
                   VALUES (?, ?, 'registered')";
         $newStmt = $conn->prepare($newSql);
@@ -309,7 +308,7 @@ public function updateRegistration($registrationId, $newEventId, $userId) {
             throw new Exception("Failed to create new registration");
         }
         
-        // 4. Increment new event count
+      
         if (!$this->incrementJoinedCount($newEventId)) {
             throw new Exception("Failed to increment new event count");
         }
@@ -324,7 +323,7 @@ public function updateRegistration($registrationId, $newEventId, $userId) {
     }
 }
 
-// Get available events for editing (excluding current and past events)
+// Get available events for editing 
 public function getAvailableEventsForEdit($userId, $currentEventId) {
     global $conn;
     

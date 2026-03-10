@@ -10,7 +10,7 @@ $name = $_SESSION['name'];
 $userId = $_SESSION['userId'];
 $userRole = $_SESSION['role'];
 
-// Add database connection and message logic
+
 require_once __DIR__ . "/../data_access/db.php";
 require_once __DIR__ . "/../business_logic/MessageLogic.php";
 require_once __DIR__ . "/../business_logic/calendarLogic.php";
@@ -255,7 +255,7 @@ $totalEvents = $calendarData['totalEvents'];
                                     <h6 class="card-subtitle mb-2">Active Now</h6>
                                     <h2 class="card-title mb-0">
                                         <?php 
-                                        // Get active users count (simplified)
+                                        // Get active users count 
                                         $activeSql = "SELECT COUNT(*) as active_count FROM users WHERE role = 'Volunteer'";
                                         $activeResult = $conn->query($activeSql);
                                         $activeCount = $activeResult ? $activeResult->fetch_assoc()['active_count'] : 0;
@@ -319,9 +319,9 @@ $totalEvents = $calendarData['totalEvents'];
                 </li>
             </ul>
 
-            <!-- Tab Content -->
+            
             <div class="tab-content" id="dashboardTabContent">
-                <!-- Calendar Tab -->
+               
                 <div class="tab-pane fade show active" id="calendar" role="tabpanel">
                     <div class="card mt-3">
                         <div class="card-header bg-white border-bottom">
@@ -729,7 +729,7 @@ $totalEvents = $calendarData['totalEvents'];
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="eventModalBody">
-                    <!-- Event details will be loaded here -->
+                    
                 </div>
                 <div class="modal-footer">
                     <span id="eventStatusBadge" class="me-auto"></span>
@@ -744,7 +744,7 @@ $totalEvents = $calendarData['totalEvents'];
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Initialize FullCalendar
+        // FullCalendar
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar-container');
             
@@ -762,8 +762,8 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         day: 'Day'
     },
     titleFormat: {
-        month: 'long',   // Show full month name (e.g., "January")
-        year: 'numeric'  // Show year (e.g., "2024")
+        month: 'long',   
+        year: 'numeric' 
     },
                 themeSystem: 'bootstrap5',
                 events: function(fetchInfo, successCallback, failureCallback) {
@@ -789,11 +789,11 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                     showEventDetails(info.event);
                 },
                 eventDidMount: function(info) {
-                    // Add tooltip with event details
+                    
                     const event = info.event;
                     const extendedProps = event.extendedProps;
                     
-                    // Create tooltip content
+                   
                     const tooltipContent = `
                         <strong>${event.title}</strong><br>
                         <strong>Date:</strong> ${event.start.toLocaleDateString()}<br>
@@ -802,15 +802,15 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                         <strong>Status:</strong> ${extendedProps.status.toUpperCase()}
                     `;
                     
-                    // Add tooltip
+                    
                     info.el.setAttribute('data-bs-toggle', 'tooltip');
                     info.el.setAttribute('data-bs-html', 'true');
                     info.el.setAttribute('title', tooltipContent);
                     
-                    // Initialize tooltip
+                    
                     new bootstrap.Tooltip(info.el);
                     
-                    // Add status indicator
+                    // Status indicator
                     if (extendedProps.status === 'cancelled') {
                         info.el.style.opacity = '0.7';
                         info.el.style.textDecoration = 'line-through';
@@ -821,7 +821,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                     } else {
                         // Add color-coded border based on user role
                         const userRole = '<?php echo $userRole; ?>';
-                        let borderColor = '#20c997'; // default teal
+                        let borderColor = '#20c997'; 
                         
                         switch(userRole) {
                             case 'Admin': borderColor = '#198754'; break;
@@ -858,7 +858,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
 
             calendar.render();
 
-            // Custom navigation buttons
+            
             document.getElementById('calendar-prev').addEventListener('click', function() {
                 calendar.prev();
                 showToast('Navigating', 'Previous period', 'info');
@@ -898,7 +898,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                 showToast('View Changed', 'Day view', 'info');
             });
 
-            // Tab switching
+           
             document.querySelectorAll('#dashboardTabs button').forEach(tab => {
                 tab.addEventListener('click', function() {
                     const tabId = this.getAttribute('data-bs-target').substring(1);
@@ -906,18 +906,18 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                 });
             });
 
-            // Auto-refresh calendar every 5 minutes
+         
             setInterval(function() {
                 calendar.refetchEvents();
                 console.log('Calendar auto-refreshed at', new Date().toLocaleTimeString());
-            }, 300000); // 5 minutes
+            }, 300000); 
 
             // Function to update event counts
             function updateEventCounts(data) {
                 const totalEvents = data.totalEvents;
                 const userRole = data.userRole;
                 
-                // Update tab badge
+               
                 const calendarTabBadge = document.querySelector('#calendar-tab .badge');
                 if (totalEvents > 0) {
                     if (!calendarTabBadge) {
@@ -939,13 +939,13 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             function showEventDetails(event) {
                 const extendedProps = event.extendedProps;
                 
-                // Update modal title
+                
                 document.getElementById('eventModalTitle').textContent = event.title;
                 
-                // Create event details HTML
+                
                 let detailsHtml = extendedProps.description;
                 
-                // Add additional information based on user role
+                
                 const userRole = '<?php echo $userRole; ?>';
                 
                 if (userRole === 'Admin' || userRole === 'Coordinator' || userRole === 'Organizer') {
@@ -973,7 +973,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                     detailsHtml += `</div>`;
                 }
                 
-                // Set modal body content
+                
                 document.getElementById('eventModalBody').innerHTML = detailsHtml;
                 
                 // Update status badge
@@ -1049,7 +1049,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
 
             // Show toast notifications
             function showToast(title, message, type = 'info') {
-                // Create toast container if it doesn't exist
+                
                 let toastContainer = document.querySelector('.toast-container');
                 if (!toastContainer) {
                     toastContainer = document.createElement('div');
@@ -1087,14 +1087,14 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                 });
             }
 
-            // Initialize tooltips
+            
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
             var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl);
             });
         });
 
-        // Existing JavaScript functions
+        
         const menuToggle = document.getElementById('menuToggle');
         const sidebar = document.getElementById('sidebar');
         
@@ -1111,7 +1111,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             }
         });
         
-        // Auto-refresh notification count every 30 seconds
+        
         setInterval(function() {
             fetch('get_unread_count.php')
                 .then(response => response.json())
@@ -1126,19 +1126,19 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         function updateNotificationBadge(count) {
             console.log('Updating badge count:', count);
             
-            // Update TOP HEADER notification badge
+            
             let topNotificationBadge = document.querySelector('.header-actions .dropdown:first-child .notification-badge');
             let topNotificationButton = document.querySelector('.header-actions .dropdown:first-child .btn');
             
-            // Update DROPDOWN MENU badge
+           
             let dropdownBadge = document.querySelector('.dropdown-menu .badge');
             
-            // Update SIDEBAR badge
+           
             let sidebarBadge = document.querySelector('.message-badge');
             let sidebarLink = document.querySelector('.nav-item a[href*="messages"]');
             
             if (count > 0) {
-                // Update or create TOP HEADER badge
+                
                 if (topNotificationBadge) {
                     topNotificationBadge.textContent = count;
                 } else if (topNotificationButton) {
@@ -1148,7 +1148,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                     topNotificationButton.appendChild(newBadge);
                 }
                 
-                // Update DROPDOWN MENU badge
+               
                 if (dropdownBadge) {
                     dropdownBadge.textContent = count + ' new';
                 } else {
@@ -1161,7 +1161,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                     }
                 }
                 
-                // Update SIDEBAR badge
+               
                 if (sidebarBadge) {
                     sidebarBadge.textContent = count;
                 } else if (sidebarLink) {
@@ -1171,7 +1171,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                     sidebarLink.appendChild(newBadge);
                 }
             } else {
-                // Remove badges if count is 0
+                
                 if (topNotificationBadge) topNotificationBadge.remove();
                 if (dropdownBadge) dropdownBadge.remove();
                 if (sidebarBadge) sidebarBadge.remove();

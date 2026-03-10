@@ -31,7 +31,7 @@ class UserData {
         return $stmt->get_result()->fetch_assoc();
     }
 
-    // Optional: Get all skills for a user
+    // Get all skills for a user
     public function getUserSkills($userId) {
         $sql = "SELECT s.* 
                 FROM skills s

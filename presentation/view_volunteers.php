@@ -912,11 +912,11 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
                                 <button class="btn btn-primary" onclick="window.print()">
                                     <i class="ri-printer-line"></i> Print Volunteer List
                                 </button>
-                                <?php if (file_exists('../presentation/mark_attendance.php')): ?>
-                                    <a href="mark_attendance.php?eventId=<?php echo $eventId; ?>" class="btn btn-warning">
-                                        <i class="ri-calendar-check-line"></i> Mark Attendance
-                                    </a>
-                                <?php endif; ?>
+<?php if ($_SESSION['role'] == 'Coordinator' && file_exists('../presentation/mark_attendance.php')): ?>
+    <a href="mark_attendance.php?eventId=<?php echo $eventId; ?>" class="btn btn-warning">
+        <i class="ri-calendar-check-line"></i> Mark Attendance
+    </a>
+<?php endif; ?>
                                 <?php if (file_exists('../presentation/send_email.php')): ?>
                                     <a href="send_email.php?eventId=<?php echo $eventId; ?>" class="btn btn-info">
                                         <i class="ri-send-plane-line"></i> Email All Volunteers
@@ -985,18 +985,18 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
                             }
                         ],
                         "drawCallback": function(settings) {
-                            // Ensure the table is properly drawn
+                            
                             console.log('DataTable redrawn with ' + settings.fnRecordsDisplay() + ' records');
                         }
                     });
                 } catch(e) {
                     console.log('DataTable initialization error:', e);
-                    // Fallback - just show the table without DataTables features
+                   
                     $('#volunteersTable').addClass('table');
                 }
             } else {
                 console.log('No volunteers to initialize DataTable');
-                // Table will still display the "no data" message with proper column count
+                
             }
 
             // Toggle between table and card view
@@ -1018,7 +1018,7 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
                 }
             });
 
-            // Auto-hide alerts after 5 seconds
+            
             setTimeout(function() {
                 const alerts = document.querySelectorAll('.alert:not(.alert-info)');
                 alerts.forEach(alert => {
@@ -1031,13 +1031,13 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
             
             // Print optimization
             window.addEventListener('beforeprint', function() {
-                // Hide the toggle view button
+                
                 $('#toggleView').hide();
-                // Force table view for printing
+                
                 $('#tableView').show();
                 $('#cardView').hide();
                 
-                // Destroy DataTable temporarily for printing
+                
                 if (hasVolunteers && $.fn.DataTable.isDataTable('#volunteersTable')) {
                     var table = $('#volunteersTable').DataTable();
                     table.destroy();
@@ -1045,10 +1045,10 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
             });
             
             window.addEventListener('afterprint', function() {
-                // Show the toggle view button again
+                // Show the toggle view button 
                 $('#toggleView').show();
                 
-                // Reinitialize DataTable after printing
+              
                 if (hasVolunteers && !$.fn.DataTable.isDataTable('#volunteersTable')) {
                     try {
                         $('#volunteersTable').DataTable({

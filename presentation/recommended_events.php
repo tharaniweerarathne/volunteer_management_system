@@ -5,7 +5,7 @@ require_once '../data_access/UserData.php';
 require_once '../data_access/SkillData.php';
 require_once '../data_access/db.php'; 
 
-// Now check if user is logged in (session was started by eventLogic.php)
+
 if (!isset($_SESSION['userId']) || $_SESSION['role'] !== 'Volunteer') {
     header("Location: sign_in.php");
     exit();
@@ -14,10 +14,10 @@ if (!isset($_SESSION['userId']) || $_SESSION['role'] !== 'Volunteer') {
 $userId = $_SESSION['userId'];
 $eventLogic = new EventLogic();
 
-// Use the global connection
+
 global $conn;
 
-// Pass connection to data classes
+
 $userData = new UserData($conn);
 $skillData = new SkillData($conn);
 
@@ -50,7 +50,7 @@ if (!empty($user['skillIds'])) {
 </head>
 <body>
 
-<!-- Navigation -->
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="#">

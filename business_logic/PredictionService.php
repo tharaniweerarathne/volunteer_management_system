@@ -12,10 +12,8 @@ class PredictionService {
             "Content-Type: application/json"
         ]);
         
-        // Add timeout to prevent hanging
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         
-        // Debug: log the data being sent
         $jsonData = json_encode($userFeatures);
         error_log("Sending to Flask: " . $jsonData);
         
@@ -23,12 +21,12 @@ class PredictionService {
 
         $response = curl_exec($ch);
         
-        // Debug: check for curl errors
+        // check for curl errors
         if (curl_error($ch)) {
             error_log("Curl error: " . curl_error($ch));
         }
         
-        // Debug: log the response
+        // log the response
         error_log("Flask response: " . $response);
 
         curl_close($ch);

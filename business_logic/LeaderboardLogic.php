@@ -1,5 +1,5 @@
 <?php
-// business_logic/LeaderboardLogic.php
+
 require_once '../data_access/LeaderboardData.php';
 
 class LeaderboardLogic {

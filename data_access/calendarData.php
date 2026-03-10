@@ -1,10 +1,10 @@
 <?php
-// data_access/calendarData.php
+
 require_once 'db.php';
 
 class CalendarData {
     
-    // Get all events for admin (including all statuses)
+    // Get all events for admin 
     public function getAllEvents() {
         global $conn;
         
@@ -134,7 +134,7 @@ class CalendarData {
             return 'cancelled';
         }
         
-        // Check if event has end date/time
+        
         if (!isset($event['endDate']) || empty($event['endDate'])) {
             return 'active';
         }

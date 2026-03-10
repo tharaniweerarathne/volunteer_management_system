@@ -101,7 +101,7 @@ class Chatbot {
         }
         
         $response = "🎯 **Top Recommendations For You:**\n\n";
-        $events = array_slice($result['events'], 0, 5); // Show top 5
+        $events = array_slice($result['events'], 0, 5); 
         
         foreach ($events as $event) {
             $skillBadge = $event['user_has_skill'] ? "✅ You have this skill!" : "⚠️ Skill needed";
@@ -141,7 +141,7 @@ class Chatbot {
             ];
         }
         
-        // Get prediction from your ML model
+        // Get prediction from ML model
         $prediction = $this->predictionService->predictParticipation($event['eventId']);
         
         if (!$prediction['success']) {

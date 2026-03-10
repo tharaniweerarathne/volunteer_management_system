@@ -33,7 +33,7 @@ class RecommendationService
         if (!empty($user['skillIds'])) {
             $userSkillIds = explode(',', $user['skillIds']);
         }
-        // Use first skill as primary (or you can loop through all)
+        
         $primarySkill = !empty($userSkillIds) ? intval($userSkillIds[0]) : 0;
 
         // Get all upcoming events
@@ -46,7 +46,7 @@ class RecommendationService
             ];
         }
 
-        // Prepare features for ALL events (one API call with all events)
+        // Features for ALL events 
         $eventFeatures = [];
         foreach ($events as $event) {
             $eventFeatures[] = [
@@ -55,15 +55,15 @@ class RecommendationService
                 "user_location" => $user['location'] ?? '',
                 "event_location" => $event['location'] ?? '',
                 "requiredSkillId" => intval($event['requiredSkillId'] ?? 0),
-                "volunteer_skill" => $primarySkill, // User's primary skill
+                "volunteer_skill" => $primarySkill, 
                 "category" => $event['category'] ?? '',
                 "attended" => $this->hasUserAttendedEvent($userId, $event['eventId']) ? 1 : 0
             ];
         }
 
-        // Send ALL events to Flask at once
+        // Send ALL events to Flask 
         $payload = [
-            "events" => $eventFeatures  // Send array of events
+            "events" => $eventFeatures  
         ];
 
         // Flask API call
@@ -153,14 +153,14 @@ class RecommendationService
             return $b['score'] <=> $a['score'];
         });
 
-        // 🔥 FILTER: Only show events with match percentage >= 50% (or adjust as needed)
-        $minMatchThreshold = 50; // You can change this value
+        // Only show events with match percentage >= 50% 
+        $minMatchThreshold = 50; 
         $suitableEvents = array_filter($scoredEvents, function($event) use ($minMatchThreshold) {
             return $event['match_percentage'] >= $minMatchThreshold;
         });
 
-        // Sort again after filtering (just to be safe)
-        $suitableEvents = array_values($suitableEvents); // Re-index array
+        
+        $suitableEvents = array_values($suitableEvents); 
 
         return [
             "success" => true,

@@ -1,5 +1,5 @@
 <?php
-// resultsData.php ----> data_access folder (UPDATED VERSION WITH MULTIPLE IMAGES)
+
 require_once 'db.php';
 
 class ResultsData {
@@ -127,7 +127,6 @@ class ResultsData {
     }
     
     // Create new result with multiple images
-// Create new result with multiple images (FIXED VERSION)
 public function createResult($data) {
     global $conn;
     
@@ -144,7 +143,7 @@ public function createResult($data) {
         return false;
     }
     
-    // Extract values with proper null handling
+   
     $eventId = $data['eventId'];
     $organizerId = $data['organizerId'];
     $resultTitle = $data['resultTitle'];
@@ -158,7 +157,7 @@ public function createResult($data) {
     $resultImage5 = $data['resultImage5'] ?? null;
     $addedBy = $data['addedBy'];
     
-    // Bind parameters properly - don't pass null directly by reference
+   
     $stmt->bind_param("iisssisssssss", 
         $eventId,
         $organizerId,
@@ -188,7 +187,7 @@ public function createResult($data) {
     return $insertId;
 }
     
-    // Get result by ID (UPDATED with multiple images)
+    // Get result by ID 
     public function getResultById($resultId) {
         global $conn;
         
@@ -212,7 +211,6 @@ public function createResult($data) {
     }
     
     // Update result with multiple images
-// Update result with multiple images (FIXED VERSION)
 public function updateResult($resultId, $data) {
     global $conn;
     
@@ -228,7 +226,7 @@ public function updateResult($resultId, $data) {
         return false;
     }
     
-    // Extract values with proper null handling
+  
     $eventId = $data['eventId'];
     $organizerId = $data['organizerId'];
     $resultTitle = $data['resultTitle'];
@@ -267,7 +265,7 @@ public function updateResult($resultId, $data) {
     return true;
 }
     
-    // Get all organizers for dropdown
+ 
     public function getAllOrganizers() {
         global $conn;
         
@@ -307,7 +305,7 @@ public function updateResult($resultId, $data) {
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
     
-    // Get events with their organizers for dropdown
+   
     public function getEventsWithOrganizers() {
         global $conn;
         
@@ -445,7 +443,7 @@ public function updateResult($resultId, $data) {
     public function deleteResult($resultId) {
         global $conn;
         
-        // Get image paths first
+        
         $result = $this->getResultById($resultId);
         if (!$result) {
             return false;
@@ -457,7 +455,7 @@ public function updateResult($resultId, $data) {
         $stmt->bind_param("i", $resultId);
         $success = $stmt->execute();
         
-        // Delete all image files if they exist
+        
         if ($success) {
             $imageFields = ['resultImage', 'resultImage2', 'resultImage3', 'resultImage4', 'resultImage5'];
             
@@ -511,13 +509,12 @@ public function updateResult($resultId, $data) {
         $result = $this->getResultById($resultId);
         if (!$result) return false;
         
-        // Admin can modify any result
+        
         if ($this->getUserRole($userId) == 'Admin') {
             return true;
         }
         
-        // Organizers/Coordinators can only modify their own results
-        // unless result is already approved (then only admin can modify)
+
         return ($result['addedById'] == $userId && $result['approvalStatus'] == 'Pending');
     }
     
@@ -571,7 +568,7 @@ public function updateResult($resultId, $data) {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
     
-    // Get all images for a result as an array
+    
     public function getResultImages($resultId) {
         global $conn;
         

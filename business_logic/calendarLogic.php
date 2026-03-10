@@ -1,5 +1,5 @@
 <?php
-// business_logic/calendarLogic.php
+
 require_once __DIR__ . '/../data_access/calendarData.php';
 
 class CalendarLogic {
@@ -13,7 +13,7 @@ class CalendarLogic {
     public function getEventsForUser($userId, $userRole) {
         switch ($userRole) {
             case 'Admin':
-                return $this->calendarData->getAllEvents(); // Admin sees ALL events
+                return $this->calendarData->getAllEvents(); 
             case 'Coordinator':
                 return $this->calendarData->getCoordinatorEvents($userId);
             case 'Organizer':
@@ -32,10 +32,10 @@ class CalendarLogic {
         foreach ($events as $event) {
             $status = $this->calendarData->getEventStatus($event);
             
-            // Set color based on status and user role
+            
             $color = $this->getEventColor($event, $status, $userRole);
             
-            // Create full datetime strings
+            
             $startTime = !empty($event['startTime']) ? $event['startTime'] : '00:00:00';
             $endTime = !empty($event['endTime']) ? $event['endTime'] : '23:59:59';
             
@@ -76,30 +76,30 @@ class CalendarLogic {
     }
     
     private function getEventColor($event, $status, $userRole) {
-        // First check event status
+        
         if ($status === 'cancelled') {
-            return '#dc3545'; // Red for cancelled
+            return '#dc3545'; 
         } elseif ($status === 'over') {
-            return '#6c757d'; // Gray for over
+            return '#6c757d'; 
         }
         
-        // For active events, color by event status or user role
+        
         if ($userRole === 'Admin') {
-            // Admin sees event status colors
+            
             $eventStatus = $event['status'] ?? 'Active';
             switch ($eventStatus) {
-                case 'Active': return '#198754'; // Green
-                case 'Pending': return '#ffc107'; // Yellow
-                case 'Draft': return '#6c757d'; // Gray
-                default: return '#0dcaf0'; // Info blue
+                case 'Active': return '#198754'; 
+                case 'Pending': return '#ffc107'; 
+                case 'Draft': return '#6c757d'; 
+                default: return '#0dcaf0'; 
             }
         } else {
-            // Other users see role-based colors
+            
             switch ($userRole) {
-                case 'Coordinator': return '#0d6efd'; // Blue
-                case 'Organizer': return '#ffc107'; // Yellow
-                case 'Volunteer': return '#6f42c1'; // Purple
-                default: return '#20c997'; // Teal
+                case 'Coordinator': return '#0d6efd'; 
+                case 'Organizer': return '#ffc107'; 
+                case 'Volunteer': return '#6f42c1'; 
+                default: return '#20c997'; 
             }
         }
     }
@@ -134,7 +134,7 @@ class CalendarLogic {
         }
         
         if ($userRole === 'Admin') {
-            // Admin sees more details
+            
             $description .= "<br><strong>Event Status:</strong> " . ($event['status'] ?? 'Active');
             $description .= "<br><strong>Created:</strong> " . date('M j, Y', strtotime($event['createdAt'] ?? ''));
             
@@ -183,7 +183,7 @@ class CalendarLogic {
             
             $stats = array_merge($eventStats, $userStats);
         } else {
-            // For other roles, get their specific stats
+            
             $events = $this->getEventsForUser($userId, $userRole);
             $totalEvents = count($events);
             
@@ -200,7 +200,7 @@ class CalendarLogic {
                     $active++;
                 }
                 
-                // Check if upcoming (future date)
+                
                 if (isset($event['startDate']) && strtotime($event['startDate']) > time()) {
                     $upcoming++;
                 }

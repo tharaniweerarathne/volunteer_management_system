@@ -12,18 +12,18 @@ $attendanceLogic = new AttendanceLogic();
 $message = '';
 $success = false;
 
-// handle date selection
+
 $selectedDate = $_GET['date'] ?? date('Y-m-d');
 
 // get events for the selected date
 $eventsResult = $attendanceLogic->getCoordinatorEvents($selectedDate);
 $events = $eventsResult['success'] ? $eventsResult['events'] : [];
 
-// handle event selection
+
 $selectedEventId = $_GET['eventId'] ?? null;
 $volunteers = [];
 $eventDetails = null;
-$searchTerm = $_GET['search'] ?? ''; // Get search term
+$searchTerm = $_GET['search'] ?? ''; 
 
 if ($selectedEventId) {
     $volunteersResult = $attendanceLogic->getEventVolunteers($selectedEventId, $searchTerm);
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_attendance']))
         $message = $result['message'];
         $success = true;
         
-        // Refresh volunteers list
+        
         $volunteersResult = $attendanceLogic->getEventVolunteers($selectedEventId, $searchTerm);
         if ($volunteersResult['success']) {
             $volunteers = $volunteersResult['volunteers'];

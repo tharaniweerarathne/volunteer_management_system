@@ -10,9 +10,9 @@ CORS(app)
 try:
     participation_model = pickle.load(open("ml_service/model/participation_rf_model.pkl", "rb"))
     recommendation_model = pickle.load(open("ml_service/model/recommendation_rf_model.pkl", "rb"))
-    print("✅ Models Loaded Successfully")
+    print("Models Loaded Successfully")
 except Exception as e:
-    print("❌ Model loading error:", str(e))
+    print("Model loading error:", str(e))
 
 @app.route("/")
 def home():

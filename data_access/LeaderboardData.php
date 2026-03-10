@@ -1,10 +1,10 @@
 <?php
-// data_access/LeaderboardData.php
+
 require_once 'db.php';
 
 class LeaderboardData {
     
-    // Get top volunteers based on attendance with ACTUAL hours calculated from time
+   
     public function getTopVolunteersByAttendance($limit = 10) {
         global $conn;
         
@@ -41,7 +41,7 @@ class LeaderboardData {
         return $volunteers;
     }
 
-    // Get volunteer's monthly hours for trend
+    
     public function getVolunteerMonthlyHours($userId) {
         global $conn;
         

@@ -25,8 +25,8 @@ class AttendanceData {
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
     
-    // Get volunteers registered for an event (FIXED - Added table alias to status column)
-// Get volunteers registered for an event with optional search
+
+// Get volunteers registered for an event 
 public function getEventVolunteers($eventId, $search = '') {
     $sql = "SELECT u.userId, u.name, u.email, u.telephoneNo,
                    IFNULL(a.status, 'Not Marked') as attendanceStatus
@@ -63,7 +63,7 @@ public function getEventVolunteers($eventId, $search = '') {
     
     // Mark attendance
     public function markAttendance($eventId, $userId, $date, $status, $coordinatorId, $remarks = '') {
-        // Check if attendance already marked for today
+        
         $checkSql = "SELECT attendanceId FROM attendance 
                     WHERE eventId = ? AND userId = ? AND attendanceDate = ?";
         $checkStmt = $this->conn->prepare($checkSql);
@@ -144,7 +144,7 @@ public function getEventVolunteers($eventId, $search = '') {
         return $stmt->execute();
     }
     
-    // Get attendance summary for event (FIXED - Added table alias to status column)
+    // Get attendance summary for event
     public function getAttendanceSummary($eventId, $date = null) {
         if (!$date) $date = date('Y-m-d');
         

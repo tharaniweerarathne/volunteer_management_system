@@ -1,30 +1,30 @@
 <?php
 session_start();
 
-// checking if user is logged in
+
 if (!isset($_SESSION['userId'])) {
     header('Location: login.php');
     exit();
 }
 
-// only volunteers can access this page
+
 if ($_SESSION['role'] !== 'Volunteer') {
     header('Location: login.php');
     exit();
 }
 
 require_once '../data_access/certificateData.php';
-require_once '../business_logic/certificateLogic.php'; // path to your CertificateLogic class
+require_once '../business_logic/certificateLogic.php'; 
 $certificateLogic = new CertificateLogic();
 $certificateData = new CertificateData();
 
-// Get search term if any
+
 $searchTerm = isset($_GET['search']) ? trim($_GET['search']) : '';
 
-// Get all certificates first
+// Get all certificates 
 $allCertificates = $certificateData->getCertificatesByVolunteer($_SESSION['userId']);
 
-// Apply search filter if search term exists
+// Apply search filter 
 $certificates = [];
 if (!empty($searchTerm)) {
     $searchLower = strtolower($searchTerm);
@@ -243,7 +243,7 @@ function highlightSearchText($text, $search) {
                                 <h4>No Certificates Yet</h4>
                                 <p class="text-muted">You haven't received any certificates yet.</p>
                                 <p class="text-muted">Complete events and maintain good attendance to earn certificates.</p>
-                                <a href="events.php" class="btn btn-primary mt-3">
+                                <a href="events_volunteer.php" class="btn btn-primary mt-3">
                                     <i class="bi bi-calendar-event"></i> Browse Events
                                 </a>
                             <?php endif; ?>
@@ -455,7 +455,7 @@ function highlightSearchText($text, $search) {
             }
         });
         
-        // Smooth scroll to top when clicking on certificate card (optional)
+        
         document.querySelectorAll('.certificate-card').forEach(card => {
             card.addEventListener('click', function(e) {
                 if (!e.target.closest('a') && !e.target.closest('button')) {

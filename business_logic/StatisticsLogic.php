@@ -1,5 +1,5 @@
 <?php
-// business_logic/StatisticsLogic.php
+
 require_once '../data_access/StatisticsData.php';
 
 class StatisticsLogic {
@@ -20,7 +20,7 @@ class StatisticsLogic {
         $totalHours = $this->statisticsData->getTotalVolunteerHours();
         $categoryStats = $this->statisticsData->getEventsByCategory();
         
-        // Format numbers (add + sign and round if needed)
+        
         return [
             'volunteers' => [
                 'total' => $totalVolunteers,
@@ -46,7 +46,7 @@ class StatisticsLogic {
         ];
     }
     
-    // Get simplified stats for the statistics section
+    
     public function getSimpleStats() {
         $totalVolunteers = $this->statisticsData->getTotalVolunteers();
         $completedEvents = $this->statisticsData->getCompletedEvents();
@@ -68,7 +68,7 @@ class StatisticsLogic {
         ];
     }
     
-    // Get detailed stats with additional information
+   
     public function getDetailedStats() {
         $totalVolunteers = $this->statisticsData->getTotalVolunteers();
         $activeVolunteers = $this->statisticsData->getActiveVolunteers();
