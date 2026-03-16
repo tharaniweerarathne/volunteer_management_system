@@ -127,9 +127,9 @@ The heart of our platform—intelligent features that learn and adapt:
 
 ## ✨ Key Features by Role
 
-<b> > Click to expand screenshot 📸 gallery</b>
+<b> ▶️ Click to expand screenshot 📸 gallery</b>
 
-<details open>
+<details>
 <summary><b>👥 Volunteers Module</b></summary>
 <br>
 
@@ -149,7 +149,7 @@ The heart of our platform—intelligent features that learn and adapt:
 </details>
 
 
-<details open>
+<details>
 <summary><b>👑Administrators Module</b></summary>
 <br>
 
@@ -169,7 +169,7 @@ The heart of our platform—intelligent features that learn and adapt:
 <br>
 </details>
 
-<details open>
+<details>
 <summary><b>📋 Coordinators Module</b></summary>
 <br>
 
@@ -186,7 +186,7 @@ The heart of our platform—intelligent features that learn and adapt:
 </details>
 
 
-<details open>
+<details>
 <summary><b>🎯 Organizers Module</b></summary>
 <br>
 
