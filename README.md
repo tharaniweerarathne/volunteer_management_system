@@ -62,6 +62,67 @@ Volunteering is crucial for community growth, but managing large volunteer netwo
 
 <br>
 
+## 🤖 AI-Powered Intelligence
+
+The heart of our platform—intelligent features that learn and adapt:
+
+### 📊 1. Event Participation Prediction
+<table>
+  <tr>
+    <td width="60%">
+      <h4>For Administrators & Coordinators</h4>
+      <ul>
+        <li>✅ <strong>Algorithm:</strong> Random Forest Regressor</li>
+        <li>✅ <strong>Input:</strong> Historical event data, past attendance, event type, day of week</li>
+        <li>✅ <strong>Output:</strong> Forecasted volunteer turnout for future events</li>
+        <li>✅ <strong>Impact:</strong> Better resource planning, venue selection, task allocation</li>
+      </ul>
+    </td>
+    <td width="40%">
+      <img src="github_docs/screenshots/prediction1.png" alt="AI Prediction Graph" width="100%"/> <img src="github_docs/screenshots/prediction2.png" alt="AI Prediction Graph 2" width="100%"/>
+      <p align="center"><i>📈 Prediction Dashboard</i></p>
+    </td>
+  </tr>
+</table>
+
+### 🎯 2. Smart Volunteer Recommendation
+<table>
+  <tr>
+    <td width="60%">
+      <h4>For Volunteers</h4>
+      <ul>
+        <li>✅ <strong>Approach:</strong> Content-Based Filtering</li>
+        <li>✅ <strong>Analysis:</strong> Volunteer profiles, skills, interests, past participation</li>
+        <li>✅ <strong>Matching:</strong> Against event requirements and themes</li>
+        <li>✅ <strong>Impact:</strong> Higher engagement, better skill utilization, satisfaction</li>
+      </ul>
+    </td>
+    <td width="40%">
+            <img src="github_docs/screenshots/recommendation1.png" alt="AI Prediction Graph" width="100%"/> <img src="github_docs/screenshots/recommendation2.png" alt="AI Prediction Graph 2" width="100%"/>
+      <p align="center"><i>💡 Personalized Suggestions</i></p>
+    </td>
+  </tr>
+</table>
+
+### 💬 3. AI Chatbot Assistant
+<table>
+  <tr>
+    <td width="60%">
+      <h4>For All Users</h4>
+      <ul>
+        <li>✅ <strong>Purpose:</strong> 24/7 intelligent assistance</li>
+        <li>✅ <strong>Capabilities:</strong> Event recommendations, FAQs, platform guidance</li>
+        <li>✅ <strong>Interaction:</strong> Content-Based Filtering recommendation model</li>
+        <li>✅ <strong>Impact:</strong> Reduces coordinator workload, instant user support</li>
+      </ul>
+    </td>
+    <td width="40%">
+      <img src="github_docs/screenshots/chatbot.png" alt="AI Chatbot" width="100%"/>
+      <p align="center"><i>🤖 Chatbot Interface</i></p>
+    </td>
+  </tr>
+</table>
+
 ## ✨ Key Features by Role
 
 ### 👥 For Volunteers
@@ -118,66 +179,7 @@ Volunteering is crucial for community growth, but managing large volunteer netwo
 
 <br>
 
-## 🤖 AI-Powered Intelligence
 
-The heart of our platform—intelligent features that learn and adapt:
-
-### 📊 1. Event Participation Prediction
-<table>
-  <tr>
-    <td width="60%">
-      <h4>For Administrators & Coordinators</h4>
-      <ul>
-        <li>✅ <strong>Algorithm:</strong> Random Forest / Linear Regression</li>
-        <li>✅ <strong>Input:</strong> Historical event data, past attendance, event type, day of week</li>
-        <li>✅ <strong>Output:</strong> Forecasted volunteer turnout for future events</li>
-        <li>✅ <strong>Impact:</strong> Better resource planning, venue selection, task allocation</li>
-      </ul>
-    </td>
-    <td width="40%">
-      <img src="github_docs/screenshots/ai-prediction-graph.png" alt="AI Prediction Graph" width="100%"/>
-      <p align="center"><i>📈 Prediction Dashboard</i></p>
-    </td>
-  </tr>
-</table>
-
-### 🎯 2. Smart Volunteer Recommendation
-<table>
-  <tr>
-    <td width="60%">
-      <h4>For Volunteers</h4>
-      <ul>
-        <li>✅ <strong>Approach:</strong> Content-Based Filtering</li>
-        <li>✅ <strong>Analysis:</strong> Volunteer profiles, skills, interests, past participation</li>
-        <li>✅ <strong>Matching:</strong> Against event requirements and themes</li>
-        <li>✅ <strong>Impact:</strong> Higher engagement, better skill utilization, satisfaction</li>
-      </ul>
-    </td>
-    <td width="40%">
-      <img src="github_docs/screenshots/ai-recommendations-card.png" alt="AI Recommendations" width="100%"/>
-      <p align="center"><i>💡 Personalized Suggestions</i></p>
-    </td>
-  </tr>
-</table>
-
-### 💬 3. AI Chatbot Assistant
-<table>
-  <tr>
-    <td width="60%">
-      <h4>For All Users</h4>
-      <ul>
-        <li>✅ <strong>Purpose:</strong> 24/7 intelligent assistance</li>
-        <li>✅ <strong>Capabilities:</strong> Event recommendations, FAQs, platform guidance</li>
-        <li>✅ <strong>Interaction:</strong> Natural language processing</li>
-        <li>✅ <strong>Impact:</strong> Reduces coordinator workload, instant user support</li>
-      </ul>
-    </td>
-    <td width="40%">
-      <img src="github_docs/screenshots/ai-chatbot-demo.png" alt="AI Chatbot" width="100%"/>
-      <p align="center"><i>🤖 Chatbot Interface</i></p>
-    </td>
-  </tr>
-</table>
 
 <br>
 
