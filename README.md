@@ -113,7 +113,7 @@ The heart of our platform—intelligent features that learn and adapt:
         <li>✅ <strong>Model:</strong> Random Forest</li>
         <li>✅ <strong>Purpose:</strong> 24/7 intelligent assistance</li>
         <li>✅ <strong>Capabilities:</strong> Event recommendations, FAQs, platform guidance</li>
-        <li>✅ <strong>Interaction:</strong> Content-Based Filtering recommendation model</li>
+        <li>✅ <strong>Interaction:</strong> Use the same recommendation model</li>
         <li>✅ <strong>Impact:</strong> Reduces coordinator workload, instant user support</li>
       </ul>
     </td>
@@ -126,8 +126,11 @@ The heart of our platform—intelligent features that learn and adapt:
 
 
 ## ✨ Key Features by Role
-<summary><b>🖥️ Click to expand full screenshots </b></summary>
+
+<details open>
+<summary><b>👥 Volunteers Module (9 Features)</b></summary>
 <br>
+
 ### 👥 For Volunteers
 | Feature | Description | Screenshot |
 |:--|:--|:--|
@@ -181,6 +184,8 @@ The heart of our platform—intelligent features that learn and adapt:
 | 📝 **Manage Feedback** | Review volunteer feedback | `github_docs/screenshots/organizer-feedback.png` |
 
 <br>
+
+</details>
 
 
 
