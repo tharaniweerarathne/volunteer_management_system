@@ -128,10 +128,9 @@ The heart of our platform—intelligent features that learn and adapt:
 ## ✨ Key Features by Role
 
 <details open>
-<summary><b>👥 Volunteers Module (9 Features)</b></summary>
+<summary><b>👥 Volunteers Module</b></summary>
 <br>
 
-### 👥 For Volunteers
 | Feature | Description | Screenshot |
 |:--|:--|:--|
 | 🔐 **Secure Auth** | Registration/Login with OTP verification | **Login Screen** <br> ![Login](github_docs/screenshots/volunteer-login.png) <br> **OTP Verification** <br> ![OTP](github_docs/screenshots/otp_register.png) <br> **Real time Email** <br> ![OTP](github_docs/screenshots/note4.png) |
@@ -145,8 +144,13 @@ The heart of our platform—intelligent features that learn and adapt:
 | ⭐ **Organizer Application** | Apply to become organizer | ![Certficate 1](github_docs/screenshots/org1.jpg) <br> ![Certficate 2](github_docs/screenshots/org2.png) <br> ![Certficate 2](github_docs/screenshots/org3.png) |
 
 <br>  
+</details>
 
-### 👑 For Administrators
+
+<details open>
+<summary><b>👑Administrators Module</b></summary>
+<br>
+
 | Feature | Description | Screenshot Location |
 |:--|:--|:--|
 | 📊 **AI Predictions** | Forecast event participation | `github_docs/screenshots/admin-predictions.png` |
@@ -161,8 +165,12 @@ The heart of our platform—intelligent features that learn and adapt:
 | 🔔 **System Notifications** | Send broadcast messages | `github_docs/screenshots/broadcast.png` |
 
 <br>
+</details>
 
-### 📋 For Coordinators
+<details open>
+<summary><b>📋 Coordinators Module</b></summary>
+<br>
+
 | Feature | Description | Screenshot Location |
 |:--|:--|:--|
 | 📅 **Calendar View** | Upcoming and completed events | `github_docs/screenshots/coordinator-calendar.png` |
@@ -173,8 +181,13 @@ The heart of our platform—intelligent features that learn and adapt:
 | 📊 **CSV Export** | Export attendance data | `github_docs/screenshots/coordinator-export.png` |
 
 <br>
+</details>
 
-### 🎯 For Organizers
+
+<details open>
+<summary><b>🎯 For Organizers</b></summary>
+<br>
+
 | Feature | Description | Screenshot Location |
 |:--|:--|:--|
 | 📅 **Personal Calendar** | Events they organize | `github_docs/screenshots/organizer-calendar.png` |
@@ -184,7 +197,6 @@ The heart of our platform—intelligent features that learn and adapt:
 | 📝 **Manage Feedback** | Review volunteer feedback | `github_docs/screenshots/organizer-feedback.png` |
 
 <br>
-
 </details>
 
 
