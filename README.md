@@ -162,7 +162,8 @@ The heart of our platform—intelligent features that learn and adapt:
 | 📋 **Event Management** | Create/modify/cancel events | ![Chatbot](github_docs/screenshots/event.png) |
 
 | 📈 **Attendance Tracking** | Monitor all event attendance | ![Certficate 1](github_docs/screenshots/attendance.png) <br> ![Certficate 2](github_docs/screenshots/attendance.png) |
-| 📤 **CSV Export** | Export data as CSV files | ![Chatbot](github_docs/screenshots/csv.png) |
+
+| 📊 **CSV Export** | Export attendance data | ![Chatbot](github_docs/screenshots/csv.png) |
 
 | 📜 **Certificate Generation** | Generate participation certificates | ![AI Recommendations 1](github_docs/screenshots/issue_certficate.png) <br> ![AI Recommendations 2](github_docs/screenshots/issue_certficate1.png) |
 
