@@ -150,21 +150,22 @@ The heart of our platform—intelligent features that learn and adapt:
 
 
 <details>
-<summary><b>👑Administrators Module</b></summary>
+<summary><b>👑Administrators Module</b></summary> 
 <br>
 
 | Feature | Description | Screenshot Location |
 |:--|:--|:--|
-| 📊 **AI Predictions** | Forecast event participation | `github_docs/screenshots/admin-predictions.png` |
-| 👥 **Manage Volunteers** | Add/edit/remove users | `github_docs/screenshots/admin-volunteers.png` |
-| 👤 **Manage Coordinators** | Add/edit/remove coordinators | `github_docs/screenshots/admin-coordinators.png` |
-| 📋 **Event Management** | Create/modify/cancel events | `github_docs/screenshots/admin-events.png` |
+| 📊 **AI Predictions** | Forecast event participation | ![AI Recommendations 1](github_docs/screenshots/prediction1.png) <br> ![AI Recommendations 2](github_docs/screenshots/prediction2.png) |
+| 📅 **Event Calendar** | Visual schedule of all events | ![Calendar 1](github_docs/screenshots/admin_dashboard.png) <br> ![Calendar 2](github_docs/screenshots/admin_dashboard1.png) |
+| 👥 **Manage Volunteers** | Add/edit/remove users | ![AI Recommendations 1](github_docs/screenshots/v1.png) <br> ![AI Recommendations 2](github_docs/screenshots/v2.png) |
+| 👤 **Manage Coordinators** | Add/edit/remove coordinators | ![AI Recommendations 1](github_docs/screenshots/volunteer_management.png) <br> ![AI Recommendations 2](github_docs/screenshots/volunteer_management1.png) |
+| 📋 **Event Management** | Create/modify/cancel events | ![Chatbot](github_docs/screenshots/event.png) |
 | 📈 **Attendance Tracking** | Monitor all event attendance | `github_docs/screenshots/admin-attendance.png` |
 | 📤 **CSV Export** | Export data as CSV files | `github_docs/screenshots/export-csv.png` |
-| 📜 **Certificate Generation** | Generate participation certificates | `github_docs/screenshots/gen-certificates.png` |
-| ✅ **Approve Events** | Approve past event results | `github_docs/screenshots/approve-events.png` |
-| ⬆️ **Role Approvals** | Approve volunteer-to-organizer requests | `github_docs/screenshots/role-approvals.png` |
-| 🔔 **System Notifications** | Send broadcast messages | `github_docs/screenshots/broadcast.png` |
+| 📜 **Certificate Generation** | Generate participation certificates | ![AI Recommendations 1](github_docs/screenshots/issue_certficate.png) <br> ![AI Recommendations 2](github_docs/screenshots/issue_certficate1.png) |
+| ✅ **Approve Events** | Approve past event results | ![Certficate 1](github_docs/screenshots/result_manegment.jpg) <br> ![Certficate 2](github_docs/screenshots/result_manegment1.jpg) |
+| ⬆️ **Role Approvals** | Approve volunteer-to-organizer requests | ![Certficate 1](github_docs/screenshots/org5.jpg) <br> ![Certficate 2](github_docs/screenshots/org6.jpg) |
+
 
 <br>
 </details>
