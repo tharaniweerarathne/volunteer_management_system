@@ -160,8 +160,8 @@ The heart of our platform—intelligent features that learn and adapt:
 | 👥 **Manage Volunteers** | Add/edit/remove users | ![AI Recommendations 1](github_docs/screenshots/v1.png) <br> ![AI Recommendations 2](github_docs/screenshots/v2.png) |
 | 👤 **Manage Coordinators** | Add/edit/remove coordinators | ![AI Recommendations 1](github_docs/screenshots/volunteer_management.png) <br> ![AI Recommendations 2](github_docs/screenshots/volunteer_management1.png) |
 | 📋 **Event Management** | Create/modify/cancel events | ![Chatbot](github_docs/screenshots/event.png) |
-| 📈 **Attendance Tracking** | Monitor all event attendance | ![Certficate 1](github_docs/screenshots/attendance.png) <br> ![Certficate 2](github_docs/screenshots/attendance.png) |
 
+| 📈 **Attendance Tracking** | Monitor all event attendance | ![Certficate 1](github_docs/screenshots/attendance.png) <br> ![Certficate 2](github_docs/screenshots/attendance.png) |
 | 📤 **CSV Export** | Export data as CSV files | ![Chatbot](github_docs/screenshots/csv.png) |
 
 | 📜 **Certificate Generation** | Generate participation certificates | ![AI Recommendations 1](github_docs/screenshots/issue_certficate.png) <br> ![AI Recommendations 2](github_docs/screenshots/issue_certficate1.png) |
