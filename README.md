@@ -161,7 +161,7 @@ The heart of our platform—intelligent features that learn and adapt:
 | 👤 **Manage Coordinators** | Add/edit/remove coordinators | ![AI Recommendations 1](github_docs/screenshots/volunteer_management.png) <br> ![AI Recommendations 2](github_docs/screenshots/volunteer_management1.png) |
 | 📋 **Event Management** | Create/modify/cancel events | ![Chatbot](github_docs/screenshots/event.png) |
 | 📊 **CSV Export** | Export attendance data | ![Chatbot](github_docs/screenshots/csv.png) |
-| 👥 **View Participants** | See who joined | ![Certficate 1](github_docs/screenshots/attendance1.png) <br> ![Certficate 2](github_docs/screenshots/attendance.png) |
+| 👥 **View Participants** | See who joined | ![Certficate 1](github_docs/screenshots/attendance.png) <br> ![Certficate 2](github_docs/screenshots/attendance1.png) |
 | 📜 **Certificate Generation** | Generate participation certificates | ![AI Recommendations 1](github_docs/screenshots/issue_certficate.png) <br> ![AI Recommendations 2](github_docs/screenshots/issue_certficate1.png) |
 | ✅ **Approve Events** | Approve past event results | ![Certficate 1](github_docs/screenshots/result_manegment.jpg) <br> ![Certficate 2](github_docs/screenshots/result_manegment1.jpg) |
 | ⬆️ **Role Approvals** | Approve volunteer-to-organizer requests | ![Certficate 1](github_docs/screenshots/org5.jpg) <br> ![Certficate 2](github_docs/screenshots/org6.jpg) |
