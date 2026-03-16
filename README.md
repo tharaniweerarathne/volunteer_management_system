@@ -163,9 +163,13 @@ The heart of our platform—intelligent features that learn and adapt:
 | 📈 **Attendance Tracking** | Monitor all event attendance | ![Certficate 1](github_docs/screenshots/attendance.png) <br> ![Certficate 2](github_docs/screenshots/attendance.png) |
 
 | 📤 **CSV Export** | Export data as CSV files | ![Chatbot](github_docs/screenshots/csv.png) |
+
 | 📜 **Certificate Generation** | Generate participation certificates | ![AI Recommendations 1](github_docs/screenshots/issue_certficate.png) <br> ![AI Recommendations 2](github_docs/screenshots/issue_certficate1.png) |
+
 | ✅ **Approve Events** | Approve past event results | ![Certficate 1](github_docs/screenshots/result_manegment.jpg) <br> ![Certficate 2](github_docs/screenshots/result_manegment1.jpg) |
+
 | ⬆️ **Role Approvals** | Approve volunteer-to-organizer requests | ![Certficate 1](github_docs/screenshots/org5.jpg) <br> ![Certficate 2](github_docs/screenshots/org6.jpg) |
+
 | 📝 **Manage Feedback** | Review volunteer feedback | ![feedback 1](github_docs/screenshots/feedback1.png) <br> ![AI Recommendations 2](github_docs/screenshots/feedback2.png) <br> ![Certficate 2](github_docs/screenshots/feedback3.png) <br> ![Certficate 2](github_docs/screenshots/feedback4.png) <br> ![Certficate 2](github_docs/screenshots/feedback5.png) |
 
 
