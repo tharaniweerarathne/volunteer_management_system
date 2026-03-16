@@ -197,9 +197,70 @@ The heart of our platform—intelligent features that learn and adapt:
 ### Prerequisites
 ```bash
 # Required installations
-- PHP 
+- PHP
 - MySQL
 - Python >= 3.13
 - Composer (optional)
 - Git
+```
+### Setup & Installation
 
+1. *Clone the Repository*
+
+```bash
+https://github.com/tharaniweerarathne/volunteer_management_system.git
+```
+### ⚙ DB Setup 
+2. *Start WAMP Server*
+<li>Launch WAMP Server</li>
+<li>Ensure all services (Apache, MySQL) are running (green icon)</li>
+
+3. *The database schema can be downloaded here:*
+
+[Download Database Schema](github_docs/Database/SQL/volunteer_management.sql)
+
+### Install Python dependencies
+```bash
+pip install -r requirements.txt
+# Requirements include: scikit-learn, pandas, numpy, flask , etc.
+```
+
+### Install PHP Libraries
+
+```bash
+# Install PHPMailer
+composer require phpmailer/phpmailer
+
+# Install Dompdf
+composer require dompdf/dompdf
+```
+
+<br>
+
+## 🔒 Security Features
+
+| Feature | Implementation |
+|:--|:--|
+| **Password Security** | Bcrypt hashing for all passwords |
+| **OTP Verification** | Email-based OTP for login & password reset |
+| **Input Validation** | Client-side (JavaScript) and Server-side (PHP) validation |
+| **Role-Based Access** | Separate portals with controlled access for Admin and Volunteers |
+| **SQL Injection Prevention** | Prepared statements and parameterized queries |
+| **XSS Protection** | Input sanitization and output encoding |
+| **Session Management** | Secure session handling for authenticated users |
+| **Error Handling** | Custom error pages and controlled error handling |
+
+
+<br>
+---
+
+## 🎯 Final Notes
+
+```
+Thank you for exploring the Unity Volunteers Trust platform!
+This project is individually developed by Tharani Sasindi Weerarathne
+and demonstrates full-stack web development, AI/ML integration,
+and secure volunteer management solutions.
+```
+## 📫 Contact / Support
+For any questions or project-related support, reach out at: `sasindikoralagamage@gmail.com`
