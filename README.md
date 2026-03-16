@@ -165,8 +165,36 @@ The heart of our platform—intelligent features that learn and adapt:
 | ⬆️ **Role Approvals** | Approve volunteer-to-organizer requests | ![Certficate 1](github_docs/screenshots/org5.jpg) <br> ![Certficate 2](github_docs/screenshots/org6.jpg) |
 | 📝 **Manage Feedback** | Review volunteer feedback | ![feedback 1](github_docs/screenshots/feedback1.png) <br> ![AI Recommendations 2](github_docs/screenshots/feedback2.png) <br> ![Certficate 2](github_docs/screenshots/feedback3.png) <br> ![Certficate 2](github_docs/screenshots/feedback4.png) <br> ![Certficate 2](github_docs/screenshots/feedback5.png) |
 
+<details>
+<summary><b>📋 Coordinators Module</b></summary>
+<br>
+
+| Feature | Description | Screenshot Location |
+|:--|:--|:--|
+| 📅 **Calendar View** | Upcoming and completed events | ![AI Recommendations 1](github_docs/screenshots/c1.png) <br> ![AI Recommendations 2](github_docs/screenshots/c2.png) |
+| 👥 **Manage Volunteers** | Add/edit/remove users | ![AI Recommendations 1](github_docs/screenshots/v1.png) <br> ![AI Recommendations 2](github_docs/screenshots/v2.png) |
+| 📋 **View Event Only** | Create/modify/cancel events | ![Chatbot](github_docs/screenshots/view_events.png) |
+| 📝 **Mark Attendance** | Record volunteer attendance | ![AI Recommendations 1](github_docs/screenshots/mark_attendance.png) <br> ![AI Recommendations 2](github_docs/screenshots/mark_attendance1.png) |
+| 📤 **Upload Results** | Add event reports/images | ![Certficate 1](github_docs/screenshots/result_manegment.jpg) <br> ![Certficate 2](github_docs/screenshots/result_manegment1.jpg) |
+| 📧 **Send Notifications** | Message volunteers | **Send Emails** <br> ![Login](github_docs/screenshots/send_email.png) <br> **OTP Verification** <br> ![OTP](github_docs/screenshots/otp_register.png) <br> **Real time Email** <br> ![OTP](github_docs/screenshots/send_message3.png) |
+| 📊 **CSV Export** | Export attendance data | ![Chatbot](github_docs/screenshots/csv.png) |
+| 📝 **Manage Feedback** | Review volunteer feedback | ![feedback 1](github_docs/screenshots/feedback1.png) <br> ![AI Recommendations 2](github_docs/screenshots/feedback2.png) <br> ![Certficate 2](github_docs/screenshots/feedback3.png) <br> ![Certficate 2](github_docs/screenshots/feedback4.png) <br> ![Certficate 2](github_docs/screenshots/feedback5.png) |
+
+<br>
+</details>
 
 
+<details>
+<summary><b>🎯 Organizers Module</b></summary>
+<br>
+
+| Feature | Description | Screenshot Location |
+|:--|:--|:--|
+| 📅 **Personal Calendar** | Events they organize | ![Certficate 1](github_docs/screenshots/org7.jpg) <br> ![Certficate 2](github_docs/screenshots/org8.png) |
+| ➕ **Create Events** | Schedule new events | ![Chatbot](github_docs/screenshots/event.png) |
+| 👥 **View Participants** | See who joined | ![Certficate 1](github_docs/screenshots/attendance.png) <br> ![Certficate 2](github_docs/screenshots/attendance.png) |
+| 📤 **Event Results** | Upload completion data | ![Certficate 1](github_docs/screenshots/result_manegment.jpg) <br> ![Certficate 2](github_docs/screenshots/result_manegment1.jpg) |
+| 📝 **Manage Feedback** | Review volunteer feedback | ![feedback 1](github_docs/screenshots/feedback1.png) <br> ![AI Recommendations 2](github_docs/screenshots/feedback2.png) <br> ![Certficate 2](github_docs/screenshots/feedback3.png) <br> ![Certficate 2](github_docs/screenshots/feedback4.png) <br> ![Certficate 2](github_docs/screenshots/feedback5.png) |
 
 <br>
 </details>
