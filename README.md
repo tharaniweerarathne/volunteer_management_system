@@ -72,7 +72,7 @@ The heart of our platform—intelligent features that learn and adapt:
     <td width="60%">
       <h4>For Administrators & Coordinators</h4>
       <ul>
-        <li>✅ <strong>Algorithm:</strong> Random Forest Regressor</li>
+        <li>✅ <strong>Model:</strong> Random Forest Regressor</li>
         <li>✅ <strong>Input:</strong> Historical event data, past attendance, event type, day of week</li>
         <li>✅ <strong>Output:</strong> Forecasted volunteer turnout for future events</li>
         <li>✅ <strong>Impact:</strong> Better resource planning, venue selection, task allocation</li>
@@ -91,7 +91,7 @@ The heart of our platform—intelligent features that learn and adapt:
     <td width="60%">
       <h4>For Volunteers</h4>
       <ul>
-        <li>✅ <strong>Approach:</strong> Content-Based Filtering</li>
+        <li>✅ <strong>Model:</strong> Random Forest</li>
         <li>✅ <strong>Analysis:</strong> Volunteer profiles, skills, interests, past participation</li>
         <li>✅ <strong>Matching:</strong> Against event requirements and themes</li>
         <li>✅ <strong>Impact:</strong> Higher engagement, better skill utilization, satisfaction</li>
@@ -110,6 +110,7 @@ The heart of our platform—intelligent features that learn and adapt:
     <td width="60%">
       <h4>For All Users</h4>
       <ul>
+        <li>✅ <strong>Model:</strong> Random Forest</li>
         <li>✅ <strong>Purpose:</strong> 24/7 intelligent assistance</li>
         <li>✅ <strong>Capabilities:</strong> Event recommendations, FAQs, platform guidance</li>
         <li>✅ <strong>Interaction:</strong> Content-Based Filtering recommendation model</li>
