@@ -68,14 +68,9 @@ Volunteering is crucial for community growth, but managing large volunteer netwo
 | Feature | Description | Screenshot |
 |:--|:--|:--|
 | 🔐 **Secure Auth** | Registration/Login with OTP verification | **Login Screen** <br> ![Login](github_docs/screenshots/volunteer-login.png) <br> **OTP Verification** <br> ![OTP](github_docs/screenshots/otp_register.png) |
-| 🤖 **AI Recommendations** | Personalized event suggestions | <br> ![Login](github_docs/screenshots/recommendation1.png) <br> **OTP Verification** <br> ![OTP](github_docs/screenshots/otp_register.png) |
-
-
-
-
-
-|---------------------------|-------------------------------|  
-| ![AI Recommendations 1](github_docs/screenshots/recommendation1.png) <br> ![AI Recommendations 2](github_docs/screenshots/recommendation2.png) |
+| 🤖 **AI Recommendations** | Personalized event suggestions |
+| ![AI Recommendations 1](github_docs/screenshots/recommendation1.png) |
+| ![AI Recommendations 2](github_docs/screenshots/recommendation2.png) |
 | 📅 **Event Calendar** | Visual schedule of joined events | `github_docs/screenshots/volunteer-calendar.png` |
 | 🏆 **Leaderboard** | Top volunteers by participation | `github_docs/screenshots/leaderboard.png` |
 | 📜 **Certificates** | Downloadable achievement certificates | `github_docs/screenshots/certificates.png` |
