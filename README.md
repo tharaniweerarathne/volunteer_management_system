@@ -67,18 +67,17 @@ Volunteering is crucial for community growth, but managing large volunteer netwo
 ### 👥 For Volunteers
 | Feature | Description | Screenshot |
 |:--|:--|:--|
-| 🔐 **Secure Auth** | Registration/Login with OTP verification | **Login Screen** <br> ![Login](github_docs/screenshots/volunteer-login.png) <br> **OTP Verification** <br> ![OTP](github_docs/screenshots/otp_register.png) |
+| 🔐 **Secure Auth** | Registration/Login with OTP verification | **Login Screen** <br> ![Login](github_docs/screenshots/volunteer-login.png) <br> **OTP Verification** <br> ![OTP](github_docs/screenshots/otp_register.png) <br> **Real time Email** <br> ![OTP](github_docs/screenshots/note4.png) |
 | 🤖 **AI Recommendations** | Personalized event suggestions | ![AI Recommendations 1](github_docs/screenshots/recommendation1.png) <br> ![AI Recommendations 2](github_docs/screenshots/recommendation2.png) |
 | 📅 **Event Calendar** | Visual schedule of joined events | ![Calendar 1](github_docs/screenshots/v_dashboard1.png) <br> ![Calendar 2](github_docs/screenshots/v_dashboard2.png) |
-| 🏆 **Leaderboard** | Top volunteers by participation | `github_docs/screenshots/leadership.png` |
+| 🏆 **Leaderboard**  | Top volunteers by participation | ![leaderboard](github_docs/screenshots/leadership.png) |
 | 📜 **Certificates** | Downloadable achievement certificates | ![Certficate 1](github_docs/screenshots/certficate1.jpg) <br> ![Certficate 2](github_docs/screenshots/certficate2.png) <br> ![Certficate 2](github_docs/screenshots/certficate3.png) |
-| 💬 **AI Chatbot** | 24/7 assistant for queries | `github_docs/screenshots/chatbot.png` |
-| 📝 **Feedback** | Submit event feedback | `github_docs/screenshots/feedback.png` |
-| 🔍 **Search** | Find events by keywords | `github_docs/screenshots/search.png` |
-| 📧 **Notifications** | Email alerts for events | `github_docs/screenshots/notifications.png` |
-| ⭐ **Organizer Application** | Apply to become organizer | `github_docs/screenshots/apply-organizer.png` |
+| 💬 **AI Chatbot** | 24/7 assistant for queries | ![Chatbot](github_docs/screenshots/chatbot.png) |
+| 📝 **Feedback** | Submit event feedback | ![feedback 1](github_docs/screenshots/feedback1.png) <br> ![AI Recommendations 2](github_docs/screenshots/feedback2.png) <br> ![Certficate 2](github_docs/screenshots/feedback3.png) <br> ![Certficate 2](github_docs/screenshots/feedback4.png) <br> ![Certficate 2](github_docs/screenshots/feedback5.png) |
+| 📧 **Notifications** | Email alerts for events | **Internal Notification** <br> ![Login](github_docs/screenshots/notification1.png) <br> **Real time Email** <br> ![OTP](github_docs/screenshots/notification2.png) |
+| ⭐ **Organizer Application** | Apply to become organizer | ![Certficate 1](github_docs/screenshots/org1.jpg) <br> ![Certficate 2](github_docs/screenshots/org2.png) <br> ![Certficate 2](github_docs/screenshots/org3.png) |
 
-<br>
+<br>  
 
 ### 👑 For Administrators
 | Feature | Description | Screenshot Location |
