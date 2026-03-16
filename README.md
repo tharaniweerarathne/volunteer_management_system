@@ -171,6 +171,7 @@ The heart of our platform—intelligent features that learn and adapt:
 <br>
 </details>
 
+<br>
 
 ## 🛠️ Technology Stack
 
