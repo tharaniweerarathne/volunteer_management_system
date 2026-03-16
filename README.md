@@ -5,7 +5,7 @@
   <br>
   
   <!-- Replace with your actual logo path -->
-  <img src="github_docs/logo.png" alt="Unity Volunteers Trust Logo" width="180"/>
+  <img src="assets/images/logo.png" alt="Unity Volunteers Trust Logo" width="180"/>
   
   <br>
   <br>
@@ -24,7 +24,7 @@
   <br>
   
   <!-- Main Banner Image - Replace with your screenshot -->
-  <img src="github_docs/screenshots/dashboard-main.png" alt="Unity Volunteers Trust Dashboard" width="850"/>
+  <img src="github_docs/screenshots/main_page.png" alt="Unity Volunteers Trust" width="850"/>
   
   <br>
   <br>
@@ -67,7 +67,11 @@ Volunteering is crucial for community growth, but managing large volunteer netwo
 ### 👥 For Volunteers
 | Feature | Description | Screenshot Location |
 |:--|:--|:--|
-| 🔐 **Secure Auth** | Registration/Login with OTP verification | `github_docs/screenshots/volunteer-login.png` |
+| 🔐 **Secure Auth** | Registration/Login with OTP verification | 
+Login Screen <br>
+![Login](github_docs/screenshots/volunteer-login.png) <br><br>
+OTP Verification <br>
+![OTP](github_docs/screenshots/otp_register.png) |
 | 🤖 **AI Recommendations** | Personalized event suggestions | `github_docs/screenshots/ai-recommendations.png` |
 | 📅 **Event Calendar** | Visual schedule of joined events | `github_docs/screenshots/volunteer-calendar.png` |
 | 🏆 **Leaderboard** | Top volunteers by participation | `github_docs/screenshots/leaderboard.png` |
