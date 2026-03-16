@@ -211,15 +211,15 @@ The heart of our platform—intelligent features that learn and adapt:
 https://github.com/tharaniweerarathne/volunteer_management_system.git
 ```
 ### ⚙ DB Setup 
-2. *Start WAMP Server*
-<li>Launch WAMP Server</li>
-<li>Ensure all services (Apache, MySQL) are running (green icon)</li>
+1. *Start WAMP Server*
+   - Launch WAMP Server
+   - Ensure all services (Apache, MySQL) are running (green icon)
 
 <br> 
 
-3. *The database schema can be downloaded here:*
+2. *The database schema can be downloaded here:*
 
-`github_docs/Database/SQL/database_schema.sql`
+`github_docs/Database/database_schema.sql`
 
 ### Install Python dependencies
 ```bash
