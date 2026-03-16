@@ -216,6 +216,7 @@ https://github.com/tharaniweerarathne/volunteer_management_system.git
 <li>Ensure all services (Apache, MySQL) are running (green icon)</li>
 
 <br> 
+
 3. *The database schema can be downloaded here:*
 
 `github_docs/Database/SQL/database_schema.sql`
