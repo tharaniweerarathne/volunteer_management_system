@@ -173,87 +173,33 @@ The heart of our platform—intelligent features that learn and adapt:
 <br>
 </details>
 
-<details>
-<summary><b>📋 Coordinators Module</b></summary>
-<br>
 
-| Feature | Description | Screenshot Location |
-|:--|:--|:--|
-| 📅 **Calendar View** | Upcoming and completed events | ![AI Recommendations 1](github_docs/screenshots/c1.png) <br> ![AI Recommendations 2](github_docs/screenshots/c2.png) |
-| 👥 **Manage Volunteers** | Add/edit/remove users | ![AI Recommendations 1](github_docs/screenshots/v1.png) <br> ![AI Recommendations 2](github_docs/screenshots/v2.png) |
-| 📋 **View Event Only** | Create/modify/cancel events | ![Chatbot](github_docs/screenshots/view_events.png) |
-| 📝 **Mark Attendance** | Record volunteer attendance | ![AI Recommendations 1](github_docs/screenshots/mark_attendance.png) <br> ![AI Recommendations 2](github_docs/screenshots/mark_attendance1.png) |
-| 📤 **Upload Results** | Add event reports/images | ![Certficate 1](github_docs/screenshots/result_manegment.jpg) <br> ![Certficate 2](github_docs/screenshots/result_manegment1.jpg) |
-| 📧 **Send Notifications** | Message volunteers | **Send Emails** <br> ![Login](github_docs/screenshots/send_email.png) <br> **OTP Verification** <br> ![OTP](github_docs/screenshots/otp_register.png) <br> **Real time Email** <br> ![OTP](github_docs/screenshots/send_message3.png) |
-| 📊 **CSV Export** | Export attendance data | ![Chatbot](github_docs/screenshots/csv.png) |
-| 📝 **Manage Feedback** | Review volunteer feedback | ![feedback 1](github_docs/screenshots/feedback1.png) <br> ![AI Recommendations 2](github_docs/screenshots/feedback2.png) <br> ![Certficate 2](github_docs/screenshots/feedback3.png) <br> ![Certficate 2](github_docs/screenshots/feedback4.png) <br> ![Certficate 2](github_docs/screenshots/feedback5.png) |
+## 🛠️ Technology Stack
 
-<br>
-</details>
+<div align="center">
 
+| Layer | Technologies |
+|:--|:--|
+| **Frontend** | ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black) ![Bootstrap](https://img.shields.io/badge/Bootstrap-5.0-7952B3?style=flat-square&logo=bootstrap&logoColor=white) |
+| **Backend** | ![PHP](https://img.shields.io/badge/PHP-8.0-777BB4?style=flat-square&logo=php&logoColor=white) ![Python](https://img.shields.io/badge/Python-3.9-3776AB?style=flat-square&logo=python&logoColor=white) ![Flask](https://img.shields.io/badge/Flask-000000?style=flat-square&logo=flask&logoColor=white) |
+| **Database** | ![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat-square&logo=mysql&logoColor=white) ![phpMyAdmin](https://img.shields.io/badge/phpMyAdmin-6C78AF?style=flat-square&logo=phpmyadmin&logoColor=white) |
+| **AI / ML** | ![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat-square&logo=scikit-learn&logoColor=white) ![Pandas](https://img.shields.io/badge/Pandas-150458?style=flat-square&logo=pandas&logoColor=white) ![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=numpy&logoColor=white) |
+| **Email & Documents** | ![PHPMailer](https://img.shields.io/badge/PHPMailer-777BB4?style=flat-square) ![Dompdf](https://img.shields.io/badge/Dompdf-PDF-red?style=flat-square) |
+| **UI Components** | ![FullCalendar](https://img.shields.io/badge/FullCalendar-3788D8?style=flat-square) ![Remix Icon](https://img.shields.io/badge/Remix_Icon-000000?style=flat-square) |
+| **Tools & Environment** | ![VS Code](https://img.shields.io/badge/VS_Code-007ACC?style=flat-square&logo=visual-studio-code&logoColor=white) ![WAMP](https://img.shields.io/badge/WAMP_Server-FB7A24?style=flat-square) ![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white) ![Figma](https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=figma&logoColor=white) |
 
-<details>
-<summary><b>🎯 Organizers Module</b></summary>
-<br>
-
-| Feature | Description | Screenshot Location |
-|:--|:--|:--|
-| 📅 **Personal Calendar** | Events they organize | ![Certficate 1](github_docs/screenshots/org7.jpg) <br> ![Certficate 2](github_docs/screenshots/org8.png) |
-| ➕ **Create Events** | Schedule new events | ![Chatbot](github_docs/screenshots/event.png) |
-| 👥 **View Participants** | See who joined | ![Certficate 1](github_docs/screenshots/attendance.png) <br> ![Certficate 2](github_docs/screenshots/attendance.png) |
-| 📤 **Event Results** | Upload completion data | ![Certficate 1](github_docs/screenshots/result_manegment.jpg) <br> ![Certficate 2](github_docs/screenshots/result_manegment1.jpg) |
-| 📝 **Manage Feedback** | Review volunteer feedback | ![feedback 1](github_docs/screenshots/feedback1.png) <br> ![AI Recommendations 2](github_docs/screenshots/feedback2.png) <br> ![Certficate 2](github_docs/screenshots/feedback3.png) <br> ![Certficate 2](github_docs/screenshots/feedback4.png) <br> ![Certficate 2](github_docs/screenshots/feedback5.png) |
-
-<br>
-</details>
-
-
+</div>
 
 <br>
 
-## 📸 Screenshots Gallery
+## 🚀 Quick Start
 
-<details>
-<summary><b>🖥️ Click to expand full screenshot gallery</b></summary>
-<br>
-
-### 🏠 Dashboard Views
-| Admin Dashboard | Coordinator Dashboard | Volunteer Dashboard |
-|:---:|:---:|:---:|
-| <img src="github_docs/screenshots/admin-dashboard.png" width="250"/> | <img src="github_docs/screenshots/coordinator-dashboard.png" width="250"/> | <img src="github_docs/screenshots/volunteer-dashboard.png" width="250"/> |
-
-### 🔐 Authentication
-| Login Page | Registration | OTP Verification |
-|:---:|:---:|:---:|
-| <img src="github_docs/screenshots/login.png" width="250"/> | <img src="github_docs/screenshots/register.png" width="250"/> | <img src="github_docs/screenshots/otp.png" width="250"/> |
-
-### 📅 Event Management
-| Event List | Create Event | Event Details |
-|:---:|:---:|:---:|
-| <img src="github_docs/screenshots/event-list.png" width="250"/> | <img src="github_docs/screenshots/create-event-form.png" width="250"/> | <img src="github_docs/screenshots/event-details.png" width="250"/> |
-
-### 📊 AI Features
-| Participation Prediction | Smart Recommendations | AI Chatbot |
-|:---:|:---:|:---:|
-| <img src="github_docs/screenshots/prediction-analytics.png" width="250"/> | <img src="github_docs/screenshots/recommendation-engine.png" width="250"/> | <img src="github_docs/screenshots/chatbot-conversation.png" width="250"/> |
-
-### 🏆 Recognition
-| Leaderboard | Certificates | Badges |
-|:---:|:---:|:---:|
-| <img src="github_docs/screenshots/leaderboard-full.png" width="250"/> | <img src="github_docs/screenshots/certificate-sample.png" width="250"/> | <img src="github_docs/screenshots/badges.png" width="250"/> |
-
-### 📊 Reports & Analytics
-| Attendance Report | CSV Export | Feedback Analysis |
-|:---:|:---:|:---:|
-| <img src="github_docs/screenshots/attendance-report.png" width="250"/> | <img src="github_docs/screenshots/csv-export-screen.png" width="250"/> | <img src="github_docs/screenshots/feedback-analytics.png" width="250"/> |
-
-### 📱 Responsive Design
-| Mobile View | Tablet View | Desktop View |
-|:---:|:---:|:---:|
-| <img src="github_docs/screenshots/mobile-view.png" width="250"/> | <img src="github_docs/screenshots/tablet-view.png" width="250"/> | <img src="github_docs/screenshots/desktop-view.png" width="250"/> |
-
-</details>
-
-<br>
-
+### Prerequisites
+```bash
+# Required installations
+- PHP 
+- MySQL
+- Python >= 3.13
+- Composer (optional)
+- Git
 
