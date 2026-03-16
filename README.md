@@ -124,8 +124,10 @@ The heart of our platform—intelligent features that learn and adapt:
   </tr>
 </table>
 
-## ✨ Key Features by Role
 
+## ✨ Key Features by Role
+<summary><b>🖥️ Click to expand full screenshots </b></summary>
+<br>
 ### 👥 For Volunteers
 | Feature | Description | Screenshot |
 |:--|:--|:--|
