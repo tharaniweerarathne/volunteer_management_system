@@ -69,7 +69,7 @@ Volunteering is crucial for community growth, but managing large volunteer netwo
 |:--|:--|:--|
 | 🔐 **Secure Auth** | Registration/Login with OTP verification | **Login Screen** <br> ![Login](github_docs/screenshots/volunteer-login.png) <br> **OTP Verification** <br> ![OTP](github_docs/screenshots/otp_register.png) |
 | 🤖 **AI Recommendations** | Personalized event suggestions | ![AI Recommendations 1](github_docs/screenshots/recommendation1.png) <br> ![AI Recommendations 2](github_docs/screenshots/recommendation2.png) |
-| 📅 **Event Calendar** | Visual schedule of joined events | ![Calendar 1](github_docs/screenshots/v_dashboard1) <br> ![Calendar 2](github_docs/screenshots/v_dashboard2.png) |
+| 📅 **Event Calendar** | Visual schedule of joined events | ![Calendar 1](github_docs/screenshots/v_dashboard1.png) <br> ![Calendar 2](github_docs/screenshots/v_dashboard2.png) |
 | 🏆 **Leaderboard** | Top volunteers by participation | `github_docs/screenshots/leadership.png` |
 | 📜 **Certificates** | Downloadable achievement certificates | ![Certficate 1](github_docs/screenshots/certficate1.jpg) <br> ![Certficate 2](github_docs/screenshots/certficate2.png) <br> ![Certficate 2](github_docs/screenshots/certficate3.png) |
 | 💬 **AI Chatbot** | 24/7 assistant for queries | `github_docs/screenshots/chatbot.png` |
