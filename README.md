@@ -34,9 +34,7 @@
   </p>
   
   <p align="center">
-    <a href="#-key-features">✨ Features</a> •
     <a href="#-ai-powered-intelligence">🤖 AI Functions</a> •
-    <a href="#-screenshots">📸 Screenshots</a> •
     <a href="#-database-structure">🗄️ Database</a> •
     <a href="#-quick-start">🚀 Quick Start</a>
   </p>
