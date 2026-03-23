@@ -264,12 +264,22 @@ form a:hover {
     background-color: #fd7e14 !important;
 }
 
+#sidebar {
+    width: 250px;
+    min-height: 100vh;
+    transition: transform 0.3s ease;
+}
 
+/* Hide toggle button on desktop */
+.menu-toggle {
+    display: none;
+}
 
 @media (max-width: 768px) {
     .container {
         padding: 20px;
         margin: 10px;
+        margin-top: 70px;
     }
     
     .container h2 {
@@ -287,14 +297,51 @@ form a:hover {
         margin-left: 0;
         margin-top: 10px;
     }
+
+        /* Show toggle button */
+    .menu-toggle {
+        display: block;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        background: #ff6b00;
+        color: white;
+        border: none;
+        padding: 10px 12px;
+        border-radius: 8px;
+        z-index: 1001;
+        font-size: 20px;
+        width: auto;
+        right: auto;
+
+    }
+
+    /* Sidebar hidden by default */
+    #sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 250px;
+        height: 100%;
+        transform: translateX(-100%);
+        z-index: 1000;
+    }
+
+    /* When active (open) */
+    #sidebar.active {
+        transform: translateX(0);
+    }
 }
 
     </style>
 </head>
 <body>
      <div class="d-flex">
+<button class="menu-toggle" onclick="toggleMenu()">
+    <i class="ri-menu-line"></i>
+</button>
 
-<nav class="navbar navbar-dark bg-dark flex-column p-3" style="width: 250px; min-height: 100vh;">
+<nav id="sidebar" class="navbar navbar-dark bg-dark flex-column p-3" style="width: 250px; min-height: 100vh;">
     <a class="navbar-brand mb-4 d-flex align-items-center" href="#">
         <img src="../assets/images/logo.png" alt="Logo" style="width: 120px; height: 40px; object-fit: cover; border-radius: 8px; margin-right: 10px;">
     </a>
@@ -411,5 +458,10 @@ if (isset($_SESSION['role'])) {
     </div>
                 </div>
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+ <script>
+function toggleMenu() {
+    document.getElementById("sidebar").classList.toggle("active");
+}
+</script>
 </body>
 </html>
