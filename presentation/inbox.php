@@ -327,6 +327,7 @@ a {
 <button class="menu-toggle" onclick="toggleMenu()">
     <i class="ri-menu-line"></i>
 </button>
+
 <nav id="sidebar" class="navbar navbar-dark bg-dark flex-column p-3" style="width: 250px; min-height: 100vh;">
     <a class="navbar-brand mb-4 d-flex align-items-center" href="#">
         <img src="../assets/images/logo.png" alt="Logo" style="width: 120px; height: 40px; object-fit: cover; border-radius: 8px; margin-right: 10px;">
