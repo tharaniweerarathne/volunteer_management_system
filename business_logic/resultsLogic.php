@@ -578,7 +578,7 @@ class ResultsLogic {
         $adminSql = "SELECT email, name FROM users WHERE role = 'Admin'";
         $adminResult = $conn->query($adminSql);
         
-        $subject = "📋 New Event Result Submitted for Review";
+        $subject = "New Event Result Submitted for Review";
         
         while ($admin = $adminResult->fetch_assoc()) {
             $body = "
