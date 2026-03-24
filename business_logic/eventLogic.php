@@ -114,6 +114,7 @@ class eventLogic {
         $eventId = $this->eventData->createEvent($eventData);
         
         if ($eventId) {
+            $this->sendNewEventNotificationToAdmin($eventData, $eventId);
             // Assign coordinators if admin
             if ($_SESSION['role'] === 'Admin' && isset($_POST['coordinators'])) {
                 $coordinatorIds = array_map('intval', $_POST['coordinators']);
@@ -707,6 +708,29 @@ public function getRecommendedEvents($userId){
     $service = new RecommendationService();
 
     return $service->getRecommendedEventsForVolunteer($userId);
+}
+
+
+private function sendNewEventNotificationToAdmin($eventData, $eventId) {
+    $subject = "New Event Created: " . $eventData['eventName'];
+    
+    $body = "
+    <h2>New Event Created</h2>
+    <p>A new event has been created on the platform:</p>
+    <h3>" . htmlspecialchars($eventData['eventName']) . "</h3>
+    <p><strong>Event ID:</strong> " . intval($eventId) . "</p>
+    <p><strong>Category:</strong> " . htmlspecialchars($eventData['category'] ?? 'N/A') . "</p>
+    <p><strong>Location:</strong> " . htmlspecialchars($eventData['location']) . "</p>
+    <p><strong>Start Date:</strong> " . date('F j, Y', strtotime($eventData['startDate'])) . "</p>
+    <p><strong>End Date:</strong> " . date('F j, Y', strtotime($eventData['endDate'])) . "</p>
+    <p><strong>Start Time:</strong> " . date('h:i A', strtotime($eventData['startTime'])) . "</p>
+    <p><strong>Max Volunteers:</strong> " . intval($eventData['maxVolunteers']) . "</p>
+    <p><strong>Description:</strong> " . htmlspecialchars($eventData['eventDescription'] ?? '') . "</p>
+    <br>
+    <p>Best regards,<br>Unity Volunteers Trust</p>
+    ";
+    
+    return $this->sendEmail('infocontact256@gmail.com', $subject, $body);
 }
 
 }
