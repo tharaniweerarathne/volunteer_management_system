@@ -252,7 +252,8 @@ $skills = $eventData->getAllSkills();
                                                 
                                                 <!-- View Details Button -->
 <a href="view_result.php?resultId=<?php echo $result['resultId']; ?>" 
-   class="btn btn-primary">
+   class="btn btn-primary"
+   style="background-color: #F67D31; border: 1px solid orange; color: white;">
     View Details
 </a>
                                             </div>
